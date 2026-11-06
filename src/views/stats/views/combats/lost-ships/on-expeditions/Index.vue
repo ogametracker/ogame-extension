@@ -2,25 +2,23 @@
     <page :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@stats/components/common/ListNav.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { ListNavItem } from '@stats/components/common/ListNav.vue';
 
-    @Component({})
-    export default class Index extends Vue {
-        private readonly rootRoute = 'combats/lost-ships/on-expeditions';
+const rootRoute = 'combats/lost-ships/on-expeditions';
 
-        private get navItems(): ListNavItem[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.amount,
-                    to: { name: 'combats/lost-ships/on-expeditions/amount' },
-                },
-                {
-                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.resources,
-                    to: { name: 'combats/lost-ships/on-expeditions/resources' },
-                },
-            ];
-        }
-    }
+const navItems = computed<ListNavItem[]>(() => {
+    return [
+        {
+            label: translations().extension.expeditions.tabHeaders.subHeaders.amount,
+            to: { name: 'combats/lost-ships/on-expeditions/amount' },
+        },
+        {
+            label: translations().extension.expeditions.tabHeaders.subHeaders.resources,
+            to: { name: 'combats/lost-ships/on-expeditions/resources' },
+        },
+    ];
+});
 </script>

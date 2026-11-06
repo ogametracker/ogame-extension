@@ -13,17 +13,17 @@
                         <div
                             class="number"
                             v-text="
-                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
+                                formatNumber(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="$i18n.$t.extension.combats.combats" />
+                        <div v-text="translations().extension.combats.combats" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.combats.combats} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div v-text="`${translations().extension.combats.combats} (${translations().extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -42,59 +42,50 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
-    import { CombatReport } from '@ogame-tracker/shared/models/combat-reports/CombatReport';
-    import { CombatResultType, CombatResultTypes } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
-    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useCombatReportStore } from '@stats/data/CombatReportDataModule';
+import type { DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+import { CombatResultTypes } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
+import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            CombatResultColorSettings,
-            CombatTrackingIgnoreEspionageCombatsSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const combatReportStore = useCombatReportStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.combatResults;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return CombatReportDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.combatResults);
 
-        private get reportsPerDay() {
-            return CombatReportDataModule.dailyResults;
-        }
+const firstDay = computed(() => combatReportStore.firstDay);
 
-        private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
-            return CombatResultTypes.map(result => ({
-                key: result,
-                label: this.$i18n.$t.extension.combats.combatResults[result],
-                color: this.colors[result],
-                filled: true,
-                getValue: dailyResult => dailyResult.results.againstPlayers[result],
-            }));
-        }
+const reportsPerDay = computed(() => combatReportStore.dailyResults);
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyCombatReportResult>[]>(() => {
+    return CombatResultTypes.map(result => ({
+        key: result,
+        label: translations().extension.combats.combatResults[result],
+        color: colors.value[result],
+        filled: true,
+        getValue: dailyResult => dailyResult.results.againstPlayers[result],
+    }));
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;

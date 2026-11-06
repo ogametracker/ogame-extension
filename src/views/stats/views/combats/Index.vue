@@ -3,36 +3,37 @@
     <page v-else :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@stats/components/common/ListNav.vue';
-    import { CombatReportDataModule } from '../../data/CombatReportDataModule';
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import type { ListNavItem } from '@stats/components/common/ListNav.vue';
+import { useCombatReportStore } from '../../data/CombatReportDataModule';
 
-    @Component({})
-    export default class Index extends Vue {
-        private readonly rootRoute = 'combats';
-        private loading = true;
+const combatReportStore = useCombatReportStore();
 
-        private async mounted() {
-            await CombatReportDataModule.ready;
-            this.loading = false;
-        }
+const rootRoute = 'combats';
 
-        private get navItems(): ListNavItem[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.combats.tabHeaders.overview,
-                    to: { name: 'combats/overview' },
-                },
-                {
-                    label: this.$i18n.$t.extension.combats.tabHeaders.loot,
-                    to: { name: 'combats/resources' },
-                },
-                {
-                    label: this.$i18n.$t.extension.combats.tabHeaders.lostShips,
-                    to: { name: 'combats/lost-ships' },
-                },
-            ];
-        }
-    }
+const loading = ref(true);
+
+const navItems = computed<ListNavItem[]>(() => {
+    return [
+        {
+            label: translations().extension.combats.tabHeaders.overview,
+            to: { name: 'combats/overview' },
+        },
+        {
+            label: translations().extension.combats.tabHeaders.loot,
+            to: { name: 'combats/resources' },
+        },
+        {
+            label: translations().extension.combats.tabHeaders.lostShips,
+            to: { name: 'combats/lost-ships' },
+        },
+    ];
+});
+
+onMounted(async () => {
+    await combatReportStore.ready;
+    loading.value = false;
+});
 </script>

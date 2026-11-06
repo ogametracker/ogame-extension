@@ -13,17 +13,17 @@
                         <div
                             class="number"
                             v-text="
-                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
+                                formatNumber(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                        <div v-text="$i18n.$t.extension.combats.shipsLost" />
+                        <div v-text="translations().extension.combats.shipsLost" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.combats.shipsLost} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div v-text="`${translations().extension.combats.shipsLost} (${translations().extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -42,58 +42,50 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
-    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
-    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useCombatReportStore } from '@stats/data/CombatReportDataModule';
+import type { DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
+import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            ShipColorSettings,
-            CombatTrackingIgnoreEspionageCombatsSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const combatReportStore = useCombatReportStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.ships;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return CombatReportDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.ships);
 
-        private get reportsPerDay() {
-            return CombatReportDataModule.dailyResults;
-        }
+const firstDay = computed(() => combatReportStore.firstDay);
 
-        private get datasets(): StatsChartDataset<DailyCombatReportResult>[] {
-            return ShipTypes.map(ship => ({
-                key: ship.toString(),
-                label: this.$i18n.$t.ogame.ships[ship],
-                color: this.colors[ship],
-                filled: true,
-                getValue: result => result.lostShips.againstPlayers.ships[ship],
-            }));
-        }
+const reportsPerDay = computed(() => combatReportStore.dailyResults);
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyCombatReportResult>[]>(() => {
+    return ShipTypes.map(ship => ({
+        key: ship.toString(),
+        label: translations().ogame.ships[ship],
+        color: colors.value[ship],
+        filled: true,
+        getValue: result => result.lostShips.againstPlayers.ships[ship],
+    }));
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;

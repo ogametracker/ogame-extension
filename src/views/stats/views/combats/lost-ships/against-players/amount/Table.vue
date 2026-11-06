@@ -22,77 +22,72 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { useCombatReportStore } from '@stats/data/CombatReportDataModule';
+import type { DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import CombatTrackingIgnoreEspionageCombatsSettings from '@stats/components/settings/CombatTrackingIgnoreEspionageCombatsSettings.vue';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            CombatTrackingIgnoreEspionageCombatsSettings,
+const combatReportStore = useCombatReportStore();
+
+const showSettings = ref(false);
+
+const avgNumberFormat: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+};
+
+const combats = computed(() => combatReportStore.dailyResultsArray);
+
+const items = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(() => {
+    return ShipTypes.map(ship => ({
+        label: translations().ogame.ships[ship],
+        getValue: nextCombats => nextCombats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(() => {
+    return [
+        {
+            label: translations().extension.common.sum,
+            getValue: nextCombats => ShipTypes.reduce(
+                (total, ship) => total + nextCombats.reduce(
+                    (acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
+                0
+            ),
         },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+    ];
+});
 
-        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
-
-        private get combats() {
-            return CombatReportDataModule.dailyResultsArray;
-        }
-
-        private get items(): RangedStatsTableItem<DailyCombatReportResult>[] {
-            return ShipTypes.map(ship => ({
-                label: this.$i18n.$t.ogame.ships[ship],
-                getValue: combats => combats.reduce((acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
-            }));
-        }
-
-        private get footerItems(): RangedStatsTableItem<DailyCombatReportResult>[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.common.sum,
-                    getValue: combats => ShipTypes.reduce(
-                        (total, ship) => total + combats.reduce(
-                            (acc, combat) => acc + combat.lostShips.againstPlayers.ships[ship], 0),
-                        0
-                    ),
-                },
-            ];
-        }
-
-        private get shipTable(): Record<string, ShipType> {
-            return {
-                [this.$i18n.$t.ogame.ships[ShipType.lightFighter]]: ShipType.lightFighter,
-                [this.$i18n.$t.ogame.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
-                [this.$i18n.$t.ogame.ships[ShipType.cruiser]]: ShipType.cruiser,
-                [this.$i18n.$t.ogame.ships[ShipType.battleship]]: ShipType.battleship,
-                [this.$i18n.$t.ogame.ships[ShipType.bomber]]: ShipType.bomber,
-                [this.$i18n.$t.ogame.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
-                [this.$i18n.$t.ogame.ships[ShipType.destroyer]]: ShipType.destroyer,
-                [this.$i18n.$t.ogame.ships[ShipType.reaper]]: ShipType.reaper,
-                [this.$i18n.$t.ogame.ships[ShipType.pathfinder]]: ShipType.pathfinder,
-                [this.$i18n.$t.ogame.ships[ShipType.smallCargo]]: ShipType.smallCargo,
-                [this.$i18n.$t.ogame.ships[ShipType.largeCargo]]: ShipType.largeCargo,
-                [this.$i18n.$t.ogame.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
-                [this.$i18n.$t.ogame.ships[ShipType.recycler]]: ShipType.recycler,
-                [this.$i18n.$t.ogame.ships[ShipType.deathStar]]: ShipType.deathStar,
-                [this.$i18n.$t.ogame.ships[ShipType.crawler]]: ShipType.crawler,
-                [this.$i18n.$t.ogame.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
-                [this.$i18n.$t.ogame.ships[ShipType.colonyShip]]: ShipType.colonyShip,
-            };
-        }
-    }
+const shipTable = computed<Record<string, ShipType>>(() => {
+    return {
+        [translations().ogame.ships[ShipType.lightFighter]]: ShipType.lightFighter,
+        [translations().ogame.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
+        [translations().ogame.ships[ShipType.cruiser]]: ShipType.cruiser,
+        [translations().ogame.ships[ShipType.battleship]]: ShipType.battleship,
+        [translations().ogame.ships[ShipType.bomber]]: ShipType.bomber,
+        [translations().ogame.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
+        [translations().ogame.ships[ShipType.destroyer]]: ShipType.destroyer,
+        [translations().ogame.ships[ShipType.reaper]]: ShipType.reaper,
+        [translations().ogame.ships[ShipType.pathfinder]]: ShipType.pathfinder,
+        [translations().ogame.ships[ShipType.smallCargo]]: ShipType.smallCargo,
+        [translations().ogame.ships[ShipType.largeCargo]]: ShipType.largeCargo,
+        [translations().ogame.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
+        [translations().ogame.ships[ShipType.recycler]]: ShipType.recycler,
+        [translations().ogame.ships[ShipType.deathStar]]: ShipType.deathStar,
+        [translations().ogame.ships[ShipType.crawler]]: ShipType.crawler,
+        [translations().ogame.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
+        [translations().ogame.ships[ShipType.colonyShip]]: ShipType.colonyShip,
+    };
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;
