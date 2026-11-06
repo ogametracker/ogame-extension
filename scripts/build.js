@@ -14,9 +14,7 @@ if (browser !== 'chrome' && browser !== 'firefox') {
 console.log(`Building OGame Tracker (browser=${browser}, dev=${isDev})`);
 const mode = isDev ? 'development' : 'production';
 const buildEnv = { ...process.env, BROWSER: browser, NODE_ENV: mode };
-const contentScripts = fs.readdirSync('src/content-scripts', { withFileTypes: true })
-    .filter(entry => entry.isDirectory())
-    .map(entry => `src/content-scripts/${entry.name}`);
+const contentScripts = 'src/content-scripts';
 const views = ['src/views/stats', 'src/views/notifications'];
 const serviceWorker = 'src/service-worker';
 
@@ -26,9 +24,7 @@ execSync('npm run build --workspaces --if-present', { stdio: 'inherit', env: bui
 const dist = path.resolve(__dirname, '../dist');
 fs.rmSync(dist, { recursive: true, force: true });
 fs.cpSync('static', dist, { recursive: true });
-for (const workspace of contentScripts) {
-    fs.cpSync(`${workspace}/dist`, path.join(dist, 'content-scripts'), { recursive: true });
-}
+fs.cpSync(`${contentScripts}/dist`, path.join(dist, 'content-scripts'), { recursive: true });
 fs.cpSync(`${serviceWorker}/dist`, dist, { recursive: true });
 for (const workspace of views) {
     fs.cpSync(`${workspace}/dist`, path.join(dist, 'views'), { recursive: true });

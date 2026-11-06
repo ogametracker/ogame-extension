@@ -9,7 +9,7 @@
     "src/views/stats",
     "src/views/notifications",
     "src/service-worker",
-    "src/content-scripts/*"
+    "src/content-scripts"
   ],
   "scripts": {
     "dev:firefox": "node scripts/build.js --dev --browser=firefox",

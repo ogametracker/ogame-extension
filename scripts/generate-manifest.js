@@ -11,7 +11,7 @@ if (browser !== 'chrome' && browser !== 'firefox') {
 
 const contentScriptDir = './src/content-scripts';
 const contentScripts = fs.readdirSync(contentScriptDir, { withFileTypes: true })
-    .filter(file => file.isDirectory())
+    .filter(file => file.isDirectory() && fs.existsSync(`${contentScriptDir}/${file.name}/options.json`))
     .map(dir => dir.name)
     .map(dirName => {
         const options = JSON.parse(fs.readFileSync(`${contentScriptDir}/${dirName}/options.json`, 'utf-8'));
