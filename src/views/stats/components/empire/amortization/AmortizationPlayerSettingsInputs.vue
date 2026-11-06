@@ -3,7 +3,7 @@
         <template v-if="!productionMode">
             <conversion-rate-settings class="conversion-rate-settings" />
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.optimizeForResources" />
+            <span v-text="translations().extension.empire.amortization.settings.playerSettings.optimizeForResources" />
             <span class="gap">
                 <o-resource
                     v-for="resource in resources"
@@ -16,7 +16,7 @@
             </span>
         </template>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.officers" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
             <o-officer
                 v-for="(active, officer) in settings.officers"
@@ -27,7 +27,7 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.playerClass" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.playerClass" />
         <span class="gap">
             <o-player-class
                 v-for="playerClass in playerClasses"
@@ -38,7 +38,7 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.allianceClass" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.allianceClass" />
         <span class="gap">
             <o-alliance-class
                 v-for="allyClass in allianceClasses"
@@ -49,26 +49,26 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.plasmaTechnology])" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(translations().ogame.research[ResearchType.plasmaTechnology])" />
         <span>
             <o-research :research="ResearchType.plasmaTechnology" />
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
         <template v-if="!productionMode">
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.astrophysics])" />
+            <span v-text="translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(translations().ogame.research[ResearchType.astrophysics])" />
             <span>
                 <o-research :research="ResearchType.astrophysics" />
                 <input type="number" :value="settings.levelAstrophysics" disabled />
             </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
+            <span v-text="translations().extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
             <span>
                 <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="0" :max="100" step="1" />
             </span>
         </template>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.lifeformLevels" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.lifeformLevels" />
         <span class="lifeform-level-grid">
             <span v-for="lifeform in LifeformTypes" :key="lifeform" style="display: contents">
                 <o-lifeform :lifeform="lifeform" />
@@ -78,65 +78,59 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { AllianceClass, SelectableAllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
-    import { PlayerClass, SelectablePlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
-    import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
-    import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
-    import { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+<script setup lang="ts">
+import { translations } from '@stats/i18n';
+import type { PropType } from 'vue';
+import { AllianceClass, SelectableAllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { PlayerClass, SelectablePlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
-    @Component({
-        components: {
-            ConversionRateSettings,
-        },
-    })
-    export default class AmortizationPlayerSettingsInputs extends Vue {
+defineProps({
+    productionMode: { required: false, type: Boolean, default: () => false },
+});
 
-        @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
-        private settings!: AmortizationPlayerSettings;
+const settings = defineModel<AmortizationPlayerSettings>({ required: true, type: Object as PropType<AmortizationPlayerSettings> });
 
-        @Prop({ required: false, type: Boolean, default: () => false })
-        private productionMode!: boolean;
+const resources = ResourceTypes;
 
-        private readonly resources = ResourceTypes;
-        private readonly ResearchType = ResearchType;
-        private readonly playerClasses = SelectablePlayerClasses;
-        private readonly allianceClasses = SelectableAllianceClasses;
-        private readonly LifeformTypes = ValidLifeformTypes;
+const playerClasses = SelectablePlayerClasses;
 
+const allianceClasses = SelectableAllianceClasses;
 
-        private togglePlayerClass(playerClass: PlayerClass): void {
-            if (this.settings.playerClass == playerClass) {
-                this.settings.playerClass = PlayerClass.none;
-                return;
-            }
+const LifeformTypes = ValidLifeformTypes;
 
-            this.settings.playerClass = playerClass;
-        }
-
-        private toggleAllianceClass(allianceClass: AllianceClass): void {
-            if (this.settings.allianceClass == allianceClass) {
-                this.settings.allianceClass = AllianceClass.none;
-                return;
-            }
-
-            this.settings.allianceClass = allianceClass;
-        }
-
-        private toggleOptimizeForResource(resource: ResourceType) {
-            if (this.settings.optimizeForResources.includes(resource)) {
-                this.settings.optimizeForResources = this.settings.optimizeForResources.filter(r => r != resource);
-            }
-            else {
-                this.settings.optimizeForResources.push(resource);
-            }
-        }
+function togglePlayerClass(playerClass: PlayerClass): void {
+    if (settings.value.playerClass == playerClass) {
+        settings.value.playerClass = PlayerClass.none;
+        return;
     }
+
+    settings.value.playerClass = playerClass;
+}
+
+function toggleAllianceClass(allianceClass: AllianceClass): void {
+    if (settings.value.allianceClass == allianceClass) {
+        settings.value.allianceClass = AllianceClass.none;
+        return;
+    }
+
+    settings.value.allianceClass = allianceClass;
+}
+
+function toggleOptimizeForResource(resource: ResourceType) {
+    if (settings.value.optimizeForResources.includes(resource)) {
+        settings.value.optimizeForResources = settings.value.optimizeForResources.filter(r => r != resource);
+    }
+    else {
+        settings.value.optimizeForResources.push(resource);
+    }
+}
 </script>
+
 <style lang="scss" scoped>
     .player-settings {
         display: grid;
@@ -176,15 +170,13 @@
     .conversion-rate-settings {
         display: contents;
 
-        &::v-deep {
-            .fake-table-header {
-                background: none;
-                justify-content: end;
-                padding-right: 0;
-            }
-            .fake-table-body {
-                padding-left: 0;
-            }
+        :deep(.fake-table-header) {
+            background: none;
+            justify-content: end;
+            padding-right: 0;
+        }
+        :deep(.fake-table-body) {
+            padding-left: 0;
         }
     }
 

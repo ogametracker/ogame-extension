@@ -9,21 +9,21 @@
 
         <div class="body">
             <template v-if="toggleable">
-                <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.includeInResult" />
+                <span v-text="translations().extension.empire.amortization.settings.planetSettings.includeInResult" />
                 <checkbox v-model="settings.include" />
             </template>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.position" />
+            <span v-text="translations().extension.empire.amortization.settings.planetSettings.position" />
             <span>
                 <input type="number" v-model.number="settings.position" min="1" max="15" step="1" />
             </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.maxTemperature" />
+            <span v-text="translations().extension.empire.amortization.settings.planetSettings.maxTemperature" />
             <span>
                 <input type="number" v-model.number="settings.maxTemperature" min="-130" max="260" step="1" />
             </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.activeItems" />
+            <span v-text="translations().extension.empire.amortization.settings.planetSettings.activeItems" />
             <span class="item-grid">
                 <o-item
                     v-for="item in boosterItems.metal"
@@ -48,11 +48,11 @@
                 />
             </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.title" />
+            <span v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.title" />
             <span class="crawler-grid">
                 <div class="crawler-grid-row">
                     <input type="number" v-model.number="settings.crawlers.percentage" step="10" min="0" max="150" />
-                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.percentage" />
+                    <span v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.percentage" />
                 </div>
                 <div class="crawler-grid-row">
                     <checkbox-button
@@ -62,15 +62,15 @@
                             '--color': settings.crawlers.max ? '0, 255, 0' : null,
                         }"
                     >
-                        <span v-if="settings.crawlers.max" v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.maxCount" />
-                        <span v-else v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.crawlers.fixCount" />
+                        <span v-if="settings.crawlers.max" v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.maxCount" />
+                        <span v-else v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.fixCount" />
                     </checkbox-button>
                     <input type="number" v-model.number="settings.crawlers.count" :disabled="settings.crawlers.max" />
                 </div>
             </span>
 
             <template v-if="settings.mines != null">
-                <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.mines" />
+                <span v-text="translations().extension.empire.amortization.settings.planetSettings.mines" />
                 <span class="mine-grid">
                     <o-building :building="BuildingType.metalMine" />
                     <input type="number" v-model.number="settings.mines.metalMine" />
@@ -83,7 +83,7 @@
                 </span>
             </template>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeform" />
+            <span v-text="translations().extension.empire.amortization.settings.planetSettings.lifeform" />
             <span class="lifeform-grid">
                 <o-lifeform
                     v-for="lifeform in lifeforms"
@@ -99,7 +99,7 @@
                 <span>
                     <checkbox
                         v-model="settings.ignoreEmptyLifeformTechnologySlots"
-                        :label="$i18n.$t.extension.empire.amortization.settings.planetSettings.ignoreEmptySlots"
+                        :label="translations().extension.empire.amortization.settings.planetSettings.ignoreEmptySlots"
                     />
                 </span>
             </template>
@@ -108,22 +108,22 @@
             <span>
                 <button class="toggle-lifeform-settings" @click="showLifeformSettings = !showLifeformSettings" :disabled="settings.lifeform == 'none'">
                     <span class="mdi" :class="showLifeformSettings ? 'mdi-menu-up' : 'mdi-menu-down'" />
-                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeformSettings" />
+                    <span v-text="translations().extension.empire.amortization.settings.planetSettings.lifeformSettings" />
                 </button>
             </span>
 
             <template v-if="showLifeformSettings">
                 <template v-if="settings.lifeformTechnologyLevels != null">
-                    <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
+                    <span v-text="translations().extension.empire.amortization.settings.planetSettings.relevantLifeformBuildings" />
                     <span class="lifeform-building-grid">
-                        <template v-for="building in applicableLifeformBuildings">
-                            <o-lifeform-building :key="`${building}-icon`" :building="building" />
-                            <input :key="`${building}-input`" type="number" v-model.number="settings.lifeformBuildingLevels[building]" />
+                        <template v-for="building in applicableLifeformBuildings" :key="building">
+                            <o-lifeform-building :building="building" />
+                            <input type="number" v-model.number="settings.lifeformBuildingLevels![building]" />
                         </template>
                     </span>
                 </template>
 
-                <span v-text="$i18n.$t.extension.empire.amortization.settings.planetSettings.lifeformTechnologies" />
+                <span v-text="translations().extension.empire.amortization.settings.planetSettings.lifeformTechnologies" />
                 <span>
                     <span class="lifeform-tech-grid">
                         <span v-for="slot in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" :key="`slot-${slot}`" class="row">
@@ -141,7 +141,7 @@
                             <input
                                 v-else-if="getSelectedLifeformTechBySlot(slot) != null"
                                 type="number"
-                                v-model.number="settings.lifeformTechnologyLevels[getSelectedLifeformTechBySlot(slot)]"
+                                v-model.number="settings.lifeformTechnologyLevels[getSelectedLifeformTechBySlot(slot)!]"
                             />
                             <input v-else type="number" disabled />
                         </span>
@@ -152,209 +152,204 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-    import { AnyBuildingCostAndTimeReductionLifeformBuildings, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType, ValidLifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { _throw } from '@ogame-tracker/shared/utils/_throw';
-    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
-    import { PropType } from 'vue';
-    import { Component, Prop, VModel, Vue, Watch } from 'vue-property-decorator';
-    import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
-    import { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
-    import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-    import { ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { translations } from '@stats/i18n';
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import { AnyBuildingCostAndTimeReductionLifeformBuildings, LifeformTechnologyBonusLifeformBuildings, LifeformTechnologyResearchBuildings, ResourceProductionBonusLifeformBuildings } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
+import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologySlots, LifeformTechnologyType, LifeformTechnologyTypesByLifeform } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
+import type { PropType } from 'vue';
+import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
+import type { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
-    @Component({})
-    export default class AmortizationPlanetSettingsInputs extends Vue {
-        private readonly ShipType = ShipType;
-        private readonly BuildingType = BuildingType;
-        private readonly lifeforms = ValidLifeformTypes;
-        private readonly slots: number[] = Array.from({ length: 18 }).map((_, i) => i + 1);
+const props = defineProps({
+    planetData: { required: false, type: Object as PropType<PlanetData | null> },
+    productionMode: { required: false, type: Boolean },
+    toggleable: { required: false, type: Boolean },
+});
 
-        private readonly lifeformTechBySlot: Record<number, Record<ValidLifeformType, LifeformTechnologyType>> = createRecord(
-            this.slots,
-            slot => createRecord(
-                ValidLifeformTypes,
-                lf => LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ?? _throw('invalid slot')
-            )
-        );
+const serverSettingsStore = useServerSettingsStore();
 
-        private getSelectedLifeformTechBySlot(slot: number): LifeformTechnologyType | null {
-            const techs = Object.values(this.lifeformTechBySlot[slot]);
-            return techs.find(tech => this.settings.activeLifeformTechnologies.includes(tech)) ?? null;
-        }
+const lifeforms = ValidLifeformTypes;
 
-        private readonly applicableBuildingTypes = [
-            ...ResourceProductionBonusLifeformBuildings.filter(b => ResourceTypes.some(resource => b.appliesTo(resource))),
-            ...LifeformTechnologyBonusLifeformBuildings,
-            ...AnyBuildingCostAndTimeReductionLifeformBuildings,
-            ...LifeformTechnologyResearchBuildings,
-        ].map(b => b.type);
+const slots: number[] = Array.from({ length: 18 }).map((_, i) => i + 1);
 
-        private get applicableLifeformBuildings(): LifeformBuildingType[] {
-            const lfBuildings = LifeformBuildingTypesByLifeform[this.settings.lifeform];
-            return lfBuildings.filter(building => this.applicableBuildingTypes.includes(building));
-        }
+const lifeformTechBySlot: Record<number, Record<ValidLifeformType, LifeformTechnologyType>> = createRecord(
+    slots,
+    slot => createRecord(
+        ValidLifeformTypes,
+        lf => LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ?? _throw('invalid slot')
+    )
+);
 
-        @VModel({ required: true, type: Object as PropType<AmortizationPlanetSettings> })
-        private settings!: AmortizationPlanetSettings;
+function getSelectedLifeformTechBySlot(slot: number): LifeformTechnologyType | null {
+    const techs = Object.values(lifeformTechBySlot[slot]);
+    return techs.find(tech => settings.value.activeLifeformTechnologies.includes(tech)) ?? null;
+}
 
-        @Prop({ required: false, type: Object as PropType<PlanetData> })
-        private planetData!: PlanetData | null;
+const applicableBuildingTypes = [
+    ...ResourceProductionBonusLifeformBuildings.filter(b => ResourceTypes.some(resource => b.appliesTo(resource))),
+    ...LifeformTechnologyBonusLifeformBuildings,
+    ...AnyBuildingCostAndTimeReductionLifeformBuildings,
+    ...LifeformTechnologyResearchBuildings,
+].map(b => b.type);
 
-        @Prop({ required: false, type: Boolean })
-        private productionMode!: boolean;
+const applicableLifeformBuildings = computed<LifeformBuildingType[]>(() => {
+    const lfBuildings = LifeformBuildingTypesByLifeform[settings.value.lifeform];
+    return lfBuildings.filter(building => applicableBuildingTypes.includes(building));
+});
 
-        @Watch('settings', { immediate: true, deep: true })
-        private onSettingsChanged() {
-            const lifeform = this.settings.lifeform;
-            if (lifeform == LifeformType.none) {
-                return;
-            }
+const settings = defineModel<AmortizationPlanetSettings>({ required: true, type: Object as PropType<AmortizationPlanetSettings> });
 
-            const planetData = this.planetData;
-            if (this.settings.ignoreEmptyLifeformTechnologySlots && planetData != null) {
-                const remove = this.settings.activeLifeformTechnologies.filter(tech => {
-                    const slot = LifeformTechnologySlots[tech];
+function onSettingsChanged() {
+    const lifeform = settings.value.lifeform;
+    if (lifeform == LifeformType.none) {
+        return;
+    }
 
-                    return !planetData.activeLifeformTechnologies.some(planetTech => slot == LifeformTechnologySlots[planetTech]);
-                });
+    const planetData = props.planetData;
+    if (settings.value.ignoreEmptyLifeformTechnologySlots && planetData != null) {
+        const remove = settings.value.activeLifeformTechnologies.filter(tech => {
+            const slot = LifeformTechnologySlots[tech];
 
-                if (remove.length > 0) {
-                    this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(tech => !remove.includes(tech));
-                }
-            }
-        }
+            return !planetData.activeLifeformTechnologies.some(planetTech => slot == LifeformTechnologySlots[planetTech]);
+        });
 
-        @Watch('settings.position')
-        private onAstrophysicsSettingsPlanetPositionChanged(newPosition: number) {
-            this.settings.maxTemperature = getAverageTemperature(newPosition);
-        }
-
-        @Prop({ required: false, type: Boolean })
-        private toggleable!: boolean;
-
-        private readonly boosterItems = {
-            metal: [
-                ItemHash.metalBooster_bronze_7days,
-                ItemHash.metalBooster_silver_7days,
-                ItemHash.metalBooster_gold_7days,
-                ItemHash.metalBooster_platinum_7days,
-            ],
-            crystal: [
-                ItemHash.crystalBooster_bronze_7days,
-                ItemHash.crystalBooster_silver_7days,
-                ItemHash.crystalBooster_gold_7days,
-                ItemHash.crystalBooster_platinum_7days,
-            ],
-            deuterium: [
-                ItemHash.deuteriumBooster_bronze_7days,
-                ItemHash.deuteriumBooster_silver_7days,
-                ItemHash.deuteriumBooster_gold_7days,
-                ItemHash.deuteriumBooster_platinum_7days,
-            ],
-        };
-
-        private readonly boosterItemsMap: Partial<Record<ItemHash, ItemHash>> = {
-            //metal
-            [ItemHash.metalBooster_bronze_7days]: ItemHash.metalBooster_bronze_7days,
-            [ItemHash.metalBooster_silver_7days]: ItemHash.metalBooster_silver_7days,
-            [ItemHash.metalBooster_gold_7days]: ItemHash.metalBooster_gold_7days,
-            [ItemHash.metalBooster_platinum_7days]: ItemHash.metalBooster_platinum_7days,
-
-            [ItemHash.metalBooster_silver_30days]: ItemHash.metalBooster_silver_7days,
-            [ItemHash.metalBooster_gold_30days]: ItemHash.metalBooster_gold_7days,
-            [ItemHash.metalBooster_platinum_30days]: ItemHash.metalBooster_platinum_7days,
-
-            [ItemHash.metalBooster_silver_90days]: ItemHash.metalBooster_silver_7days,
-            [ItemHash.metalBooster_gold_90days]: ItemHash.metalBooster_gold_7days,
-            [ItemHash.metalBooster_platinum_90days]: ItemHash.metalBooster_platinum_7days,
-
-            //crystal
-            [ItemHash.crystalBooster_bronze_7days]: ItemHash.crystalBooster_bronze_7days,
-            [ItemHash.crystalBooster_silver_7days]: ItemHash.crystalBooster_silver_7days,
-            [ItemHash.crystalBooster_gold_7days]: ItemHash.crystalBooster_gold_7days,
-            [ItemHash.crystalBooster_platinum_7days]: ItemHash.crystalBooster_platinum_7days,
-
-            [ItemHash.crystalBooster_silver_30days]: ItemHash.crystalBooster_silver_7days,
-            [ItemHash.crystalBooster_gold_30days]: ItemHash.crystalBooster_gold_7days,
-            [ItemHash.crystalBooster_platinum_30days]: ItemHash.crystalBooster_platinum_7days,
-
-            [ItemHash.crystalBooster_silver_90days]: ItemHash.crystalBooster_silver_7days,
-            [ItemHash.crystalBooster_gold_90days]: ItemHash.crystalBooster_gold_7days,
-            [ItemHash.crystalBooster_platinum_90days]: ItemHash.crystalBooster_platinum_7days,
-
-            // deuterium
-            [ItemHash.deuteriumBooster_bronze_7days]: ItemHash.deuteriumBooster_bronze_7days,
-            [ItemHash.deuteriumBooster_silver_7days]: ItemHash.deuteriumBooster_silver_7days,
-            [ItemHash.deuteriumBooster_gold_7days]: ItemHash.deuteriumBooster_gold_7days,
-            [ItemHash.deuteriumBooster_platinum_7days]: ItemHash.deuteriumBooster_platinum_7days,
-
-            [ItemHash.deuteriumBooster_silver_30days]: ItemHash.deuteriumBooster_silver_7days,
-            [ItemHash.deuteriumBooster_gold_30days]: ItemHash.deuteriumBooster_gold_7days,
-            [ItemHash.deuteriumBooster_platinum_30days]: ItemHash.deuteriumBooster_platinum_7days,
-
-            [ItemHash.deuteriumBooster_silver_90days]: ItemHash.deuteriumBooster_silver_7days,
-            [ItemHash.deuteriumBooster_gold_90days]: ItemHash.deuteriumBooster_gold_7days,
-            [ItemHash.deuteriumBooster_platinum_90days]: ItemHash.deuteriumBooster_platinum_7days,
-        };
-
-        private showLifeformSettings = false;
-
-
-        private get isCrawlerOverloadEnabled() {
-            return ServerSettingsDataModule.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled;
-        }
-
-        private get activeBooster() {
-            return {
-                metal: this.boosterItems.metal.find(item => this.settings.activeItems.map(item => this.boosterItemsMap[item]).includes(item)),
-                crystal: this.boosterItems.crystal.find(item => this.settings.activeItems.map(item => this.boosterItemsMap[item]).includes(item)),
-                deuterium: this.boosterItems.deuterium.find(item => this.settings.activeItems.map(item => this.boosterItemsMap[item]).includes(item)),
-            };
-        }
-
-        private toggleBooster(item: ItemHash, exclude: ItemHash[]) {
-            const active = this.settings.activeItems
-                .map(i => this.boosterItemsMap[i] as ItemHash)
-                .filter(i => i == item || !exclude.includes(i));
-
-            if (active.includes(item)) {
-                this.settings.activeItems = active.filter(i => i != item);
-            } else {
-                this.settings.activeItems = [...active, item];
-            }
-        }
-
-        private toggleLifeform(lifeform: LifeformType) {
-            if (this.settings.lifeform == lifeform) {
-                this.settings.lifeform = LifeformType.none;
-                this.settings.activeLifeformTechnologies = [];
-                this.showLifeformSettings = false;
-                return;
-            }
-
-            this.settings.lifeform = lifeform;
-            this.settings.activeLifeformTechnologies = LifeformTechnologyTypesByLifeform[this.settings.lifeform];
-        }
-
-        private toggleLifeformTech(tech: LifeformTechnologyType) {
-            if (this.settings.activeLifeformTechnologies.includes(tech)) {
-                this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(t => t != tech);
-            }
-            else {
-                this.settings.activeLifeformTechnologies = this.settings.activeLifeformTechnologies.filter(t => LifeformTechnologySlots[t] != LifeformTechnologySlots[tech]);
-                this.settings.activeLifeformTechnologies.push(tech);
-            }
+        if (remove.length > 0) {
+            settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(tech => !remove.includes(tech));
         }
     }
+}
+
+function onAstrophysicsSettingsPlanetPositionChanged(newPosition: number) {
+    settings.value.maxTemperature = getAverageTemperature(newPosition);
+}
+
+const boosterItems = {
+    metal: [
+        ItemHash.metalBooster_bronze_7days,
+        ItemHash.metalBooster_silver_7days,
+        ItemHash.metalBooster_gold_7days,
+        ItemHash.metalBooster_platinum_7days,
+    ],
+    crystal: [
+        ItemHash.crystalBooster_bronze_7days,
+        ItemHash.crystalBooster_silver_7days,
+        ItemHash.crystalBooster_gold_7days,
+        ItemHash.crystalBooster_platinum_7days,
+    ],
+    deuterium: [
+        ItemHash.deuteriumBooster_bronze_7days,
+        ItemHash.deuteriumBooster_silver_7days,
+        ItemHash.deuteriumBooster_gold_7days,
+        ItemHash.deuteriumBooster_platinum_7days,
+    ],
+};
+
+const boosterItemsMap: Partial<Record<ItemHash, ItemHash>> = {
+    //metal
+    [ItemHash.metalBooster_bronze_7days]: ItemHash.metalBooster_bronze_7days,
+    [ItemHash.metalBooster_silver_7days]: ItemHash.metalBooster_silver_7days,
+    [ItemHash.metalBooster_gold_7days]: ItemHash.metalBooster_gold_7days,
+    [ItemHash.metalBooster_platinum_7days]: ItemHash.metalBooster_platinum_7days,
+
+    [ItemHash.metalBooster_silver_30days]: ItemHash.metalBooster_silver_7days,
+    [ItemHash.metalBooster_gold_30days]: ItemHash.metalBooster_gold_7days,
+    [ItemHash.metalBooster_platinum_30days]: ItemHash.metalBooster_platinum_7days,
+
+    [ItemHash.metalBooster_silver_90days]: ItemHash.metalBooster_silver_7days,
+    [ItemHash.metalBooster_gold_90days]: ItemHash.metalBooster_gold_7days,
+    [ItemHash.metalBooster_platinum_90days]: ItemHash.metalBooster_platinum_7days,
+
+    //crystal
+    [ItemHash.crystalBooster_bronze_7days]: ItemHash.crystalBooster_bronze_7days,
+    [ItemHash.crystalBooster_silver_7days]: ItemHash.crystalBooster_silver_7days,
+    [ItemHash.crystalBooster_gold_7days]: ItemHash.crystalBooster_gold_7days,
+    [ItemHash.crystalBooster_platinum_7days]: ItemHash.crystalBooster_platinum_7days,
+
+    [ItemHash.crystalBooster_silver_30days]: ItemHash.crystalBooster_silver_7days,
+    [ItemHash.crystalBooster_gold_30days]: ItemHash.crystalBooster_gold_7days,
+    [ItemHash.crystalBooster_platinum_30days]: ItemHash.crystalBooster_platinum_7days,
+
+    [ItemHash.crystalBooster_silver_90days]: ItemHash.crystalBooster_silver_7days,
+    [ItemHash.crystalBooster_gold_90days]: ItemHash.crystalBooster_gold_7days,
+    [ItemHash.crystalBooster_platinum_90days]: ItemHash.crystalBooster_platinum_7days,
+
+    // deuterium
+    [ItemHash.deuteriumBooster_bronze_7days]: ItemHash.deuteriumBooster_bronze_7days,
+    [ItemHash.deuteriumBooster_silver_7days]: ItemHash.deuteriumBooster_silver_7days,
+    [ItemHash.deuteriumBooster_gold_7days]: ItemHash.deuteriumBooster_gold_7days,
+    [ItemHash.deuteriumBooster_platinum_7days]: ItemHash.deuteriumBooster_platinum_7days,
+
+    [ItemHash.deuteriumBooster_silver_30days]: ItemHash.deuteriumBooster_silver_7days,
+    [ItemHash.deuteriumBooster_gold_30days]: ItemHash.deuteriumBooster_gold_7days,
+    [ItemHash.deuteriumBooster_platinum_30days]: ItemHash.deuteriumBooster_platinum_7days,
+
+    [ItemHash.deuteriumBooster_silver_90days]: ItemHash.deuteriumBooster_silver_7days,
+    [ItemHash.deuteriumBooster_gold_90days]: ItemHash.deuteriumBooster_gold_7days,
+    [ItemHash.deuteriumBooster_platinum_90days]: ItemHash.deuteriumBooster_platinum_7days,
+};
+
+const showLifeformSettings = ref(false);
+
+const isCrawlerOverloadEnabled = computed(() => serverSettingsStore.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled);
+
+const activeBooster = computed(() => {
+    return {
+        metal: boosterItems.metal.find(item => settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item)),
+        crystal: boosterItems.crystal.find(item => settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item)),
+        deuterium: boosterItems.deuterium.find(item => settings.value.activeItems.map(item => boosterItemsMap[item]).includes(item)),
+    };
+});
+
+function toggleBooster(item: ItemHash, exclude: ItemHash[]) {
+    const active = settings.value.activeItems
+        .map(i => boosterItemsMap[i] as ItemHash)
+        .filter(i => i == item || !exclude.includes(i));
+
+    if (active.includes(item)) {
+        settings.value.activeItems = active.filter(i => i != item);
+    } else {
+        settings.value.activeItems = [...active, item];
+    }
+}
+
+function toggleLifeform(lifeform: LifeformType) {
+    if (settings.value.lifeform == lifeform) {
+        settings.value.lifeform = LifeformType.none;
+        settings.value.activeLifeformTechnologies = [];
+        showLifeformSettings.value = false;
+        return;
+    }
+
+    settings.value.lifeform = lifeform;
+    settings.value.activeLifeformTechnologies = LifeformTechnologyTypesByLifeform[settings.value.lifeform];
+}
+
+function toggleLifeformTech(tech: LifeformTechnologyType) {
+    if (settings.value.activeLifeformTechnologies.includes(tech)) {
+        settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(t => t != tech);
+    }
+    else {
+        settings.value.activeLifeformTechnologies = settings.value.activeLifeformTechnologies.filter(t => LifeformTechnologySlots[t] != LifeformTechnologySlots[tech]);
+        settings.value.activeLifeformTechnologies.push(tech);
+    }
+}
+
+watch(() => settings.value, onSettingsChanged, { immediate: true, deep: true });
+
+watch(() => settings.value.position, onAstrophysicsSettingsPlanetPositionChanged);
 </script>
+
 <style lang="scss" scoped>
     .planet-settings {
         width: 330px;
