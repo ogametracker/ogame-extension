@@ -3,35 +3,39 @@
     <tab-view v-else :tabs="tabs" root-route-name="resource-balance" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { Tab } from '@stats/components/common/TabView.vue';
-    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
-    import { CombatReportDataModule } from '../../data/CombatReportDataModule';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import type { Tab } from '@stats/components/common/TabView.vue';
+import { useExpeditionStore } from '../../data/ExpeditionDataModule';
+import { useCombatReportStore } from '../../data/CombatReportDataModule';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
 
-    @Component({})
-    export default class Index extends Vue {
-        private loading = true;
+const combatReportStore = useCombatReportStore();
 
-        private async mounted() {
-            await CombatReportDataModule.ready;
-            await ExpeditionDataModule.ready;
-            await DebrisFieldReportDataModule.ready;
-            this.loading = false;
-        }
+const expeditionStore = useExpeditionStore();
 
-        private get tabs(): Tab[] {
-            return [
-                {
-                    to: { name: 'resource-balance/chart' },
-                    label: this.$i18n.$t.extension.common.chart,
-                },
-                {
-                    to: { name: 'resource-balance/table' },
-                    label: this.$i18n.$t.extension.common.table,
-                },
-            ];
-        }
-    }
+const debrisFieldReportStore = useDebrisFieldReportStore();
+
+const loading = ref(true);
+
+const tabs = computed<Tab[]>(() => {
+    return [
+        {
+            to: { name: 'resource-balance/chart' },
+            label: translations().extension.common.chart,
+        },
+        {
+            to: { name: 'resource-balance/table' },
+            label: translations().extension.common.table,
+        },
+    ];
+});
+
+onMounted(async () => {
+    await combatReportStore.ready;
+    await expeditionStore.ready;
+    await debrisFieldReportStore.ready;
+    loading.value = false;
+});
 </script>

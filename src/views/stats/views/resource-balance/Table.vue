@@ -34,241 +34,233 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { CombatReportDataModule, DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
-    import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '../../data/ExpeditionDataModule';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import DetailedResourceBalanceSettings from '@stats/components/settings/resource-balance/DetailedResourceBalanceSettings.vue';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
-    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
-    import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
-    import { addDays, differenceInDays, startOfDay } from 'date-fns';
-    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
-    import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
-    import IncludeShipsLostInCombatsInResourceBalance from '@stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
-    import IncludeLostLootResourcesInResourceBalance from '@stats/components/settings/resource-balance/IncludeLostLootResourcesInResourceBalance.vue';
-    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { useCombatReportStore } from '@stats/data/CombatReportDataModule';
+import type { DailyCombatReportResult } from '@stats/data/CombatReportDataModule';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
+import type { DailyDebrisFieldReportResult } from '../../data/DebrisFieldReportDataModule';
+import { useExpeditionStore } from '../../data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '../../data/ExpeditionDataModule';
+import { useSettingsStore } from '../../data/SettingsDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import DetailedResourceBalanceSettings from '@stats/components/settings/resource-balance/DetailedResourceBalanceSettings.vue';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+import LostShipResourceUnitsFactorSettings from '@stats/components/settings/LostShipResourceUnitsFactorSettings.vue';
+import { addDays, differenceInDays, startOfDay } from 'date-fns';
+import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+import IncludeShipsFoundOnExpeditionsInResourceBalanceSettings from '@stats/components/settings/resource-balance/IncludeShipsFoundOnExpeditionsInResourceBalanceSettings.vue';
+import IncludeShipsLostInCombatsInResourceBalance from '@stats/components/settings/resource-balance/IncludeShipsLostInCombatsInResourceBalance.vue';
+import IncludeLostLootResourcesInResourceBalance from '@stats/components/settings/resource-balance/IncludeLostLootResourcesInResourceBalance.vue';
+import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
-    type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
-    const EventTypes: EventType[] = ['expedition', 'combat-report', 'debris-field-report'];
+type EventType = 'expedition' | 'combat-report' | 'debris-field-report';
 
-    interface DailyEvents {
-        date: number;
+const EventTypes: EventType[] = ['expedition', 'combat-report', 'debris-field-report'];
 
-        expeditions?: DailyExpeditionResult;
-        combats?: DailyCombatReportResult;
-        debrisFields?: DailyDebrisFieldReportResult;
+interface DailyEvents {
+    date: number;
+
+    expeditions?: DailyExpeditionResult;
+    combats?: DailyCombatReportResult;
+    debrisFields?: DailyDebrisFieldReportResult;
+}
+
+;
+
+const settingsStore = useSettingsStore();
+
+const combatReportStore = useCombatReportStore();
+
+const debrisFieldReportStore = useDebrisFieldReportStore();
+
+const expeditionStore = useExpeditionStore();
+
+const showSettings = ref(false);
+
+const avgNumberFormat: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+};
+
+const includeFoundShipsFactor = computed<Record<ResourceType, number>>(() => {
+    const { factor, deuteriumFactor } = settingsStore.settings.expeditionFoundShipsResourceUnits;
+    const settingFactor = includeFoundShips.value ? 1 : 0;
+
+    return {
+        [ResourceType.metal]: factor * settingFactor,
+        [ResourceType.crystal]: factor * settingFactor,
+        [ResourceType.deuterium]: deuteriumFactor * settingFactor,
     };
+});
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            DetailedResourceBalanceSettings,
-            ConversionRateSettings,
-            ExpeditionShipResourceUnitsFactorSettings,
-            LostShipResourceUnitsFactorSettings,
-            ShowConvertedResourcesInCellsSettings,
-            IncludeShipsFoundOnExpeditionsInResourceBalanceSettings,
-            IncludeShipsLostInCombatsInResourceBalance,
-            IncludeLostLootResourcesInResourceBalance,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const includeFoundShips = computed(() => settingsStore.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits);
 
-        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
+const includeLostShips = computed(() => settingsStore.settings.resourceBalance.includeLostShipsResourceUnits);
+
+const includeLostShipsFactor = computed<Record<ResourceType, number>>(() => {
+    const { factor, deuteriumFactor } = settingsStore.settings.lostShipsResourceUnits;
+    const settingFactor = includeLostShips.value ? 1 : 0;
+
+    return {
+        [ResourceType.metal]: factor * settingFactor,
+        [ResourceType.crystal]: factor * settingFactor,
+        [ResourceType.deuterium]: deuteriumFactor * settingFactor,
+    };
+});
+
+const includeLostLoot = computed(() => settingsStore.settings.resourceBalance.includeLostLootResources);
+
+const resourceTypes = computed<Record<string, ResourceType>>(() => {
+    return {
+        [translations().extension.resources.metal]: ResourceType.metal,
+        [translations().extension.resources.crystal]: ResourceType.crystal,
+        [translations().extension.resources.deuterium]: ResourceType.deuterium,
+    };
+});
+
+const events = computed<DailyEvents[]>(() => {
+    const minDay = Math.min(combatReportStore.firstDay, debrisFieldReportStore.firstDay, expeditionStore.firstDay);
+    const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
+    const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
+
+    return days.map<DailyEvents>(day => ({
+        date: day,
+        expeditions: expeditionStore.dailyResults[day],
+        combats: combatReportStore.dailyResults[day],
+        debrisFields: debrisFieldReportStore.dailyResults[day],
+    })).filter(ev => (ev.expeditions ?? ev.combats ?? ev.debrisFields) != null);
+});
+
+const settings = computed(() => settingsStore.settings.resourceBalance);
+
+const resourceIconSize = computed(() => {
+    if (settings.value.showDetailedBreakdown) {
+        return '36px';
+    }
+    return '24px';
+});
+
+const items = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
+    if (settings.value.showDetailedBreakdown) {
+        const types: Record<ResourceType, (EventType | null)[]> = {
+            [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report', null],
+            [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report', null],
+            [ResourceType.deuterium]: ['expedition', 'combat-report', 'debris-field-report', null],
         };
 
-        private get includeFoundShipsFactor(): Record<ResourceType, number> {
-            const { factor, deuteriumFactor } = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
-            const settingFactor = this.includeFoundShips ? 1 : 0;
-
-            return {
-                [ResourceType.metal]: factor * settingFactor,
-                [ResourceType.crystal]: factor * settingFactor,
-                [ResourceType.deuterium]: deuteriumFactor * settingFactor,
-            };
-        }
-
-        private get includeFoundShips() {
-            return SettingsDataModule.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits;
-        }
-
-        private get includeLostShips() {
-            return SettingsDataModule.settings.resourceBalance.includeLostShipsResourceUnits;
-        }
-
-        private get includeLostShipsFactor(): Record<ResourceType, number> {
-            const { factor, deuteriumFactor } = SettingsDataModule.settings.lostShipsResourceUnits;
-            const settingFactor = this.includeLostShips ? 1 : 0;
-
-            return {
-                [ResourceType.metal]: factor * settingFactor,
-                [ResourceType.crystal]: factor * settingFactor,
-                [ResourceType.deuterium]: deuteriumFactor * settingFactor,
-            };
-        }
-
-        private get includeLostLoot() {
-            return SettingsDataModule.settings.resourceBalance.includeLostLootResources;
-        }
-
-        private get resourceTypes(): Record<string, ResourceType> {
-            return {
-                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
-            };
-        }
-
-        private get events(): DailyEvents[] {
-            const minDay = Math.min(CombatReportDataModule.firstDay, DebrisFieldReportDataModule.firstDay, ExpeditionDataModule.firstDay);
-            const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
-
-            return days.map<DailyEvents>(day => ({
-                date: day,
-                expeditions: ExpeditionDataModule.dailyResults[day],
-                combats: CombatReportDataModule.dailyResults[day],
-                debrisFields: DebrisFieldReportDataModule.dailyResults[day],
-            })).filter(ev => (ev.expeditions ?? ev.combats ?? ev.debrisFields) != null);
-        }
-
-        private get settings() {
-            return SettingsDataModule.settings.resourceBalance;
-        }
-
-        private get resourceIconSize() {
-            if (this.settings.showDetailedBreakdown) {
-                return '36px';
-            }
-            return '24px';
-        }
-
-        private get items(): RangedStatsTableItem<DailyEvents>[] {
-            if (this.settings.showDetailedBreakdown) {
-                const types: Record<ResourceType, (EventType | null)[]> = {
-                    [ResourceType.metal]: ['expedition', 'combat-report', 'debris-field-report', null],
-                    [ResourceType.crystal]: ['expedition', 'combat-report', 'debris-field-report', null],
-                    [ResourceType.deuterium]: ['expedition', 'combat-report', 'debris-field-report', null],
-                };
-
-                return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
-                    label: this.$i18n.$t.extension.resources[resource],
-                    items: types[resource].map(eventType => ({
-                        label: eventType == null ? this.$i18n.$t.extension.common.sum : this.$i18n.$t.extension.resourceBalance[eventType],
-                        getValue: events => this.getResources(events, eventType, resource),
-                        class: eventType == null ? 'sum-item' : '',
-                        labelClass: eventType == null ? 'sum-item' : '',
-                    })),
-                }));
-            }
-
-            return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.extension.resources[resource],
-                getValue: events => this.getResources(events, null, resource),
-            }));
-        }
-
-        private getResources(events: DailyEvents[], eventType: EventType | null, resource: ResourceType): number {
-            return events.reduce((acc, event) => {
-                switch (eventType) {
-                    case 'expedition': return acc + this.getResource({ date: event.date, expeditions: event.expeditions }, resource);
-                    case 'combat-report': return acc + this.getResource({ date: event.date, combats: event.combats }, resource);
-                    case 'debris-field-report': return acc + this.getResource({ date: event.date, debrisFields: event.debrisFields }, resource);
-                    case null: return acc + this.getResource(event, resource);
-                }
-            }, 0);
-        }
-
-        private getResource(dayEvents: DailyEvents, resource: ResourceType): number {
-            return this.getExpeditionResourceAmount(dayEvents.expeditions, resource)
-                + this.getCombatResourceAmount(dayEvents.combats, resource)
-                + this.getDebrisFieldResourceAmount(dayEvents.debrisFields, resource);
-        }
-
-        private getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefined, resource: ResourceType): number {
-            if (expeditions == null) {
-                return 0;
-            }
-
-            const includeFoundShipsFactor = this.includeFoundShipsFactor[resource];
-            const total = expeditions.findings.resources[resource]
-                + expeditions.findings.fleetResourceUnits[resource] * includeFoundShipsFactor;
-
-            return total;
-        }
-
-        private getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefined, resource: ResourceType): number {
-            if (dailyReports == null) {
-                return 0;
-            }
-
-            const lostLootFactor = this.includeLostLoot ? 1 : 0;
-            const lootResources = dailyReports.loot.lost[resource] * lostLootFactor
-                + dailyReports.loot.gained[resource];
-
-            const includeLostShipsFactor = this.includeLostShipsFactor[resource];
-            const lostShipResourceUnits = (
-                dailyReports.lostShips.onExpeditions.resourceUnits[resource]
-                + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
-            ) * includeLostShipsFactor;
-
-            const total = lootResources - lostShipResourceUnits;
-
-            return total;
-        }
-
-        private getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
-            if (reports == null) {
-                return 0;
-            }
-
-            return reports.total[resource];
-        }
-
-        private get footerItems(): RangedStatsTableItem<DailyEvents>[] {
-            const result: RangedStatsTableItem<DailyEvents>[] = [
-                {
-                    label: this.$i18n.$t.extension.common.resourceUnits,
-                    getValue: events => ResourceTypes.reduce(
-                        (total, resource) => total + EventTypes.reduce(
-                            (total, eventType) => total + this.getResources(events, eventType, resource),
-                            0
-                        ),
-                        0
-                    ),
-                },
-            ];
-
-            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
-                result.push({
-                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
-                    getValue: events => ResourceTypes.reduce(
-                        (total, resource) => total + EventTypes.reduce(
-                            (total, eventType) => total + getMsuOrDsu({
-                                [resource]: this.getResources(events, eventType, resource)
-                            }),
-                            0
-                        ),
-                        0
-                    ),
-                });
-            }
-
-            return result;
-        }
+        return ResourceTypes.map<RangedStatsTableItem<DailyEvents>>(resource => ({
+            label: translations().extension.resources[resource],
+            items: types[resource].map(eventType => ({
+                label: eventType == null ? translations().extension.common.sum : translations().extension.resourceBalance[eventType],
+                getValue: nextEvents => getResources(nextEvents, eventType, resource),
+                class: eventType == null ? 'sum-item' : '',
+                labelClass: eventType == null ? 'sum-item' : '',
+            })),
+        }));
     }
 
+    return ResourceTypes.map(resource => ({
+        label: translations().extension.resources[resource],
+        getValue: nextEvents => getResources(nextEvents, null, resource),
+    }));
+});
+
+function getResources(nextEvents: DailyEvents[], eventType: EventType | null, resource: ResourceType): number {
+    return nextEvents.reduce((acc, event) => {
+        switch (eventType) {
+            case 'expedition': return acc + getResource({ date: event.date, expeditions: event.expeditions }, resource);
+            case 'combat-report': return acc + getResource({ date: event.date, combats: event.combats }, resource);
+            case 'debris-field-report': return acc + getResource({ date: event.date, debrisFields: event.debrisFields }, resource);
+            case null: return acc + getResource(event, resource);
+        }
+    }, 0);
+}
+
+function getResource(dayEvents: DailyEvents, resource: ResourceType): number {
+    return getExpeditionResourceAmount(dayEvents.expeditions, resource)
+        + getCombatResourceAmount(dayEvents.combats, resource)
+        + getDebrisFieldResourceAmount(dayEvents.debrisFields, resource);
+}
+
+function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefined, resource: ResourceType): number {
+    if (expeditions == null) {
+        return 0;
+    }
+
+    const localIncludeFoundShipsFactor = includeFoundShipsFactor.value[resource];
+    const total = expeditions.findings.resources[resource]
+        + expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
+
+    return total;
+}
+
+function getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefined, resource: ResourceType): number {
+    if (dailyReports == null) {
+        return 0;
+    }
+
+    const lostLootFactor = includeLostLoot.value ? 1 : 0;
+    const lootResources = dailyReports.loot.lost[resource] * lostLootFactor
+        + dailyReports.loot.gained[resource];
+
+    const localIncludeLostShipsFactor = includeLostShipsFactor.value[resource];
+    const lostShipResourceUnits = (
+        dailyReports.lostShips.onExpeditions.resourceUnits[resource]
+        + dailyReports.lostShips.againstPlayers.resourceUnits[resource]
+    ) * localIncludeLostShipsFactor;
+
+    const total = lootResources - lostShipResourceUnits;
+
+    return total;
+}
+
+function getDebrisFieldResourceAmount(reports: DailyDebrisFieldReportResult | undefined, resource: ResourceType): number {
+    if (reports == null) {
+        return 0;
+    }
+
+    return reports.total[resource];
+}
+
+const footerItems = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
+    const result: RangedStatsTableItem<DailyEvents>[] = [
+        {
+            label: translations().extension.common.resourceUnits,
+            getValue: nextEvents => ResourceTypes.reduce(
+                (total, resource) => total + EventTypes.reduce(
+                    (total, eventType) => total + getResources(nextEvents, eventType, resource),
+                    0
+                ),
+                0
+            ),
+        },
+    ];
+
+    if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
+        result.push({
+            label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
+            getValue: nextEvents => ResourceTypes.reduce(
+                (total, resource) => total + EventTypes.reduce(
+                    (total, eventType) => total + getMsuOrDsu({
+                        [resource]: getResources(nextEvents, eventType, resource)
+                    }),
+                    0
+                ),
+                0
+            ),
+        });
+    }
+
+    return result;
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;
@@ -277,16 +269,14 @@
         align-items: start;
         height: 100%;
 
-        &::v-deep {
-            .sum-item {
-                font-weight: bold;
-                border-top: 1px solid rgba(var(--color), 0.5);
-                margin-top: 1px;
-            }
+        :deep(.sum-item) {
+            font-weight: bold;
+            border-top: 1px solid rgba(var(--color), 0.5);
+            margin-top: 1px;
         }
     }
 
-    .floating-settings::v-deep .floating-menu {
+    .floating-settings:deep(.floating-menu) {
         display: grid;
         grid-template-columns: auto auto;
         column-gap: 8px;
