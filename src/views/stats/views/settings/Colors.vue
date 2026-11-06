@@ -11,32 +11,17 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
-    import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
-    import ExpeditionDepletionColorSettings from '@stats/components/settings/colors/ExpeditionDepletionColorSettings.vue';
-    import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
-    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
-    import LifeformColorSettings from '@stats/components/settings/colors/LifeformColorSettings.vue';
-    import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
-
-    @Component({
-        components: {
-            ExpeditionEventColorSettings,
-            ExpeditionEventSizeColorSettings,
-            ExpeditionDepletionColorSettings,
-            CombatResultColorSettings,
-            ResourceColorSettings,
-            ShipColorSettings,
-            LifeformColorSettings,
-            LifeformDiscoveryColorSettings,
-        },
-    })
-    export default class Colors extends Vue {
-    }
+<script setup lang="ts">
+import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
+import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
+import ExpeditionDepletionColorSettings from '@stats/components/settings/colors/ExpeditionDepletionColorSettings.vue';
+import CombatResultColorSettings from '@stats/components/settings/colors/CombatResultColorSettings.vue';
+import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
+import LifeformColorSettings from '@stats/components/settings/colors/LifeformColorSettings.vue';
+import LifeformDiscoveryColorSettings from '@stats/components/settings/colors/LifeformDiscoveryColorSettings.vue';
 </script>
+
 <style lang="scss" scoped>
     .colors {
         display: flex;

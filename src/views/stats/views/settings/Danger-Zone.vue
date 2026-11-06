@@ -5,7 +5,7 @@
                 <span class="ogti ogti-expedition" />
                 <span
                     v-text="
-                        $i18n.$t.extension.settings.dangerZone.deleteExpeditions.button(
+                        translations().extension.settings.dangerZone.deleteExpeditions.button(
                             accountAndServer
                         )
                     "
@@ -16,7 +16,7 @@
                 <span class="ogti ogti-attack" />
                 <span
                     v-text="
-                        $i18n.$t.extension.settings.dangerZone.deleteCombats.button(
+                        translations().extension.settings.dangerZone.deleteCombats.button(
                             accountAndServer
                         )
                     "
@@ -27,7 +27,7 @@
                 <span class="ogti ogti-debris-field" />
                 <span
                     v-text="
-                        $i18n.$t.extension.settings.dangerZone.deleteDebrisFieldReports.button(
+                        translations().extension.settings.dangerZone.deleteDebrisFieldReports.button(
                             accountAndServer
                         )
                     "
@@ -40,7 +40,7 @@
             <span class="mdi mdi-account" />
             <span
                 v-text="
-                    $i18n.$t.extension.settings.dangerZone.deleteAccount.button(
+                    translations().extension.settings.dangerZone.deleteAccount.button(
                         accountAndServer
                     )
                 "
@@ -52,7 +52,7 @@
             <span class="mdi mdi-update" />
             <span
                 v-text="
-                    $i18n.$t.extension.settings.dangerZone.deleteUniverseHistory.button(
+                    translations().extension.settings.dangerZone.deleteUniverseHistory.button(
                         server
                     )
                 "
@@ -63,7 +63,7 @@
         <button class="delete-button" @click="deleteEverything()">
             <span class="mdi mdi-delete" />
             <span
-                v-text="$i18n.$t.extension.settings.dangerZone.deleteEverything.button"
+                v-text="translations().extension.settings.dangerZone.deleteEverything.button"
             />
         </button>
 
@@ -73,143 +73,147 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { CombatReportDataModule } from '../../data/CombatReportDataModule';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { ExpeditionDataModule } from '../../data/ExpeditionDataModule';
-    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
-    import { UniversesAndAccountsDataModule } from '../../data/UniversesAndAccountsDataModule';
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import { useCombatReportStore } from '../../data/CombatReportDataModule';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
+import { useExpeditionStore } from '../../data/ExpeditionDataModule';
+import { useUniverseHistoryStore } from '../../data/UniverseHistoryDataModule';
+import { useUniversesAndAccountsStore } from '../../data/UniversesAndAccountsDataModule';
 
-    @Component({})
-    export default class DangerZone extends Vue {
+const expeditionStore = useExpeditionStore();
 
-        private isDeleting = false;
+const combatReportStore = useCombatReportStore();
 
-        private async mounted() {
-            await ExpeditionDataModule.ready;
-            await CombatReportDataModule.ready;
-            await DebrisFieldReportDataModule.ready;
+const debrisFieldReportStore = useDebrisFieldReportStore();
 
-            await UniversesAndAccountsDataModule.ready;
-        }
+const universesAndAccountsStore = useUniversesAndAccountsStore();
 
-        private get server() {
-            const server = UniversesAndAccountsDataModule.currentServer;
-            return `${server.language.toUpperCase()} ${server.name}`;
-        }
+const universeHistoryStore = useUniverseHistoryStore();
 
-        private get accountAndServer() {
-            const account = UniversesAndAccountsDataModule.currentAccount;
-            return `${account.name} - ${this.server}`;
-        }
+const isDeleting = ref(false);
 
-        private async clearExpeditions() {
-            const confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteExpeditions.confirmationText(this.accountAndServer, this.$i18n.$n(ExpeditionDataModule.count))
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
+const server = computed(() => {
+    const localServer = universesAndAccountsStore.currentServer;
+    return `${localServer.language.toUpperCase()} ${localServer.name}`;
+});
 
-            if (confirmed) {
-                this.isDeleting = true;
-                await ExpeditionDataModule.clear();
+const accountAndServer = computed(() => {
+    const account = universesAndAccountsStore.currentAccount;
+    return `${account.name} - ${server.value}`;
+});
 
-                window.location.hash = '';
-                window.location.reload();
-            }
-        }
+async function clearExpeditions() {
+    const confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteExpeditions.confirmationText(accountAndServer.value, formatNumber(expeditionStore.count))
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
 
-        private async clearCombats() {
-            const confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteCombats.confirmationText(this.accountAndServer, this.$i18n.$n(CombatReportDataModule.count))
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
+    if (confirmed) {
+        isDeleting.value = true;
+        await expeditionStore.clear();
 
-            if (confirmed) {
-                this.isDeleting = true;
-                await CombatReportDataModule.clear();
-
-                window.location.hash = '';
-                window.location.reload();
-            }
-        }
-
-        private async clearDebrisFieldReports() {
-            const confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteDebrisFieldReports.confirmationText(this.accountAndServer, this.$i18n.$n(DebrisFieldReportDataModule.count))
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
-
-            if (confirmed) {
-                this.isDeleting = true;
-                await DebrisFieldReportDataModule.clear();
-
-                window.location.hash = '';
-                window.location.reload();
-            }
-        }
-
-        private async deleteAccount() {
-            const confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteAccount.confirmationText(this.accountAndServer)
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
-
-
-            if (confirmed) {
-                this.isDeleting = true;
-                await UniversesAndAccountsDataModule.deleteCurrentAccount();
-
-                window.close();
-            }
-        }
-
-        private async deleteUniverseHistory() {
-            const confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteUniverseHistory.confirmationText(this.accountAndServer)
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
-
-
-            if (confirmed) {
-                this.isDeleting = true;
-                await UniverseHistoryDataModule.deleteCurrentServer();
-
-                window.location.hash = '';
-                window.location.reload();
-            }
-        }
-
-        private async deleteEverything() {
-            let confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteEverything.confirmationText1
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
-            if (!confirmed) {
-                return;
-            }
-
-            confirmed = window.confirm(
-                this.$i18n.$t.extension.settings.dangerZone.deleteEverything.confirmationText2
-                + '\n\n'
-                + this.$i18n.$t.extension.settings.dangerZone.doYouWantToContinue
-            );
-
-
-            if (confirmed) {
-                this.isDeleting = true;
-                await UniversesAndAccountsDataModule.deleteEverything();
-
-                window.close();
-            }
-        }
+        window.location.hash = '';
+        window.location.reload();
     }
+}
+
+async function clearCombats() {
+    const confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteCombats.confirmationText(accountAndServer.value, formatNumber(combatReportStore.count))
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
+
+    if (confirmed) {
+        isDeleting.value = true;
+        await combatReportStore.clear();
+
+        window.location.hash = '';
+        window.location.reload();
+    }
+}
+
+async function clearDebrisFieldReports() {
+    const confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteDebrisFieldReports.confirmationText(accountAndServer.value, formatNumber(debrisFieldReportStore.count))
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
+
+    if (confirmed) {
+        isDeleting.value = true;
+        await debrisFieldReportStore.clear();
+
+        window.location.hash = '';
+        window.location.reload();
+    }
+}
+
+async function deleteAccount() {
+    const confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteAccount.confirmationText(accountAndServer.value)
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
+
+    if (confirmed) {
+        isDeleting.value = true;
+        await universesAndAccountsStore.deleteCurrentAccount();
+
+        window.close();
+    }
+}
+
+async function deleteUniverseHistory() {
+    const confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteUniverseHistory.confirmationText(accountAndServer.value)
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
+
+    if (confirmed) {
+        isDeleting.value = true;
+        await universeHistoryStore.deleteCurrentServer();
+
+        window.location.hash = '';
+        window.location.reload();
+    }
+}
+
+async function deleteEverything() {
+    let confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteEverything.confirmationText1
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
+    if (!confirmed) {
+        return;
+    }
+
+    confirmed = window.confirm(
+        translations().extension.settings.dangerZone.deleteEverything.confirmationText2
+        + '\n\n'
+        + translations().extension.settings.dangerZone.doYouWantToContinue
+    );
+
+    if (confirmed) {
+        isDeleting.value = true;
+        await universesAndAccountsStore.deleteEverything();
+
+        window.close();
+    }
+}
+
+onMounted(async () => {
+    await expeditionStore.ready;
+    await combatReportStore.ready;
+    await debrisFieldReportStore.ready;
+
+    await universesAndAccountsStore.ready;
+});
 </script>
 
 <style lang="scss" scoped>
