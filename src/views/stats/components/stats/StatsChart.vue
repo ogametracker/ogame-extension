@@ -1,7 +1,7 @@
 <template>
     <scrollable-chart
         :datasets="computedDatasets"
-        :x-label-formatter="(index) => formatDate(index)"
+        :x-label-formatter="formatDayIndex"
         :no-legend="noLegend"
         :hide-tooltip-footer="noTooltipFooter"
     >
@@ -12,78 +12,68 @@
 </template>
 
 <script lang="ts">
-    import { PropType } from 'vue';
-    import { addDays, differenceInDays, startOfDay, subDays } from 'date-fns';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { ScrollableChartDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+export type StatsChartItemFilterFunction<T> = (item: T) => boolean;
 
-    export type StatsChartItemFilterFunction<T> = (item: T) => boolean;
+export interface StatsChartDataset<T> {
+    key: string;
+    label: string;
+    color: string;
+    getValue: (item: T) => number;
+    filled?: boolean;
+    stack?: boolean;
+    showAverage?: boolean;
+}
+</script>
 
-    export interface StatsChartDataset<T> {
-        key: string;
-        label: string;
-        color: string;
-        getValue: (item: T) => number;
-        filled?: boolean;
-        stack?: boolean;
-        showAverage?: boolean;
-    }
+<script setup lang="ts" generic="T">
+import { computed } from 'vue';
+import { formatDate } from '@stats/i18n';
+import type { PropType } from 'vue';
+import { addDays, differenceInDays, startOfDay, subDays } from 'date-fns';
+import type { ScrollableChartDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
 
-    @Component({})
-    export default class StatsChart<T> extends Vue {
+const props = defineProps({
+    datasets: { required: true, type: Array as PropType<StatsChartDataset<T>[]> },
+    noLegend: { required: false, type: Boolean },
+    noTooltipFooter: { required: false, type: Boolean },
+    firstDay: { required: true, type: [Number, Date] as PropType<number | Date> },
+    itemsPerDay: { required: true, type: Object as PropType<Partial<Record<number, T>>> },
+    minDays: { required: false, type: Number, default: () => 30 },
+});
 
-        @Prop({ required: true, type: Array as PropType<StatsChartDataset<T>[]> })
-        private datasets!: StatsChartDataset<T>[];
+const minDay = computed(() => {
+    const firstDay = typeof props.firstDay === 'number' ? props.firstDay : props.firstDay.getTime();
+    const today = startOfDay(Date.now());
+    return Math.min(firstDay, subDays(today, props.minDays - 1).getTime());
+});
 
-        @Prop({ required: false, type: Boolean })
-        private noLegend!: boolean;
+const computedDatasets = computed<ScrollableChartDataset[]>(() => {
+    const localMinDay = minDay.value;
+    const dayCount = differenceInDays(startOfDay(Date.now()), localMinDay);
+    const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(localMinDay, add).getTime());
 
-        @Prop({ required: false, type: Boolean })
-        private noTooltipFooter!: boolean;
+    const itemByDay = days.map(day => props.itemsPerDay[day] ?? null);
+    const filteredItemDays = itemByDay.filter(items => items != null).length;
 
-        @Prop({ required: true, type: [Number, Date] })
-        private firstDay!: number | Date;
+    return props.datasets.map(dataset => {
+        const values = itemByDay.map(item => item == null ? 0 : dataset.getValue(item));
+        const total = values.reduce((acc, cur) => acc + cur, 0);
 
-        @Prop({ required: true, type: Object as PropType<Record<number, T>> })
-        private itemsPerDay!: Record<number, T>;
+        return {
+            key: dataset.key,
+            color: dataset.color,
+            label: dataset.label,
+            values: values.map((y, x) => ({ x, y })),
+            filled: dataset.filled ?? true,
+            stack: dataset.stack ?? true,
+            hidePoints: false,
+            average: dataset.showAverage == true ? total / Math.max(1, filteredItemDays) : undefined,
+        };
+    });
+});
 
-        @Prop({ required: false, type: Number, default: () => 30 })
-        private minDays!: number;
-
-        private get minDay() {
-            const firstDay = typeof this.firstDay === 'number' ? this.firstDay : this.firstDay.getTime();
-            const today = startOfDay(Date.now());
-            return Math.min(firstDay, subDays(today, this.minDays - 1).getTime());
-        }
-
-        private get computedDatasets(): ScrollableChartDataset[] {
-            const minDay = this.minDay;
-            const dayCount = differenceInDays(startOfDay(Date.now()), minDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(minDay, add).getTime());
-
-            const itemByDay = days.map(day => this.itemsPerDay[day] ?? null);
-            const filteredItemDays = itemByDay.filter(items => items != null).length;
-
-            return this.datasets.map(dataset => {
-                const values = itemByDay.map(item => item == null ? 0 : dataset.getValue(item));
-                const total = values.reduce((acc, cur) => acc + cur, 0);
-
-                return {
-                    key: dataset.key,
-                    color: dataset.color,
-                    label: dataset.label,
-                    values: values.map((y, x) => ({ x, y })),
-                    filled: dataset.filled ?? true,
-                    stack: dataset.stack ?? true,
-                    hidePoints: false,
-                    average: dataset.showAverage == true ? total / Math.max(1, filteredItemDays) : undefined,
-                };
-            });
-        }
-
-        private formatDate(index: number): string {
-            const day = addDays(this.minDay, index);
-            return this.$i18n.$d(day, 'date');
-        }
-    }
+function formatDayIndex(index: number): string {
+    const day = addDays(minDay.value, index);
+    return formatDate(day, 'date');
+}
 </script>
