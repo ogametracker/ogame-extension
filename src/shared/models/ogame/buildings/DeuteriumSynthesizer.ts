@@ -9,13 +9,13 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const mineProduction = Math.trunc(
-            (10 *
-                level *
-                1.1 ** level *
-                dependencies.serverSettings.economySpeed *
-                (1.44 - 0.004 * dependencies.planet.temperature) *
-                dependencies.productionSettings.deuteriumSynthesizer) /
-                100,
+            (10
+                * level
+                * 1.1 ** level
+                * dependencies.serverSettings.economySpeed
+                * (1.44 - 0.004 * dependencies.planet.temperature)
+                * dependencies.productionSettings.deuteriumSynthesizer)
+                / 100,
         );
         return mineProduction;
     }

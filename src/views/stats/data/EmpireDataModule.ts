@@ -102,8 +102,8 @@ export const useEmpireStore = defineStore('empire', () => {
             ((await store.get('research')) as ResearchLevels | undefined) ?? createRecord(ResearchTypes, 0);
         const planetOrder = ((await store.get('planetOrder')) as number[] | undefined) ?? [];
         const lifeformExperience =
-            ((await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined) ??
-            createRecord(ValidLifeformTypes, 0);
+            ((await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined)
+            ?? createRecord(ValidLifeformTypes, 0);
 
         const planets: Record<number, PlanetData | MoonData> = {};
         const allKeys = await store.getAllKeys();
@@ -117,8 +117,8 @@ export const useEmpireStore = defineStore('empire', () => {
                 const basicInfo =
                     ((await store.get(`moon.${id}`)) as DbBasicMoonData) ?? _throw('no basic moon data found');
                 const buildings =
-                    ((await store.get(`moon.${id}.buildings`)) as DbMoonBuildingLevels | undefined) ??
-                    createRecord(MoonBuildingTypes, 0);
+                    ((await store.get(`moon.${id}.buildings`)) as DbMoonBuildingLevels | undefined)
+                    ?? createRecord(MoonBuildingTypes, 0);
                 const ships =
                     ((await store.get(`moon.${id}.ships`)) as DbShipAmounts | undefined) ?? createRecord(ShipTypes, 0);
                 const defense: DbDefenseAmounts = ((await store.get(`moon.${id}.defenses`)) as
@@ -143,11 +143,11 @@ export const useEmpireStore = defineStore('empire', () => {
                 const basicInfo =
                     ((await store.get(`planet.${id}`)) as DbBasicPlanetData) ?? _throw('no basic planet data found');
                 const buildings =
-                    ((await store.get(`planet.${id}.buildings`)) as DbPlanetBuildingLevels | undefined) ??
-                    createRecord(PlanetBuildingTypes, 0);
+                    ((await store.get(`planet.${id}.buildings`)) as DbPlanetBuildingLevels | undefined)
+                    ?? createRecord(PlanetBuildingTypes, 0);
                 const ships =
-                    ((await store.get(`planet.${id}.ships`)) as DbShipAmounts | undefined) ??
-                    createRecord(ShipTypes, 0);
+                    ((await store.get(`planet.${id}.ships`)) as DbShipAmounts | undefined)
+                    ?? createRecord(ShipTypes, 0);
                 const defense: DbDefenseAmounts = ((await store.get(`planet.${id}.defenses`)) as
                     | DbDefenseAmounts
                     | undefined) ?? {
@@ -156,8 +156,8 @@ export const useEmpireStore = defineStore('empire', () => {
                     [DefenseType.largeShieldDome]: false,
                 };
                 const missiles =
-                    ((await store.get(`planet.${id}.missiles`)) as DbMissileAmounts | undefined) ??
-                    createRecord(MissileTypes, 0);
+                    ((await store.get(`planet.${id}.missiles`)) as DbMissileAmounts | undefined)
+                    ?? createRecord(MissileTypes, 0);
                 const activeItems = ((await store.get(`planet.${id}.activeItems`)) as DbActiveItems | undefined) ?? {};
                 const productionSettings = (((await store.get(`planet.${id}.productionSettings`)) as
                     | DbPlanetProductionSettings
@@ -174,9 +174,8 @@ export const useEmpireStore = defineStore('empire', () => {
                 const activeLifeform =
                     ((await store.get(`planet.${id}.lifeform`)) as LifeformType | undefined) ?? LifeformType.none;
                 const lifeformBuildings =
-                    ((await store.get(`planet.${id}.lifeformBuildings`)) as
-                        | DbPlanetLifeformBuildingLevels
-                        | undefined) ?? createRecord(LifeformBuildingTypes, 0);
+                    ((await store.get(`planet.${id}.lifeformBuildings`)) as DbPlanetLifeformBuildingLevels | undefined)
+                    ?? createRecord(LifeformBuildingTypes, 0);
                 const lifeformTechnologies =
                     ((await store.get(`planet.${id}.lifeformTechnologies`)) as
                         | DbPlanetLifeformTechnologyLevels

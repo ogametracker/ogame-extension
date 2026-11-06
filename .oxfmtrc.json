@@ -6,5 +6,6 @@
     "singleQuote": true,
     "tabWidth": 4,
     "trailingComma": "all",
+    "experimentalOperatorPosition": "start",
     "ignorePatterns": ["**/*.generated.ts"]
 }

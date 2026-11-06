@@ -279,9 +279,9 @@
                         <template #cell-what="{ item, index }">
                             <div
                                 v-if="
-                                    item.type == 'mine' ||
-                                    item.type == 'lifeform-building' ||
-                                    item.type == 'lifeform-technology'
+                                    item.type == 'mine'
+                                    || item.type == 'lifeform-building'
+                                    || item.type == 'lifeform-technology'
                                 "
                                 class="what-cell"
                                 :class="`what-cell--${item.type}`"
@@ -318,8 +318,8 @@
                                             />
                                             <span
                                                 v-if="
-                                                    additionalLifeformBuilding.levels.from !=
-                                                    additionalLifeformBuilding.levels.to
+                                                    additionalLifeformBuilding.levels.from
+                                                    != additionalLifeformBuilding.levels.to
                                                 "
                                                 v-text="
                                                     `${additionalLifeformBuilding.levels.from} - ${additionalLifeformBuilding.levels.to}`
@@ -418,8 +418,8 @@
                                     <div
                                         :style="{
                                             display:
-                                                additionalLifeformStuffGroup.planetIds.size == 1 ||
-                                                showAmotizationGroup[`item-${index}_group-${i}`]
+                                                additionalLifeformStuffGroup.planetIds.size == 1
+                                                || showAmotizationGroup[`item-${index}_group-${i}`]
                                                     ? 'contents'
                                                     : 'none',
                                         }"
@@ -483,8 +483,8 @@
 
                                                 <span
                                                     v-if="
-                                                        additionalLifeformStuff.levels.from !=
-                                                        additionalLifeformStuff.levels.to
+                                                        additionalLifeformStuff.levels.from
+                                                        != additionalLifeformStuff.levels.to
                                                     "
                                                     v-text="
                                                         `${additionalLifeformStuff.levels.from} - ${additionalLifeformStuff.levels.to}`

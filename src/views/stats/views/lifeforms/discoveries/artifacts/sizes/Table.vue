@@ -6,8 +6,8 @@
 
                 <span
                     v-if="
-                        value ==
-                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                        value
+                        == translations().extension.empire.lifeforms.artifactFindingSizes[
                             LifeformDiscoveryEventArtifactFindingSize.small
                         ]
                     "
@@ -16,8 +16,8 @@
                 />
                 <span
                     v-else-if="
-                        value ==
-                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                        value
+                        == translations().extension.empire.lifeforms.artifactFindingSizes[
                             LifeformDiscoveryEventArtifactFindingSize.medium
                         ]
                     "
@@ -26,8 +26,8 @@
                 />
                 <span
                     v-else-if="
-                        value ==
-                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                        value
+                        == translations().extension.empire.lifeforms.artifactFindingSizes[
                             LifeformDiscoveryEventArtifactFindingSize.large
                         ]
                     "
@@ -36,8 +36,8 @@
                 />
                 <span
                     v-else-if="
-                        value ==
-                        translations().extension.empire.lifeforms.artifactFindingSizes[
+                        value
+                        == translations().extension.empire.lifeforms.artifactFindingSizes[
                             LifeformDiscoveryEventArtifactFindingSize.storageFull
                         ]
                     "

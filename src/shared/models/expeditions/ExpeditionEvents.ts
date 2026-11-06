@@ -17,16 +17,16 @@ interface ExpeditionEventWithSize {
     size: ExpeditionEventSize;
 }
 
-export type ExpeditionEventDarkMatter = ExpeditionEventBase &
-    ExpeditionEventWithSize & {
+export type ExpeditionEventDarkMatter = ExpeditionEventBase
+    & ExpeditionEventWithSize & {
         type: ExpeditionEventType.darkMatter;
         darkMatter: number;
     };
 
 export type ExpeditionEventResourcesAmount = Record<ResourceType, number>;
 
-export type ExpeditionEventResources = ExpeditionEventBase &
-    ExpeditionEventWithSize & {
+export type ExpeditionEventResources = ExpeditionEventBase
+    & ExpeditionEventWithSize & {
         type: ExpeditionEventType.resources;
         resources: ExpeditionEventResourcesAmount;
     };
@@ -61,8 +61,8 @@ export const ExpeditionFindableShipTypes: ExpeditionFindableShipType[] = [
 
 export type ExpeditionFindableFleet = Partial<Record<ExpeditionFindableShipType, number>>;
 
-export type ExpeditionEventFleet = ExpeditionEventBase &
-    ExpeditionEventWithSize & {
+export type ExpeditionEventFleet = ExpeditionEventBase
+    & ExpeditionEventWithSize & {
         type: ExpeditionEventType.fleet;
         fleet: ExpeditionFindableFleet;
     };

@@ -54,8 +54,8 @@ function onMessage(message: Message<MessageType, any>) {
             const msg = message as DebrisFieldReportMessage;
 
             const div =
-                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ??
-                _throw(`failed to find debris field report with id '${msg.data.id}'`);
+                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find debris field report with id '${msg.data.id}'`);
             div.classList.add(cssClasses.messages.debrisFieldReport);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
@@ -104,8 +104,8 @@ function onMessage(message: Message<MessageType, any>) {
             }
 
             const div =
-                document.querySelector(`div.msg[data-msg-id="${id}"]`) ??
-                _throw(`failed to find combat report message with id '${id}'`);
+                document.querySelector(`div.msg[data-msg-id="${id}"]`)
+                ?? _throw(`failed to find combat report message with id '${id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.error);

@@ -31,9 +31,9 @@ export function trackLifeformSettingsPage() {
                 const match = title.match(/\s*(?<level>\d+)[^\d]*:?\s*(?<exp>[^\s/]*)\/?\d?/i);
 
                 const levelText =
-                    match?.groups?.level.replace(/[^\d]/g, '') ??
-                    elem.querySelector('.currentlevel')?.textContent?.trim() ??
-                    _throw('no level match');
+                    match?.groups?.level.replace(/[^\d]/g, '')
+                    ?? elem.querySelector('.currentlevel')?.textContent?.trim()
+                    ?? _throw('no level match');
                 const level = parseIntSafe(levelText, 10);
 
                 let currentExp = 0;

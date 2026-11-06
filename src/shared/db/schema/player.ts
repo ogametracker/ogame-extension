@@ -47,8 +47,8 @@ export type DbShipAmounts = Record<ShipType, number>;
 export type DbDefenseAmounts = Record<
     Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>,
     number
-> &
-    Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+>
+    & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
 
 export type DbMissileAmounts = Record<MissileType, number>;
 

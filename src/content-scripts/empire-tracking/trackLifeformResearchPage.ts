@@ -16,8 +16,8 @@ export function trackLifeformResearchPage() {
         selector: '#technologies',
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const technologyLevels: Partial<Record<LifeformTechnologyType, number>> = {};

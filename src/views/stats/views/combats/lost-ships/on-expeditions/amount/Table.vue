@@ -68,8 +68,8 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
             getValue: nextCombats =>
                 ShipTypes.reduce(
                     (total, ship) =>
-                        total +
-                        nextCombats.reduce((acc, combat) => acc + combat.lostShips.onExpeditions.ships[ship], 0),
+                        total
+                        + nextCombats.reduce((acc, combat) => acc + combat.lostShips.onExpeditions.ships[ship], 0),
                     0,
                 ),
         },

@@ -42,11 +42,11 @@ export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
     );
 
     const potentialCrawlerBoost =
-        (data.serverSettings.crawlerProductionFactorPerUnit *
-            crawlerCount *
-            crawlerProductivity *
-            data.crawlerProductionSetting) /
-        100;
+        (data.serverSettings.crawlerProductionFactorPerUnit
+            * crawlerCount
+            * crawlerProductivity
+            * data.crawlerProductionSetting)
+        / 100;
 
     return Math.min(potentialCrawlerBoost, data.serverSettings.crawlerMaxProductionFactor);
 }

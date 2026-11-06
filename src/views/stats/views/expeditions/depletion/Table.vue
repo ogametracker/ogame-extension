@@ -97,8 +97,8 @@ const depletionLevelsByLabel = computed<Record<string, ExpeditionDepletionLevel 
     return createRecord(
         depletionLevels.map(level => translations().extension.expeditions.depletionLevels[level]),
         label =>
-            depletionLevels.find(level => label == translations().extension.expeditions.depletionLevels[level]) ??
-            _throw(`failed to find depletion level for label '${label}'`),
+            depletionLevels.find(level => label == translations().extension.expeditions.depletionLevels[level])
+            ?? _throw(`failed to find depletion level for label '${label}'`),
     );
 });
 </script>

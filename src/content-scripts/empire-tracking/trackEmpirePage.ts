@@ -76,14 +76,14 @@ export function trackEmpirePage() {
         selector: '#siteFooter',
         callback: async () => {
             const ogameNowText =
-                (document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-timestamp');
+                (document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-timestamp');
             const ogameNow = parseIntSafe(ogameNowText, 10) * 1000;
 
             const scripts = Array.from(document.querySelectorAll('script')) as HTMLScriptElement[];
             const script =
-                scripts.find(s => s.textContent?.includes('createImperiumHtml(') ?? false) ??
-                _throw('did not find script with imperium data');
+                scripts.find(s => s.textContent?.includes('createImperiumHtml(') ?? false)
+                ?? _throw('did not find script with imperium data');
             const js = script.textContent ?? _throw('no js found');
 
             const jsonRegex = /createImperiumHtml\("#mainWrapper", "#loading", (?<json>.+), [01] \)/;
@@ -172,7 +172,9 @@ function trackPlanetActiveItems(planet: OgameEmpirePlanet, ogameNow: number) {
 
         const itemId = resolveItemIdBySmallImage(smallImageHash, totalDuration);
         if (itemId == null) {
-            _logWarning(`could not resolve item with small image hash '${smallImageHash}' and duration ${totalDuration}`);
+            _logWarning(
+                `could not resolve item with small image hash '${smallImageHash}' and duration ${totalDuration}`,
+            );
             return;
         }
 

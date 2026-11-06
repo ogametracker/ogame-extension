@@ -571,10 +571,10 @@ const items = computed<ProductionItem[]>(() => {
             ...production,
             fusionReactorConsumption: localFusionReactorConsumptions[planet.id],
             total:
-                production.metal.total +
-                production.crystal.total +
-                production.deuterium.total -
-                localFusionReactorConsumptions[planet.id],
+                production.metal.total
+                + production.crystal.total
+                + production.deuterium.total
+                - localFusionReactorConsumptions[planet.id],
             totalConverted: getMsuOrDsu({
                 metal: production.metal.total,
                 crystal: production.crystal.total,
@@ -604,8 +604,8 @@ const footerItems = computed<ProductionItem[]>(() => {
     const metalPerHour = productionPerHour.metal;
     const crystalPerHour = productionPerHour.crystal;
     const deuteriumPerHour =
-        productionPerHour.deuterium -
-        Object.values(fusionReactorConsumptions.value).reduce((total, cur) => total + cur, 0);
+        productionPerHour.deuterium
+        - Object.values(fusionReactorConsumptions.value).reduce((total, cur) => total + cur, 0);
     const totalPerHour = metalPerHour + crystalPerHour + deuteriumPerHour;
     const totalConvertedPerHour = getMsuOrDsu({
         metal: metalPerHour,
@@ -734,9 +734,9 @@ function getActiveItems(item: ProductionItem): (ItemId | null)[] {
             item.activeItems.find(id => {
                 const effect = Items[id]?.effect;
                 return (
-                    effect?.type === 'resourceProductionBonus' &&
-                    effect.value[resource] != null &&
-                    Object.keys(effect.value).length === 1
+                    effect?.type === 'resourceProductionBonus'
+                    && effect.value[resource] != null
+                    && Object.keys(effect.value).length === 1
                 );
             }) ?? null,
     );

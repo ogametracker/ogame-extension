@@ -104,14 +104,14 @@ const nameRegex = /^<b>(?<name>.+) \[\d+:\d+:\d+\]/;
 
 function getPlanetData(planetElem: Element): BasicPlanetDataPlanet {
     const planetLink =
-        (planetElem.querySelector(':scope > a.planetlink') as HTMLAnchorElement | null)?.href ??
-        _throw('no planetlink found');
+        (planetElem.querySelector(':scope > a.planetlink') as HTMLAnchorElement | null)?.href
+        ?? _throw('no planetlink found');
     const idText = planetLink.match(planetIdRegex)?.groups?.id ?? _throw('no planet id found in url');
     const id = parseIntSafe(idText, 10);
 
     const coordsText =
-        planetElem.querySelector(':scope > a.planetlink > .planet-koords')?.textContent ??
-        _throw('no planet coordinates found');
+        planetElem.querySelector(':scope > a.planetlink > .planet-koords')?.textContent
+        ?? _throw('no planet coordinates found');
     const coordinates = parseCoordinates(coordsText);
 
     const titleText =
@@ -195,8 +195,8 @@ function trackSelectedLifeform() {
         selector: '#lifeform', // is only on page for planets
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const lifeform = getActiveLifeform();
@@ -280,9 +280,9 @@ function updateFleetTracking() {
         );
         // Checking for data-tooltip-title and title as OGLight is refactoring it to title
         const tooltipHtml =
-            tooltipElement?.getAttribute('data-tooltip-title') ??
-            tooltipElement?.getAttribute('title') ??
-            _throw('no tooltip found');
+            tooltipElement?.getAttribute('data-tooltip-title')
+            ?? tooltipElement?.getAttribute('title')
+            ?? _throw('no tooltip found');
 
         const tooltipTextElem = document.createElement('div');
         tooltipTextElem.innerHTML = tooltipHtml;

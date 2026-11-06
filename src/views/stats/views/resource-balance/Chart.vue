@@ -198,9 +198,9 @@ function getConvertedResourcesAmount(nextDatasets: ScollableChartFooterDataset[]
 
 function getResource(dayEvents: DayEvents, resource: ResourceType): number {
     return (
-        getExpeditionResourceAmount(dayEvents.expeditions, resource) +
-        getCombatResourceAmount(dayEvents.combatReports, resource) +
-        getDebrisFieldResourceAmount(dayEvents.debrisFieldReports, resource)
+        getExpeditionResourceAmount(dayEvents.expeditions, resource)
+        + getCombatResourceAmount(dayEvents.combatReports, resource)
+        + getDebrisFieldResourceAmount(dayEvents.debrisFieldReports, resource)
     );
 }
 
@@ -211,8 +211,8 @@ function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefi
 
     const localIncludeFoundShipsFactor = includeFoundShipsFactor.value[resource];
     const total =
-        expeditions.findings.resources[resource] +
-        expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
+        expeditions.findings.resources[resource]
+        + expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
 
     return total;
 }
@@ -227,9 +227,9 @@ function getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefin
 
     const localIncludeLostShipsFactor = includeLostShipsFactor.value[resource];
     const lostShipResourceUnits =
-        (dailyReports.lostShips.onExpeditions.resourceUnits[resource] +
-            dailyReports.lostShips.againstPlayers.resourceUnits[resource]) *
-        localIncludeLostShipsFactor;
+        (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
+            + dailyReports.lostShips.againstPlayers.resourceUnits[resource])
+        * localIncludeLostShipsFactor;
 
     const total = lootResources - lostShipResourceUnits;
 

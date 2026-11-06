@@ -119,24 +119,24 @@ export class EmpireProductionBreakdown {
             const planet = this.planets[planetId];
 
             collectorClassBonusFactor +=
-                planet.collectorClassBonusFactor *
-                getTechnologyBonusFactor(
+                planet.collectorClassBonusFactor
+                * getTechnologyBonusFactor(
                     planet.lifeformTechnologyBoost[LifeformTechnologyType.rocktalCollectorEnhancement],
                     planet.lifeformExperienceBoost,
                 );
 
             ResourceProductionBonusLifeformTechnologies.forEach(prudctionBonusTechnology => {
                 lifeformTechnologyProductionBonusFactor +=
-                    planet.lifeformTechnologyBonusProductionFactor[prudctionBonusTechnology.type] *
-                    getTechnologyBonusFactor(
+                    planet.lifeformTechnologyBonusProductionFactor[prudctionBonusTechnology.type]
+                    * getTechnologyBonusFactor(
                         planet.lifeformTechnologyBoost[prudctionBonusTechnology.type],
                         planet.lifeformExperienceBoost,
                     );
             });
 
             lifeformTechnologyCrawlerProductionBonusFactor +=
-                planet.lifeformTechnologyCrawlerProductionBonusFactor *
-                getTechnologyBonusFactor(
+                planet.lifeformTechnologyCrawlerProductionBonusFactor
+                * getTechnologyBonusFactor(
                     planet.lifeformTechnologyBoost[LifeformTechnologyType.ionCrystalModules],
                     planet.lifeformExperienceBoost,
                 );
@@ -168,9 +168,9 @@ export class EmpireProductionBreakdown {
         const mineProduction = this.planets[planetId].mineProduction;
 
         const playerClassFactor =
-            (this.playerClass == PlayerClass.collector ? 1 : 0) *
-            this.serverSettings.collectorProductionFactor *
-            (1 + collectorClassBonusFactor);
+            (this.playerClass == PlayerClass.collector ? 1 : 0)
+            * this.serverSettings.collectorProductionFactor
+            * (1 + collectorClassBonusFactor);
         const allianceClassFactor =
             (this.allianceClass == AllianceClass.trader ? 1 : 0) * AllianceClassTraderProductionBonus;
         const geologistFactor = this.geologist ? GeologistProductionBonus : 0;
@@ -211,17 +211,17 @@ export class EmpireProductionBreakdown {
         const lifeformTechnologiesProduction = mineProduction * lifeformTechnologyProductionBonusFactor; // lifeform technology bonus production
 
         const total =
-            baseProduction +
-            mineProduction +
-            plasmaTechnologyProduction +
-            crawlerProduction +
-            playerClassProduction +
-            allianceClassProduction +
-            geologistProduction +
-            commandStaffProduction +
-            itemProduction +
-            lifeformBuildingsProduction +
-            lifeformTechnologiesProduction;
+            baseProduction
+            + mineProduction
+            + plasmaTechnologyProduction
+            + crawlerProduction
+            + playerClassProduction
+            + allianceClassProduction
+            + geologistProduction
+            + commandStaffProduction
+            + itemProduction
+            + lifeformBuildingsProduction
+            + lifeformTechnologiesProduction;
 
         return {
             baseProduction,

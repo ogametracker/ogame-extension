@@ -209,10 +209,10 @@ export class AmortizationItemGenerator {
         get totalPlasmaTechnologyCostReduction() {
             return Object.values(this.planets).reduce(
                 (total, planet) =>
-                    total +
-                    planet.plasmaTechnologyCostReduction *
+                    total
+                    + planet.plasmaTechnologyCostReduction
                         //HACK: used improvedStellarator here, but should ideally iterate over every single technology separately
-                        getTechnologyBonusFactor(
+                        * getTechnologyBonusFactor(
                             planet.lifeformTechnologyBoost[LifeformTechnologyType.improvedStellarator],
                             planet.lifeformExperienceBoost,
                         ),
@@ -512,8 +512,8 @@ export class AmortizationItemGenerator {
             planetState.lifeformBuildingCostReductions[building] =
                 planetState.lifeformBuildingCostReductionBuildings.reduce(
                     (total, costReductionBuilding) =>
-                        total +
-                        costReductionBuilding.getCostAndTimeReduction(
+                        total
+                        + costReductionBuilding.getCostAndTimeReduction(
                             building,
                             planetData.lifeformBuildings[costReductionBuilding.type],
                         ).cost,
@@ -524,8 +524,8 @@ export class AmortizationItemGenerator {
         // update lifeform technology cost reduction
         planetState.lifeformTechnologyCostReduction = planetState.lifeformTechnologyResearchBuildings.reduce(
             (total, researchBuilding) =>
-                total +
-                researchBuilding.getLifeformTechnologyResearchCostAndTimeReduction(
+                total
+                + researchBuilding.getLifeformTechnologyResearchCostAndTimeReduction(
                     planetData.lifeformBuildings[researchBuilding.type],
                 ).cost,
             0,
@@ -535,8 +535,8 @@ export class AmortizationItemGenerator {
         $mineBuildingTypes.forEach(mine => {
             planetState.mineCostReductions[mine] = planetState.mineCostReductionBuildings.reduce(
                 (total, costReductionBuilding) =>
-                    total +
-                    costReductionBuilding.getCostAndTimeReduction(
+                    total
+                    + costReductionBuilding.getCostAndTimeReduction(
                         mine,
                         planetData.lifeformBuildings[costReductionBuilding.type],
                     ).cost,
@@ -547,8 +547,8 @@ export class AmortizationItemGenerator {
         // update plasmatech cost reduction
         planetState.plasmaTechnologyCostReduction = planetState.plasmaTechnologyCostReductionTechnologies.reduce(
             (total, costReductionTech) =>
-                total +
-                costReductionTech.getResearchCostAndTimeReduction(
+                total
+                + costReductionTech.getResearchCostAndTimeReduction(
                     ResearchType.plasmaTechnology,
                     planetData.lifeformTechnologies[costReductionTech.type],
                 ).cost,
@@ -1103,8 +1103,8 @@ export class AmortizationItemGenerator {
             additionalCrawlerBonus = bonus;
         } else if ('getClassBonus' in technology && technology.appliesTo(PlayerClass.collector)) {
             const bonus =
-                technology.getClassBonus(PlayerClass.collector, newLevel) -
-                technology.getClassBonus(PlayerClass.collector, newLevel - 1);
+                technology.getClassBonus(PlayerClass.collector, newLevel)
+                - technology.getClassBonus(PlayerClass.collector, newLevel - 1);
 
             additionalCollectorClassBonus = bonus;
         }
@@ -1141,21 +1141,21 @@ export class AmortizationItemGenerator {
             if ('getExpeditionBonus' in technology) {
                 ExpeditionEventTypes.forEach(eventType => {
                     const bonus =
-                        technology.getExpeditionBonus(eventType, newLevel) -
-                        technology.getExpeditionBonus(eventType, newLevel - 1);
+                        technology.getExpeditionBonus(eventType, newLevel)
+                        - technology.getExpeditionBonus(eventType, newLevel - 1);
                     additionalExpeditionBonuses[eventType] += bonus;
                 });
             } else if ('getExpeditionEventProbabilityBonus' in technology) {
                 ExpeditionEventTypes.forEach(eventType => {
                     const bonus =
-                        technology.getExpeditionEventProbabilityBonus(eventType, newLevel) -
-                        technology.getExpeditionEventProbabilityBonus(eventType, newLevel - 1);
+                        technology.getExpeditionEventProbabilityBonus(eventType, newLevel)
+                        - technology.getExpeditionEventProbabilityBonus(eventType, newLevel - 1);
                     additionalExpeditionEventProbabilityBonuses[eventType] += bonus;
                 });
             } else if ('getClassBonus' in technology && technology.appliesTo(PlayerClass.discoverer)) {
                 const bonus =
-                    technology.getClassBonus(PlayerClass.discoverer, newLevel) -
-                    technology.getClassBonus(PlayerClass.discoverer, newLevel - 1);
+                    technology.getClassBonus(PlayerClass.discoverer, newLevel)
+                    - technology.getClassBonus(PlayerClass.discoverer, newLevel - 1);
 
                 additionalDiscovererClassBonus = bonus;
             }
@@ -1289,8 +1289,8 @@ export class AmortizationItemGenerator {
             );
 
             let additionalCostReduction =
-                building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost -
-                building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
+                building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost
+                - building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
             const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
                 if ('building' in cur) {
                     const curReducedCost = multiplyCostInt(
@@ -1309,8 +1309,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 const resultBase: PotentialLifeformTechnologyCostReductionItemBase = {
                     planetId: planetData.id,
@@ -1361,8 +1361,8 @@ export class AmortizationItemGenerator {
                 const costReduction = localPlanetState.lifeformTechnologyCostReduction;
                 const additionalCostReduction =
                     cur.building != building.type
-                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost -
-                          building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
+                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost
+                          - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
                         : 0; // no additional cost reduction for ealier levels of itself
 
                 const newCostReduction = costReduction + additionalCostReduction;
@@ -1374,8 +1374,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 return {
                     planetId: planetData.id,
@@ -1399,8 +1399,8 @@ export class AmortizationItemGenerator {
                         | PotentialLifeformTechnologyCostReductionTechnologyResearchBuilding
                         | PotentialLifeformTechnologyCostReductionTechnologyBonusBuilding
                         | null,
-                ) ??
-                planetState.lifeformBuildingCostReductionBuildings.reduce(
+                )
+                ?? planetState.lifeformBuildingCostReductionBuildings.reduce(
                     (best, cur) => potentialLifeformTechnologyCostIndirectReductionBuildingReduceFunction(best, cur),
                     null as PotentialLifeformTechnologyCostReductionBuildingCostReductionBuilding | null,
                 );
@@ -1422,8 +1422,8 @@ export class AmortizationItemGenerator {
                 const bestBuilding = bestItem.building;
                 bestBuilding.affectedBuildings.forEach(affectedBuildingType => {
                     const additionalCostReduction =
-                        bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level).cost -
-                        bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level - 1).cost;
+                        bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level).cost
+                        - bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level - 1).cost;
 
                     if ((LifeformBuildingTypes as AnyBuildingType[]).includes(affectedBuildingType)) {
                         localPlanetState.lifeformBuildingCostReduction[affectedBuildingType as LifeformBuildingType] +=
@@ -1432,15 +1432,15 @@ export class AmortizationItemGenerator {
                 });
             } else if ('getLifeformTechnologyResearchCostAndTimeReduction' in bestItem.building) {
                 const additionalCostReduction =
-                    bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level).cost -
-                    bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level - 1).cost;
+                    bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level).cost
+                    - bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level - 1).cost;
 
                 localPlanetState.lifeformTechnologyCostReduction += additionalCostReduction;
             } else {
                 for (const tech of LifeformTechnologyTypes) {
                     const additionalTechBonus =
-                        bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level) -
-                        bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level - 1);
+                        bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level)
+                        - bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level - 1);
 
                     localPlanetState.lifeformTechnologyBoost[tech] += additionalTechBonus;
                 }
@@ -1546,8 +1546,8 @@ export class AmortizationItemGenerator {
         const additionalTechnologyBoost = createRecord(
             LifeformTechnologyTypes,
             tech =>
-                lfBuilding.getLifeformTechnologyBonus(tech, newLevel) -
-                lfBuilding.getLifeformTechnologyBonus(tech, newLevel - 1),
+                lfBuilding.getLifeformTechnologyBonus(tech, newLevel)
+                - lfBuilding.getLifeformTechnologyBonus(tech, newLevel - 1),
         );
 
         ResourceTypes.forEach(resource => {
@@ -1657,8 +1657,8 @@ export class AmortizationItemGenerator {
             const newProductionBreakdown = productionBreakdown.clone();
 
             const additionalProductionBonusForResource =
-                lfBuilding.getProductionBonus(newLevel)[resource] -
-                lfBuilding.getProductionBonus(newLevel - 1)[resource];
+                lfBuilding.getProductionBonus(newLevel)[resource]
+                - lfBuilding.getProductionBonus(newLevel - 1)[resource];
             newProductionBreakdown.planets[planetId].lifeformBuildingBonusProductionFactor +=
                 additionalProductionBonusForResource;
 
@@ -1735,8 +1735,8 @@ export class AmortizationItemGenerator {
 
                 const additionalCostReduction =
                     cur.building != building.type
-                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost -
-                          building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
+                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost
+                          - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
                         : 0; // no additional cost reduction for ealier levels of itself
 
                 const newCostReduction = costReduction + additionalCostReduction;
@@ -1748,8 +1748,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 return {
                     building: building,
@@ -1786,8 +1786,8 @@ export class AmortizationItemGenerator {
 
             bestBuilding.building.affectedBuildings.forEach(affectedBuildingType => {
                 const additionalCostReduction =
-                    bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level).cost -
-                    bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level - 1).cost;
+                    bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level).cost
+                    - bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level - 1).cost;
 
                 if (!LifeformBuildingTypes.includes(affectedBuildingType as LifeformBuildingType)) {
                     _throw(`affected building type ${affectedBuildingType} is not a lifeform building!`);
@@ -1846,8 +1846,8 @@ export class AmortizationItemGenerator {
         const additionalLifeformStuffByPlanet: Record<
             number,
             Partial<
-                Record<LifeformBuildingType, LifeformBuildingLevels> &
-                    Record<LifeformTechnologyType, LifeformTechnologyLevels>
+                Record<LifeformBuildingType, LifeformBuildingLevels>
+                    & Record<LifeformTechnologyType, LifeformTechnologyLevels>
             >
         > = {};
         potentiallyReducedResult.additionalLifeformBuildings.forEach(item => {
@@ -1974,9 +1974,9 @@ export class AmortizationItemGenerator {
 
                 //HACK: used improvedStellarator, but should ideally iterate through all separately
                 return (
-                    total +
-                    planetPlasmaTechCostReduction *
-                        getTechnologyBonusFactor(
+                    total
+                    + planetPlasmaTechCostReduction
+                        * getTechnologyBonusFactor(
                             planetTechBonus[LifeformTechnologyType.improvedStellarator],
                             xpTechBonus,
                         )
@@ -2033,12 +2033,12 @@ export class AmortizationItemGenerator {
                 const xpTechBonus = this.#state.planets[planetId].lifeformExperienceBoost;
 
                 const additionalCostReduction =
-                    technology.getResearchCostAndTimeReduction(cur.research, newLevel).cost -
-                    technology.getResearchCostAndTimeReduction(cur.research, newLevel - 1).cost;
+                    technology.getResearchCostAndTimeReduction(cur.research, newLevel).cost
+                    - technology.getResearchCostAndTimeReduction(cur.research, newLevel - 1).cost;
 
                 const newCostReduction =
-                    costReduction +
-                    additionalCostReduction * getTechnologyBonusFactor(planetTechBonus[technology.type], xpTechBonus);
+                    costReduction
+                    + additionalCostReduction * getTechnologyBonusFactor(planetTechBonus[technology.type], xpTechBonus);
                 const curReducedCost = multiplyCostInt(cur.cost, 1 - newCostReduction);
 
                 return addCost(total, curReducedCost);
@@ -2047,8 +2047,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 return {
                     planetId,
@@ -2089,13 +2089,13 @@ export class AmortizationItemGenerator {
             const additionalTechBonus = createRecord(LifeformTechnologyTypes, 0);
             if ('getLifeformTechnologyResearchCostAndTimeReduction' in building) {
                 additionalCostReduction =
-                    building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost -
-                    building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
+                    building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel).cost
+                    - building.getLifeformTechnologyResearchCostAndTimeReduction(newLevel - 1).cost;
             } else {
                 for (const tech of LifeformTechnologyTypes) {
                     additionalTechBonus[tech] =
-                        building.getLifeformTechnologyBonus(tech, newLevel) -
-                        building.getLifeformTechnologyBonus(tech, newLevel - 1);
+                        building.getLifeformTechnologyBonus(tech, newLevel)
+                        - building.getLifeformTechnologyBonus(tech, newLevel - 1);
                 }
             }
             const newTotalReducedCost = costs.reduce<Cost>((total, cur) => {
@@ -2106,15 +2106,15 @@ export class AmortizationItemGenerator {
                         const planetPlasmaTechCostReduction = planet.plasmaTechnologyCostReduction;
                         //HACK: used improvedStellarator, but should ideally iterate through all separately
                         const planetTechBonus =
-                            planet.lifeformTechnologyBoost[LifeformTechnologyType.improvedStellarator] +
-                            (planet.id == planetId
+                            planet.lifeformTechnologyBoost[LifeformTechnologyType.improvedStellarator]
+                            + (planet.id == planetId
                                 ? additionalTechBonus[LifeformTechnologyType.improvedStellarator]
                                 : 0);
                         const xpTechBonus = this.#state.planets[planetId].lifeformExperienceBoost;
 
                         return (
-                            total +
-                            planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus)
+                            total
+                            + planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus)
                         );
                     }, 0);
                     const curReducedCost = multiplyCostInt(cur.cost, 1 - plasmaTechCostReduction);
@@ -2137,8 +2137,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 const resultBase: PotentialPlasmaTechnologyCostReductionItemBase = {
                     planetId,
@@ -2192,8 +2192,8 @@ export class AmortizationItemGenerator {
                         const xpTechBonus = this.#state.planets[planetId].lifeformExperienceBoost;
 
                         return (
-                            total +
-                            planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus)
+                            total
+                            + planetPlasmaTechCostReduction * getTechnologyBonusFactor(planetTechBonus, xpTechBonus)
                         );
                     }, 0);
                     const curReducedCost = multiplyCostInt(cur.cost, 1 - plasmaTechCostReduction);
@@ -2210,8 +2210,8 @@ export class AmortizationItemGenerator {
                 const costReduction = localPlanetState.lifeformTechnologyCostReduction;
                 const additionalCostReduction =
                     cur.building != building.type
-                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost -
-                          building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
+                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost
+                          - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
                         : 0; // no additional cost reduction for ealier levels of itself
 
                 const newCostReduction = costReduction + additionalCostReduction;
@@ -2223,8 +2223,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostMConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostMConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostMConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostMConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostMConverted < best.newTotalReducedCostConverted)
             ) {
                 return {
                     planetId,
@@ -2249,10 +2249,10 @@ export class AmortizationItemGenerator {
                     (best, cur) =>
                         potentialPlasmaTechCostReductionTechnologyReduceFunction(best, cur, planetState.data.id),
                     null as PotentialPlasmaTechnologyCostReductionTechnology | null,
-                ) ??
+                )
                 // - lf research building (to reduce cost of reduction lf technology) A
                 //   OR lf technology bonus building (to increase cost reduction bonus of reduction tech) A
-                [
+                ?? [
                     ...planetState.lifeformTechnologyResearchBuildings,
                     ...planetState.lifeformTechnologyBoostBuildings,
                 ].reduce(
@@ -2266,9 +2266,9 @@ export class AmortizationItemGenerator {
                         | PotentialPlasmaTechnologyCostReductionTechnologyResearchBuilding
                         | PotentialPlasmaTechnologyCostReductionTechnologyBonusBuilding
                         | null,
-                ) ??
+                )
                 // - lf building cost reduction building (to reduce cost of lf buildings above with A)
-                planetState.lifeformBuildingCostReductionBuildings.reduce(
+                ?? planetState.lifeformBuildingCostReductionBuildings.reduce(
                     (best, cur) =>
                         potentialPlasmaTechCostIndirectReductionBuildingReduceFunction(best, cur, planetState.data.id),
                     null as PotentialPlasmaTechnologyCostReductionBuildingCostReductionBuilding | null,
@@ -2279,8 +2279,8 @@ export class AmortizationItemGenerator {
             }
 
             if (
-                bestPlanetItem.newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || bestPlanetItem.newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                bestPlanetItem.newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || bestPlanetItem.newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 return bestPlanetItem;
             }
@@ -2312,23 +2312,23 @@ export class AmortizationItemGenerator {
                     const bestBuilding = bestItem.building;
                     bestBuilding.affectedBuildings.forEach(affectedBuildingType => {
                         const additionalCostReduction =
-                            bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level).cost -
-                            bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level - 1).cost;
+                            bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level).cost
+                            - bestBuilding.getCostAndTimeReduction(affectedBuildingType, bestItem.level - 1).cost;
 
                         localPlanetState.lifeformBuildingCostReduction[affectedBuildingType as LifeformBuildingType] +=
                             additionalCostReduction;
                     });
                 } else if ('getLifeformTechnologyResearchCostAndTimeReduction' in bestItem.building) {
                     const additionalCostReduction =
-                        bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level).cost -
-                        bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level - 1).cost;
+                        bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level).cost
+                        - bestItem.building.getLifeformTechnologyResearchCostAndTimeReduction(bestItem.level - 1).cost;
 
                     localPlanetState.lifeformTechnologyCostReduction += additionalCostReduction;
                 } else {
                     for (const tech of LifeformTechnologyTypes) {
                         const additionalTechBonus =
-                            bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level) -
-                            bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level - 1);
+                            bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level)
+                            - bestItem.building.getLifeformTechnologyBonus(tech, bestItem.level - 1);
 
                         localPlanetState.lifeformTechnologyBoost[tech] += additionalTechBonus;
                     }
@@ -2344,8 +2344,8 @@ export class AmortizationItemGenerator {
                 localPlanetState.lifeformTechnologyLevels[bestItem.technology.type]++;
                 localPlanetState.plasmaTechnologyCostReduction +=
                     bestItem.technology.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, bestItem.level)
-                        .cost -
-                    bestItem.technology.getResearchCostAndTimeReduction(
+                        .cost
+                    - bestItem.technology.getResearchCostAndTimeReduction(
                         ResearchType.plasmaTechnology,
                         bestItem.level - 1,
                     ).cost;
@@ -2537,8 +2537,8 @@ export class AmortizationItemGenerator {
 
                 const additionalCostReduction =
                     cur.building != building.type
-                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost -
-                          building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
+                        ? building.getCostAndTimeReduction(cur.building, newLevel).cost
+                          - building.getCostAndTimeReduction(cur.building, newLevel - 1).cost
                         : 0; // no additional cost reduction for ealier levels of itself
 
                 const newCostReduction = costReduction + additionalCostReduction;
@@ -2550,8 +2550,8 @@ export class AmortizationItemGenerator {
             const newTotalReducedCostConverted = this.#getMsuOrDsu(newTotalReducedCost);
 
             if (
-                newTotalReducedCostConverted < totalReducedCostConverted &&
-                (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
+                newTotalReducedCostConverted < totalReducedCostConverted
+                && (best == null || newTotalReducedCostConverted < best.newTotalReducedCostConverted)
             ) {
                 return {
                     building,
@@ -2570,8 +2570,8 @@ export class AmortizationItemGenerator {
                 mineCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(
                     potentialMineReductionBuildingReduceFunction,
                     null,
-                ) ??
-                lifeformBuildingCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(
+                )
+                ?? lifeformBuildingCostReductionBuildings.reduce<PotentialMineCostReductionBuilding | null>(
                     potentialMineReductionBuildingReduceFunction,
                     null,
                 );
@@ -2592,8 +2592,8 @@ export class AmortizationItemGenerator {
 
             bestBuilding.building.affectedBuildings.forEach(affectedBuildingType => {
                 const additionalCostReduction =
-                    bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level).cost -
-                    bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level - 1).cost;
+                    bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level).cost
+                    - bestBuilding.building.getCostAndTimeReduction(affectedBuildingType, bestBuilding.level - 1).cost;
 
                 if (($mineBuildingTypes as AnyBuildingType[]).includes(affectedBuildingType)) {
                     mineCostReduction[affectedBuildingType as MineBuildingType] += additionalCostReduction;

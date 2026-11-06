@@ -210,8 +210,8 @@ export class UniverseHistoryModule {
         const nextUpdate =
             nextUpdates.length == 1
                 ? nextUpdates[0]
-                : (nextUpdates.find((_, i) => nextUpdates[i + 1] >= now) ??
-                  _throw('failed to find next update time for universe history'));
+                : (nextUpdates.find((_, i) => nextUpdates[i + 1] >= now)
+                  ?? _throw('failed to find next update time for universe history'));
         const timeLeft = Math.max(0, nextUpdate - now);
         _logDebug(
             `next universe history tracking in ${timeLeft} ms (${new Date(Date.now() + timeLeft)}) for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`,
@@ -918,8 +918,8 @@ export class UniverseHistoryModule {
 
         for (const planet of planets) {
             if (
-                planet.id in lastCoordinates &&
-                this.coordinatesEqual(planet.coordinates, lastCoordinates[planet.id]!)
+                planet.id in lastCoordinates
+                && this.coordinatesEqual(planet.coordinates, lastCoordinates[planet.id]!)
             ) {
                 continue;
             }

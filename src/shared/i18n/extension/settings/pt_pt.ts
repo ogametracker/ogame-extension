@@ -136,8 +136,8 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
         deleteAccount: {
             button: (account: string) => `Apagar toda a informação da conta actualmente selecionada (${account})`,
             confirmationText: (account: string) =>
-                `Se confirmares, todos os dados da conta actualmente selecionada (${account}) serão apagados.\n` +
-                `Isto inclui o histórico do universo se não existir outra conta monitorizada nesse universo.`,
+                `Se confirmares, todos os dados da conta actualmente selecionada (${account}) serão apagados.\n`
+                + `Isto inclui o histórico do universo se não existir outra conta monitorizada nesse universo.`,
         },
         deleteUniverseHistory: {
             button: (server: string) => `Apagar o histórico do universo da conta actualmente selecionada (${server})`,
@@ -147,8 +147,8 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
         deleteEverything: {
             button: 'Apagar todos os dados',
             confirmationText1:
-                `Se confirmares, todos os dados serão apagados.\n` +
-                'Isto inclui to todos de todas as contas incluindo expedições, combates, reciclagem de campos de destroços, historico dos universos e mais.',
+                `Se confirmares, todos os dados serão apagados.\n`
+                + 'Isto inclui to todos de todas as contas incluindo expedições, combates, reciclagem de campos de destroços, historico dos universos e mais.',
             confirmationText2: 'Confirma novamente que é para apagar todos os dados.',
         },
     },
@@ -267,10 +267,10 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
     linkAccounts: {
         header: (account: string) => `Linkar contas com a conta actualmente selecionada (${account})`,
         descriptionHtml: (account: string) =>
-            `Só deverás linkar contas se quiseres que o Ogame Tracker consider os dados das contas a link como dados da conta actualmente selecionada (${account}).<br/>` +
-            `Isto é comum acontecer quando existe uma fusão de universos e as contas passam a ser consideradas outras pelo OGame Tracker.<br/><br/>` +
-            `Examplo: <br/>` +
-            `<ol>
+            `Só deverás linkar contas se quiseres que o Ogame Tracker consider os dados das contas a link como dados da conta actualmente selecionada (${account}).<br/>`
+            + `Isto é comum acontecer quando existe uma fusão de universos e as contas passam a ser consideradas outras pelo OGame Tracker.<br/><br/>`
+            + `Examplo: <br/>`
+            + `<ol>
                     <li>O jogador "OGame Professional" está a jogar no servidor "EN Milkyway"</li>
                     <li>O servidor "EN Milkyway" é tornado exodus durante a fusão</li>
                     <li>O jogador "OGame Professional" faz merge da sua conta para o servidor "EN Cartwheel"</li>   

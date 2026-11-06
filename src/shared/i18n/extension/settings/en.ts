@@ -133,8 +133,8 @@ export const en: SettingsTranslations = {
         deleteAccount: {
             button: (account: string) => `Delete all data of the currently selected account (${account})`,
             confirmationText: (account: string) =>
-                `If you confirm, all tracked data for the currently selected account (${account}) will be deleted.\n` +
-                `This includes tracked universe history data if there is no other account tracked for this universe.`,
+                `If you confirm, all tracked data for the currently selected account (${account}) will be deleted.\n`
+                + `This includes tracked universe history data if there is no other account tracked for this universe.`,
         },
         deleteUniverseHistory: {
             button: (server: string) => `Delete tracked universe history of currently selected universe (${server})`,
@@ -144,8 +144,8 @@ export const en: SettingsTranslations = {
         deleteEverything: {
             button: 'Delete all data',
             confirmationText1:
-                `If you confirm, all data will be deleted.\n` +
-                'This includes tracked data of every account including tracked expeditions, combats, debris field reports, universe history data, and more.',
+                `If you confirm, all data will be deleted.\n`
+                + 'This includes tracked data of every account including tracked expeditions, combats, debris field reports, universe history data, and more.',
             confirmationText2: 'Please confirm again that you want to delete all data.',
         },
     },
@@ -264,10 +264,10 @@ export const en: SettingsTranslations = {
     linkAccounts: {
         header: (account: string) => `Link accounts with the current account (${account})`,
         descriptionHtml: (account: string) =>
-            `You should only link accounts if you want the OGame Tracker to consider data of the linked accounts as data of the current account (${account}).<br/>` +
-            `This is often the case when an account has been merged to another server and is handled as a separate account in the OGame Tracker.<br/><br/>` +
-            `Example: <br/>` +
-            `<ol>
+            `You should only link accounts if you want the OGame Tracker to consider data of the linked accounts as data of the current account (${account}).<br/>`
+            + `This is often the case when an account has been merged to another server and is handled as a separate account in the OGame Tracker.<br/><br/>`
+            + `Example: <br/>`
+            + `<ol>
                     <li>the player "OGame Professional" is playing on the server "EN Milkyway"</li>
                     <li>the server "EN Milkyway" becomes exodus universe during a merge</li>
                     <li>the player "OGame Professional" merges their account to "EN Cartwheel"</li>   

@@ -138,8 +138,8 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         deleteAccount: {
             button: (account: string) => `Supprimer toutes les données du compte actuellement sélectionné (${account})`,
             confirmationText: (account: string) =>
-                `Si vous confirmez, toutes les données suivies pour le compte actuellement sélectionné (${account}) seront supprimées.\n` +
-                `Cela inclut les données suivies de l'historique de l'univers s'il n'y a pas d'autre compte suivi pour cet univers.`,
+                `Si vous confirmez, toutes les données suivies pour le compte actuellement sélectionné (${account}) seront supprimées.\n`
+                + `Cela inclut les données suivies de l'historique de l'univers s'il n'y a pas d'autre compte suivi pour cet univers.`,
         },
         deleteUniverseHistory: {
             button: (server: string) =>
@@ -150,8 +150,8 @@ export const fr: RecursivePartial<SettingsTranslations> = {
         deleteEverything: {
             button: 'Supprimer toutes les données',
             confirmationText1:
-                `Si vous confirmez, toutes les données seront supprimées.\n` +
-                "Cela inclut les données suivies de chaque compte, y compris les expéditions suivies, les combats suivis, les rapports de récolte de champs de débris suivis, les données d'historique de l'univers et plus encore.",
+                `Si vous confirmez, toutes les données seront supprimées.\n`
+                + "Cela inclut les données suivies de chaque compte, y compris les expéditions suivies, les combats suivis, les rapports de récolte de champs de débris suivis, les données d'historique de l'univers et plus encore.",
             confirmationText2: 'Veuillez confirmer à nouveau que vous voulez supprimer toutes les données.',
         },
     },
@@ -271,10 +271,10 @@ export const fr: RecursivePartial<SettingsTranslations> = {
     linkAccounts: {
         header: (account: string) => `Lier des comptes avec le compte actuel (${account})`,
         descriptionHtml: (account: string) =>
-            `Vous ne devriez lier des comptes que si vous voulez que l'OGame Tracker considère les données des comptes liés comme des données du compte actuel (${account}).<br/>` +
-            `C'est souvent le cas lorsque qu'un compte a été fusionné avec un autre serveur et est traité comme un compte distinct dans l'OGame Tracker.<br/><br/>` +
-            `Exemple: <br/>` +
-            `<ol>
+            `Vous ne devriez lier des comptes que si vous voulez que l'OGame Tracker considère les données des comptes liés comme des données du compte actuel (${account}).<br/>`
+            + `C'est souvent le cas lorsque qu'un compte a été fusionné avec un autre serveur et est traité comme un compte distinct dans l'OGame Tracker.<br/><br/>`
+            + `Exemple: <br/>`
+            + `<ol>
                     <li>le joueur "OGame Professional" joue sur le serveur "FR Voie Lactée"</li>
                     <li>le serveur "FR Voie Lactée" devient un univers exode lors d'une fusion</li>
                     <li>le joueur "OGame Professional" fusionne son compte avec "FR Trèfle"</li>

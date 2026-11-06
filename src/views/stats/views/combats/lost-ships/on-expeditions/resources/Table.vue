@@ -107,10 +107,10 @@ const footerItems = computed<RangedStatsTableItem<DailyCombatReportResult>[]>(()
             getValue: reports =>
                 reports.reduce(
                     (acc, report) =>
-                        acc +
-                        report.lostShips.onExpeditions.resourceUnits.metal * localFactors.metal +
-                        report.lostShips.onExpeditions.resourceUnits.crystal * localFactors.crystal +
-                        report.lostShips.onExpeditions.resourceUnits.deuterium * localFactors.deuterium,
+                        acc
+                        + report.lostShips.onExpeditions.resourceUnits.metal * localFactors.metal
+                        + report.lostShips.onExpeditions.resourceUnits.crystal * localFactors.crystal
+                        + report.lostShips.onExpeditions.resourceUnits.deuterium * localFactors.deuterium,
                     0,
                 ),
         },

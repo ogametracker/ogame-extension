@@ -45,10 +45,10 @@
                         />
                         <span
                             v-if="
-                                limits[type.key](Number.MAX_SAFE_INTEGER) ==
-                                    getTotalPlanetBonus(planets[planet.id], type.key) ||
-                                limits[type.key](Number.MIN_SAFE_INTEGER) ==
-                                    getTotalPlanetBonus(planets[planet.id], type.key)
+                                limits[type.key](Number.MAX_SAFE_INTEGER)
+                                    == getTotalPlanetBonus(planets[planet.id], type.key)
+                                || limits[type.key](Number.MIN_SAFE_INTEGER)
+                                    == getTotalPlanetBonus(planets[planet.id], type.key)
                             "
                             class="mdi mdi-alert-outline"
                         />
@@ -59,10 +59,10 @@
                     <div v-for="building in buildingsSorted" :key="building" class="tech-row">
                         <template
                             v-if="
-                                (!isStandardBuilding(building) &&
-                                    LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(building) &&
-                                    planet.lifeformBuildings[building] > 0) ||
-                                forceIncludeBuildings.includes(building)
+                                (!isStandardBuilding(building)
+                                    && LifeformBuildingTypesByLifeform[planet.activeLifeform].includes(building)
+                                    && planet.lifeformBuildings[building] > 0)
+                                || forceIncludeBuildings.includes(building)
                             "
                         >
                             <div />
@@ -70,8 +70,8 @@
                                 <OBuilding :building="building" size="24px" />
                                 <span
                                     v-text="
-                                        translations().ogame.buildings[building] +
-                                        ` (${planet.buildings[building as keyof typeof planet.buildings] ?? 0})`
+                                        translations().ogame.buildings[building]
+                                        + ` (${planet.buildings[building as keyof typeof planet.buildings] ?? 0})`
                                     "
                                 />
                             </div>
@@ -79,8 +79,8 @@
                                 <OLifeformBuilding :building="building" size="24px" />
                                 <span
                                     v-text="
-                                        translations().ogame.lifeformBuildings[building] +
-                                        ` (${planet.lifeformBuildings[building]})`
+                                        translations().ogame.lifeformBuildings[building]
+                                        + ` (${planet.lifeformBuildings[building]})`
                                     "
                                 />
                             </div>
@@ -189,8 +189,8 @@ function formatCoordinates(coords: Coordinates) {
 
 function getTotalPlanetBonus(planet: LifeformPlanetBonuses, type: string): number {
     const bonus =
-        Object.values(planet.bonusByBuilding[type]).reduce((total, cur) => total + (cur ?? 0), 0) +
-        (props.noTechnologyBonuses ? 0 : props.technologyBonuses[type]);
+        Object.values(planet.bonusByBuilding[type]).reduce((total, cur) => total + (cur ?? 0), 0)
+        + (props.noTechnologyBonuses ? 0 : props.technologyBonuses[type]);
 
     return props.limits[type](bonus);
 }

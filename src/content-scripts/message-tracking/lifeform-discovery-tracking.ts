@@ -66,8 +66,8 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewLifeformDiscovery: {
             const msg = message as LifeformDiscoveryMessage;
             const div =
-                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ??
-                _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
+                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find lifeform discovery message with id '${msg.data.id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.processed);
@@ -90,8 +90,8 @@ function onMessage(message: Message<MessageType, any>) {
             }
 
             const div =
-                document.querySelector(`div.msg[data-msg-id="${id}"]`) ??
-                _throw(`failed to find message with id '${id}'`);
+                document.querySelector(`div.msg[data-msg-id="${id}"]`)
+                ?? _throw(`failed to find message with id '${id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.error);
@@ -324,8 +324,8 @@ function getLifeformDiscoveryResultClass(
 
 function getLifeformDiscoveryMissionArtifactSizeIconClass(size: LifeformDiscoveryEventArtifactFindingSize) {
     return (
-        'ogame-tracker-lifeform-discovery-result--size-icon mdi ' +
-        {
+        'ogame-tracker-lifeform-discovery-result--size-icon mdi '
+        + {
             [LifeformDiscoveryEventArtifactFindingSize.small]: 'mdi-hexagon-slice-1',
             [LifeformDiscoveryEventArtifactFindingSize.medium]: 'mdi-hexagon-slice-3',
             [LifeformDiscoveryEventArtifactFindingSize.large]: 'mdi-hexagon-slice-5',

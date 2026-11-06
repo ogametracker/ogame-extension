@@ -15,13 +15,13 @@ export function trackShipyardPage() {
         selector: '#technologies',
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const planetType =
-                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content ??
-                _throw('did not find meta ogame-planet-type');
+                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
             const ships = ShipTypes.filter(ship => !isMoon || ship != ShipType.crawler);
@@ -29,8 +29,8 @@ export function trackShipyardPage() {
 
             ships.forEach(ship => {
                 const amountText =
-                    element.querySelector(`[data-technology="${ship}"] .amount`)?.getAttribute('data-value') ??
-                    _throw(`did not find amount of ship '${ShipType[ship]}'`);
+                    element.querySelector(`[data-technology="${ship}"] .amount`)?.getAttribute('data-value')
+                    ?? _throw(`did not find amount of ship '${ShipType[ship]}'`);
 
                 const amount = parseIntSafe(amountText, 10);
                 shipCounts[ship] = amount;

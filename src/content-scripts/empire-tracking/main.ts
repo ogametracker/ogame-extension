@@ -72,8 +72,8 @@ const pageTrackers: PageTracker[] = [
     {
         action: () => trackResourceSettingsPage(),
         condition: query =>
-            (query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings') ||
-            query.page?.toLowerCase() == 'resourcesettings',
+            (query.page?.toLowerCase() == 'ingame' && query.component?.toLowerCase() == 'resourcesettings')
+            || query.page?.toLowerCase() == 'resourcesettings',
     },
     {
         action: () => trackLifeformBuildingsPage(),

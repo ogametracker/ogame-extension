@@ -18,8 +18,8 @@ observer.observe(document.documentElement, { childList: true, subtree: true });
 
 function trackUniverseName() {
     const universeName =
-        (document.querySelector('meta[name="ogame-universe-name"]') as HTMLMetaElement | null)?.content ??
-        _throw('no universe name meta found');
+        (document.querySelector('meta[name="ogame-universe-name"]') as HTMLMetaElement | null)?.content
+        ?? _throw('no universe name meta found');
 
     const message: UpdateUniverseNameMessage = {
         type: MessageType.UpdateUniverseName,
@@ -32,8 +32,8 @@ function trackUniverseName() {
 
 function trackAccount() {
     const playerName =
-        (document.querySelector('meta[name="ogame-player-name"]') as HTMLMetaElement | null)?.content ??
-        _throw('no player name meta found');
+        (document.querySelector('meta[name="ogame-player-name"]') as HTMLMetaElement | null)?.content
+        ?? _throw('no player name meta found');
 
     const message: UpdatePlayerNameMessage = {
         type: MessageType.UpdatePlayerName,

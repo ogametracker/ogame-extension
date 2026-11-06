@@ -18,13 +18,13 @@ export function trackFacilitiesPage() {
         selector: '#technologies > .icons',
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const planetType =
-                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content ??
-                _throw('did not find meta ogame-planet-type');
+                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
             const buildingTypes = isMoon ? MoonFacilityBuildingTypes : PlanetFacilityBuildingTypes;
@@ -32,8 +32,8 @@ export function trackFacilitiesPage() {
 
             buildingTypes.forEach(building => {
                 const levelText =
-                    element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value') ??
-                    _throw(`did not find level of building '${BuildingType[building]}'`);
+                    element.querySelector(`[data-technology="${building}"] .level`)?.getAttribute('data-value')
+                    ?? _throw(`did not find level of building '${BuildingType[building]}'`);
                 const level = parseIntSafe(levelText, 10);
 
                 buildingLevels[building] = level;

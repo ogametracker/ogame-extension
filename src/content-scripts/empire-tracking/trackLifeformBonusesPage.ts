@@ -43,8 +43,8 @@ function updateActiveLifeformResearchSlots(element: Element) {
         );
         for (const slotElement of slotElements) {
             const levelText =
-                slotElement.querySelector(':scope > space-object-technology-item:nth-of-type(2)')?.textContent ??
-                _throw('missing research level');
+                slotElement.querySelector(':scope > space-object-technology-item:nth-of-type(2)')?.textContent
+                ?? _throw('missing research level');
             const level = parseIntSafe(levelText);
 
             const techIdText =
@@ -91,9 +91,9 @@ function updateLifeformExperience(element: Element) {
         const match = title.match(/\s*(?<level>\d+)[^\d]*:?\s*(?<exp>[^\s/]*)\/?\d?/i);
 
         const levelText =
-            match?.groups?.level.replace(/[^\d]/g, '') ??
-            elem.querySelector('.currentlevel')?.textContent?.trim() ??
-            _throw('no level match');
+            match?.groups?.level.replace(/[^\d]/g, '')
+            ?? elem.querySelector('.currentlevel')?.textContent?.trim()
+            ?? _throw('no level match');
         const level = parseIntSafe(levelText, 10);
 
         let currentExp = 0;

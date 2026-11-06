@@ -200,7 +200,7 @@ watch(() => props.playerId, onPlayerIdChanged, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
-@use "sass:map";
+@use 'sass:map';
 
 $status-bar-height: 40px;
 $status-bar-margin: 5px;

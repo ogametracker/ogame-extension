@@ -241,8 +241,8 @@ const lifeformTechBySlot: Record<number, Record<ValidLifeformType, LifeformTechn
         createRecord(
             ValidLifeformTypes,
             lf =>
-                LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot) ??
-                _throw('invalid slot'),
+                LifeformTechnologyTypesByLifeform[lf].find(tech => LifeformTechnologySlots[tech] == slot)
+                ?? _throw('invalid slot'),
         ),
 );
 
@@ -338,7 +338,9 @@ const isCrawlerOverloadEnabled = computed(
 
 const activeBooster = computed(() => {
     const selected = (resource: ResourceType) =>
-        boosterItems[resource].find(option => settings.value.activeItems.some(id => getBoosterOption(id, resource) === option));
+        boosterItems[resource].find(option =>
+            settings.value.activeItems.some(id => getBoosterOption(id, resource) === option),
+        );
 
     return {
         metal: selected(ResourceType.metal),

@@ -154,8 +154,8 @@ export function getPlanetState(
     // plasma tech cost reduction
     const plasmaTechnologyCostReductionTechnologies = ResearchCostAndTimeReductionLifeformTechnologies.filter(
         tech =>
-            planet.activeLifeformTechnologies.includes(tech.type) &&
-            tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, 20).cost > 0,
+            planet.activeLifeformTechnologies.includes(tech.type)
+            && tech.getResearchCostAndTimeReduction(ResearchType.plasmaTechnology, 20).cost > 0,
     );
 
     // lf research buildings
@@ -198,16 +198,16 @@ export function getPlanetState(
     // init lf tech cost reductions
     const lifeformTechnologyCostReduction = lifeformTechnologyResearchBuildings.reduce(
         (total, building) =>
-            total +
-            building.getLifeformTechnologyResearchCostAndTimeReduction(planetData.lifeformBuildings[building.type])
+            total
+            + building.getLifeformTechnologyResearchCostAndTimeReduction(planetData.lifeformBuildings[building.type])
                 .cost,
         0,
     );
     // init plasmatech cost reductions
     const plasmaTechnologyCostReduction = plasmaTechnologyCostReductionTechnologies.reduce(
         (total, tech) =>
-            total +
-            tech.getResearchCostAndTimeReduction(
+            total
+            + tech.getResearchCostAndTimeReduction(
                 ResearchType.plasmaTechnology,
                 planetData.lifeformTechnologies[tech.type],
             ).cost,

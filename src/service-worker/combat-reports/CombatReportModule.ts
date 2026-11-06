@@ -151,8 +151,8 @@ export class CombatReportModule {
         lootFactor *= ogameCombatReport.winner == 'attacker' ? 1 : 0;
 
         const result: CombatResultType =
-            (ogameCombatReport.isAttacker && ogameCombatReport.winner == 'attacker') ||
-            (ogameCombatReport.isDefender && ogameCombatReport.winner == 'defender')
+            (ogameCombatReport.isAttacker && ogameCombatReport.winner == 'attacker')
+            || (ogameCombatReport.isDefender && ogameCombatReport.winner == 'defender')
                 ? CombatResultType.won
                 : ogameCombatReport.winner == 'none'
                   ? CombatResultType.draw

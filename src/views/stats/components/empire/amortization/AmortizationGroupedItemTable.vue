@@ -235,8 +235,8 @@ const footerItems = computed<[TableItem]>(() => {
 
 function getPlanetName(id: number): string {
     return (
-        empireStore.empire.planets[id]?.name ??
-        `${translations().extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`
+        empireStore.empire.planets[id]?.name
+        ?? `${translations().extension.empire.amortization.saveLoad.abandonedPlanet} (${id})`
     );
 }
 

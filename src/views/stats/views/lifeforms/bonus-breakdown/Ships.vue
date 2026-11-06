@@ -145,9 +145,9 @@ function getPlanetBonus(tech: StatsBonusLifeformTechnology, planet: PlanetData):
     };
 
     if (
-        planet.activeLifeform == LifeformType.none ||
-        !planet.activeLifeformTechnologies.includes(tech.type) ||
-        !tech.appliesTo(ship.value)
+        planet.activeLifeform == LifeformType.none
+        || !planet.activeLifeformTechnologies.includes(tech.type)
+        || !tech.appliesTo(ship.value)
     ) {
         return result;
     }

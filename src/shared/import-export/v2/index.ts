@@ -77,8 +77,8 @@ export interface V2ExportedEmpirePlanet {
         [ShipType.crawler]: number;
     };
     activeItems: Partial<Record<ItemHash, number | 'permanent'>>;
-    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> &
-        Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number>
+        & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
 
     activeLifeform?: LifeformType;
@@ -94,8 +94,8 @@ export interface V2ExportedEmpireMoon {
 
     buildings: Record<MoonBuildingType, number>;
     activeItems: Partial<Record<ItemHash, number | 'permanent'>>;
-    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> &
-        Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number>
+        & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
 }
 

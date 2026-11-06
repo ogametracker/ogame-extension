@@ -110,8 +110,8 @@ function onMessage(message: Message<MessageType, any>) {
         case MessageType.NewExpedition: {
             const msg = message as ExpeditionMessage;
             const div =
-                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`) ??
-                _throw(`failed to find expedition message with id '${msg.data.id}'`);
+                document.querySelector(`div.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find expedition message with id '${msg.data.id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.processed);
@@ -134,8 +134,8 @@ function onMessage(message: Message<MessageType, any>) {
             }
 
             const div =
-                document.querySelector(`div.msg[data-msg-id="${id}"]`) ??
-                _throw(`failed to find message with id '${id}'`);
+                document.querySelector(`div.msg[data-msg-id="${id}"]`)
+                ?? _throw(`failed to find message with id '${id}'`);
 
             div.classList.remove(cssClasses.messages.waitingToBeProcessed);
             div.classList.add(cssClasses.messages.error);
@@ -536,8 +536,8 @@ function getExpeditionResultContentHtml(expedition: ExpeditionEvent): string {
 
 function getDepletionLevelClass(level: ExpeditionDepletionLevel) {
     return (
-        `ogame-tracker-expedition-result--depletion-level ogame-tracker-expedition-result--depletion-level-${level} mdi ` +
-        {
+        `ogame-tracker-expedition-result--depletion-level ogame-tracker-expedition-result--depletion-level-${level} mdi `
+        + {
             [ExpeditionDepletionLevel.none]: 'mdi-signal-cellular-outline',
             [ExpeditionDepletionLevel.low]: 'mdi-signal-cellular-1',
             [ExpeditionDepletionLevel.medium]: 'mdi-signal-cellular-2',
@@ -548,8 +548,8 @@ function getDepletionLevelClass(level: ExpeditionDepletionLevel) {
 
 function getExpeditionSizeIconClass(size: ExpeditionEventSize | ExpeditionEventCombatSize) {
     return (
-        'ogame-tracker-expedition--size-icon mdi ' +
-        (<Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>>{
+        'ogame-tracker-expedition--size-icon mdi '
+        + (<Record<ExpeditionEventSize | ExpeditionEventCombatSize, string>>{
             [ExpeditionEventSize.small]: 'mdi-hexagon-slice-1',
             [ExpeditionEventSize.medium]: 'mdi-hexagon-slice-3',
             [ExpeditionEventSize.large]: 'mdi-hexagon-slice-5',
@@ -562,8 +562,8 @@ function getExpeditionResultClass(expedition: ExpeditionEvent) {
     let cssClass = `ogame-tracker-expedition-result ogame-tracker-expedition-result--${expedition.type}`;
 
     if (
-        expedition.type == ExpeditionEventType.fleet &&
-        ExpeditionFindableShipTypes.every(ship => (expedition.fleet[ship] ?? 0) > 0)
+        expedition.type == ExpeditionEventType.fleet
+        && ExpeditionFindableShipTypes.every(ship => (expedition.fleet[ship] ?? 0) > 0)
     ) {
         cssClass += ' ogame-tracker-expedition-result--fleet--rainbow';
     }

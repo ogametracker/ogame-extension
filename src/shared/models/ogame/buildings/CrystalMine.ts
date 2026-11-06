@@ -9,13 +9,13 @@ class CrystalMineClass extends ProductionBuilding {
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const boost = this.getProductionBoost(dependencies.planet.position, dependencies.serverSettings);
         const mineProduction = Math.trunc(
-            (20 *
-                dependencies.serverSettings.economySpeed *
-                (1 + boost) *
-                level *
-                1.1 ** level *
-                dependencies.productionSettings.crystalMine) /
-                100,
+            (20
+                * dependencies.serverSettings.economySpeed
+                * (1 + boost)
+                * level
+                * 1.1 ** level
+                * dependencies.productionSettings.crystalMine)
+                / 100,
         );
 
         return mineProduction;

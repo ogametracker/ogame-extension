@@ -169,9 +169,9 @@ function getPlanetBonus(tech: ResearchCostAndTimeReductionLifeformTechnology, pl
         research.value == 'lifeform-researches' ? LifeformTechnologyType.intergalacticEnvoys : research.value;
 
     if (
-        planet.activeLifeform == LifeformType.none ||
-        !planet.activeLifeformTechnologies.includes(tech.type) ||
-        !tech.appliesTo(localResearch)
+        planet.activeLifeform == LifeformType.none
+        || !planet.activeLifeformTechnologies.includes(tech.type)
+        || !tech.appliesTo(localResearch)
     ) {
         return result;
     }

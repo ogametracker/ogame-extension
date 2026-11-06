@@ -550,8 +550,8 @@ function updatePaths() {
     internalDatasets.value = internalDatasets.value.map(dataset => {
         const svgPathSegments = computeSvgPathSegments(dataset.normalizedValues, dataset.internalValues);
         if (
-            props.continueLastValue &&
-            dataset.normalizedValues[dataset.normalizedValues.length - 1].x < maxXNormalized.value
+            props.continueLastValue
+            && dataset.normalizedValues[dataset.normalizedValues.length - 1].x < maxXNormalized.value
         ) {
             const lastSegment = svgPathSegments[svgPathSegments.length - 1];
             lastSegment.push({
@@ -656,8 +656,8 @@ function updateTickOffset() {
         throw new Error('scrollbar container is null');
     }
     scrolledFraction.value =
-        scrollbarContainer.value!.scrollLeft /
-        (scrollbarContainer.value!.scrollWidth - scrollbarContainer.value!.clientWidth);
+        scrollbarContainer.value!.scrollLeft
+        / (scrollbarContainer.value!.scrollWidth - scrollbarContainer.value!.clientWidth);
     leftX.value = (maxXNormalized.value - 1) * scrolledFraction.value;
 }
 

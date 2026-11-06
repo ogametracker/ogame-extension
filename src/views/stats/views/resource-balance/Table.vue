@@ -201,9 +201,9 @@ function getResources(nextEvents: DailyEvents[], eventType: EventType | null, re
 
 function getResource(dayEvents: DailyEvents, resource: ResourceType): number {
     return (
-        getExpeditionResourceAmount(dayEvents.expeditions, resource) +
-        getCombatResourceAmount(dayEvents.combats, resource) +
-        getDebrisFieldResourceAmount(dayEvents.debrisFields, resource)
+        getExpeditionResourceAmount(dayEvents.expeditions, resource)
+        + getCombatResourceAmount(dayEvents.combats, resource)
+        + getDebrisFieldResourceAmount(dayEvents.debrisFields, resource)
     );
 }
 
@@ -214,8 +214,8 @@ function getExpeditionResourceAmount(expeditions: DailyExpeditionResult | undefi
 
     const localIncludeFoundShipsFactor = includeFoundShipsFactor.value[resource];
     const total =
-        expeditions.findings.resources[resource] +
-        expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
+        expeditions.findings.resources[resource]
+        + expeditions.findings.fleetResourceUnits[resource] * localIncludeFoundShipsFactor;
 
     return total;
 }
@@ -230,9 +230,9 @@ function getCombatResourceAmount(dailyReports: DailyCombatReportResult | undefin
 
     const localIncludeLostShipsFactor = includeLostShipsFactor.value[resource];
     const lostShipResourceUnits =
-        (dailyReports.lostShips.onExpeditions.resourceUnits[resource] +
-            dailyReports.lostShips.againstPlayers.resourceUnits[resource]) *
-        localIncludeLostShipsFactor;
+        (dailyReports.lostShips.onExpeditions.resourceUnits[resource]
+            + dailyReports.lostShips.againstPlayers.resourceUnits[resource])
+        * localIncludeLostShipsFactor;
 
     const total = lootResources - lostShipResourceUnits;
 
@@ -257,8 +257,8 @@ const footerItems = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
             getValue: nextEvents =>
                 ResourceTypes.reduce(
                     (total, resource) =>
-                        total +
-                        EventTypes.reduce(
+                        total
+                        + EventTypes.reduce(
                             (total, eventType) => total + getResources(nextEvents, eventType, resource),
                             0,
                         ),
@@ -273,11 +273,11 @@ const footerItems = computed<RangedStatsTableItem<DailyEvents>[]>(() => {
             getValue: nextEvents =>
                 ResourceTypes.reduce(
                     (total, resource) =>
-                        total +
-                        EventTypes.reduce(
+                        total
+                        + EventTypes.reduce(
                             (total, eventType) =>
-                                total +
-                                getMsuOrDsu({
+                                total
+                                + getMsuOrDsu({
                                     [resource]: getResources(nextEvents, eventType, resource),
                                 }),
                             0,

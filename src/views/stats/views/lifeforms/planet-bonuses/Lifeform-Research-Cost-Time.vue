@@ -119,8 +119,8 @@ const planets = computed<Record<number, LifeformPlanetBonuses<keyof Bonuses>>>((
                     createRecord(
                         activeBuildingTypes,
                         type =>
-                            -1 *
-                            (
+                            -1
+                            * (
                                 LifeformBuildingsByType[type] as LifeformTechnologyResearchBuilding
                             ).getLifeformTechnologyResearchCostAndTimeReduction(planet.lifeformBuildings[type])[key],
                     ),

@@ -70,9 +70,9 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
             if (
                 linkedAccounts.some(
                     acc =>
-                        acc.id == linkedAcc.playerId &&
-                        acc.serverId == linkedAcc.serverId &&
-                        acc.serverLanguage == linkedAcc.language,
+                        acc.id == linkedAcc.playerId
+                        && acc.serverId == linkedAcc.serverId
+                        && acc.serverLanguage == linkedAcc.language,
                 )
             ) {
                 continue;
@@ -348,8 +348,8 @@ export async function importData(data: V2Export, progressCallback?: (info: Impor
 
         await tx.objectStore('_lastUpdate').put(history._lastUpdate, 0);
 
-        const stores: (StoreNames<OgameTrackerUniverseHistoryDbSchema> &
-            Exclude<keyof V2ExportedUniverseHistory, '_lastUpdate'>)[] = [
+        const stores: (StoreNames<OgameTrackerUniverseHistoryDbSchema>
+            & Exclude<keyof V2ExportedUniverseHistory, '_lastUpdate'>)[] = [
             'players',
             'playerNames',
             'playerAlliances',

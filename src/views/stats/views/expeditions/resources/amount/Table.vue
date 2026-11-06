@@ -81,10 +81,10 @@ const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() =
             getValue: nextExpos =>
                 nextExpos.reduce(
                     (acc, expo) =>
-                        acc +
-                        expo.findings.resources.metal +
-                        expo.findings.resources.crystal +
-                        expo.findings.resources.deuterium,
+                        acc
+                        + expo.findings.resources.metal
+                        + expo.findings.resources.crystal
+                        + expo.findings.resources.deuterium,
                     0,
                 ),
         },

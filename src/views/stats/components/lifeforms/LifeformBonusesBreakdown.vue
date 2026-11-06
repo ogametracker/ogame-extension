@@ -18,8 +18,8 @@
                     />
                     <span
                         v-if="
-                            limits[type.key](Number.MAX_SAFE_INTEGER) == totalBonus[type.key] ||
-                            limits[type.key](Number.MIN_SAFE_INTEGER) == totalBonus[type.key]
+                            limits[type.key](Number.MAX_SAFE_INTEGER) == totalBonus[type.key]
+                            || limits[type.key](Number.MIN_SAFE_INTEGER) == totalBonus[type.key]
                         "
                         class="mdi mdi-alert-outline"
                     />
@@ -73,8 +73,8 @@
                     <div v-for="tech in technologiesSorted" :key="tech" class="tech-row">
                         <template
                             v-if="
-                                planet.activeLifeformTechnologies.includes(tech) &&
-                                planet.lifeformTechnologies[tech] > 0
+                                planet.activeLifeformTechnologies.includes(tech)
+                                && planet.lifeformTechnologies[tech] > 0
                             "
                         >
                             <div class="slot" v-text="LifeformTechnologySlots[tech]" />
@@ -82,8 +82,8 @@
                                 <OLifeformTechnology :technology="tech" size="24px" />
                                 <span
                                     v-text="
-                                        translations().ogame.lifeformTechnologies[tech] +
-                                        ` (${planet.lifeformTechnologies[tech]})`
+                                        translations().ogame.lifeformTechnologies[tech]
+                                        + ` (${planet.lifeformTechnologies[tech]})`
                                     "
                                 />
                             </div>

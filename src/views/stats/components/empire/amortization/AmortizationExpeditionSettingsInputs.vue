@@ -146,8 +146,8 @@ function onSettingsChanged() {
             Object.keys(topScores.value)
                 .map(k => parseIntSafe(k))
                 .sort((a, b) => b - a)
-                .find(score => score <= settings.value.serverSettings.topScore) ??
-            _throw('failed to find matching top score');
+                .find(score => score <= settings.value.serverSettings.topScore)
+            ?? _throw('failed to find matching top score');
     }
 }
 

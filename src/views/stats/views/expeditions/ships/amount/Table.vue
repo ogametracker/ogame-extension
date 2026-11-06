@@ -64,8 +64,8 @@ const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() =
             getValue: nextExpos =>
                 nextExpos.reduce(
                     (acc, expo) =>
-                        acc +
-                        ExpeditionFindableShipTypes.reduce((acc, ship) => acc + (expo.findings.fleet[ship] ?? 0), 0),
+                        acc
+                        + ExpeditionFindableShipTypes.reduce((acc, ship) => acc + (expo.findings.fleet[ship] ?? 0), 0),
                     0,
                 ),
         },

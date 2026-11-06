@@ -64,8 +64,8 @@ function getExpeditionEventType(text: string): ExpeditionEventType {
         type => translations().extension.expeditions.expeditionEvents[type],
     );
     return (
-        (Object.entries(reverseMap) as [ExpeditionEventType, string][]).find(e => e[1] == text)?.[0] ??
-        _throw('failed to find fitting type')
+        (Object.entries(reverseMap) as [ExpeditionEventType, string][]).find(e => e[1] == text)?.[0]
+        ?? _throw('failed to find fitting type')
     );
 }
 

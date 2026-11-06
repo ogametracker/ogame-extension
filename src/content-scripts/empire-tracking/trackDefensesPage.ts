@@ -20,20 +20,20 @@ export function trackDefensesPage() {
         selector: '#technologies > .icons',
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const planetType =
-                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content ??
-                _throw('did not find meta ogame-planet-type');
+                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
             const defenseCounts = createRecord(DefenseTypes, 0);
             DefenseTypes.forEach(defense => {
                 const amountText =
-                    element.querySelector(`[data-technology="${defense}"] .amount`)?.getAttribute('data-value') ??
-                    _throw(`did not find amount of defense '${DefenseType[defense]}'`);
+                    element.querySelector(`[data-technology="${defense}"] .amount`)?.getAttribute('data-value')
+                    ?? _throw(`did not find amount of defense '${DefenseType[defense]}'`);
 
                 const amount = parseIntSafe(amountText, 10);
                 defenseCounts[defense] = amount;
@@ -58,8 +58,8 @@ export function trackDefensesPage() {
             const missileCounts = createRecord(MissileTypes, 0);
             MissileTypes.forEach(missile => {
                 const amountText =
-                    element.querySelector(`[data-technology="${missile}"] .amount`)?.getAttribute('data-value') ??
-                    _throw(`did not find amount of missile '${MissileType[missile]}'`);
+                    element.querySelector(`[data-technology="${missile}"] .amount`)?.getAttribute('data-value')
+                    ?? _throw(`did not find amount of missile '${MissileType[missile]}'`);
 
                 const amount = parseIntSafe(amountText, 10);
                 missileCounts[missile] = amount;

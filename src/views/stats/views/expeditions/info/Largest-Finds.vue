@@ -144,8 +144,8 @@ const keyTranslations = computed<Record<FindKey, string>>(() => {
         deuterium: translations().ogame.resources.deuterium,
         shipUnits: translations().extension.expeditions.topFinds.shipUnits,
         shipUnitsConverted:
-            translations().extension.expeditions.topFinds.shipUnits +
-            ` (${
+            translations().extension.expeditions.topFinds.shipUnits
+            + ` (${
                 settingsStore.settings.conversionRates.mode == 'msu'
                     ? translations().extension.common.msu
                     : translations().extension.common.dsu

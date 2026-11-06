@@ -192,18 +192,18 @@ const items = computed<PlanetLifeformItem[]>(() => {
             buildingLevels: planet.lifeformBuildings,
             lifeformTechsTier1: Array.from({ length: 6 }).map(
                 (_, i) =>
-                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6) ??
-                    null,
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6)
+                    ?? null,
             ),
             lifeformTechsTier2: Array.from({ length: 6 }).map(
                 (_, i) =>
-                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 1 * 6) ??
-                    null,
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 1 * 6)
+                    ?? null,
             ),
             lifeformTechsTier3: Array.from({ length: 6 }).map(
                 (_, i) =>
-                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 2 * 6) ??
-                    null,
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 2 * 6)
+                    ?? null,
             ),
             lifeformTechnologies: planet.lifeformTechnologies,
         };

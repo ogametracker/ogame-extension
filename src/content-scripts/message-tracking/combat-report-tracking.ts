@@ -113,8 +113,8 @@ function onMessage(message: Message<MessageType, any>) {
             delete shouldTrackResolvers[msg.data.id];
 
             const li =
-                document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`) ??
-                _throw(`failed to find combat report with id '${msg.data.id}'`);
+                document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
             li.classList.add(cssClasses.messages.processed);
             li.classList.add(cssClasses.messages.ignored);
@@ -135,8 +135,8 @@ function onMessage(message: Message<MessageType, any>) {
             delete shouldTrackResolvers[combatReport.id];
 
             const li =
-                document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`) ??
-                _throw(`failed to find combat report with id '${msg.data.id}'`);
+                document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
@@ -211,8 +211,8 @@ function onMessage(message: Message<MessageType, any>) {
             }
 
             const li =
-                document.querySelector(`.msg[data-msg-id="${id}"]`) ??
-                _throw(`failed to find combat report message with id '${id}'`);
+                document.querySelector(`.msg[data-msg-id="${id}"]`)
+                ?? _throw(`failed to find combat report message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);

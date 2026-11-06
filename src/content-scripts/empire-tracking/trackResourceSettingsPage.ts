@@ -25,13 +25,13 @@ export function trackResourceSettingsPage(): void {
         selector: '#inhalt .mainRS',
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const planetType =
-                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content ??
-                _throw('did not find meta ogame-planet-type');
+                (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+                ?? _throw('did not find meta ogame-planet-type');
             const isMoon = planetType == 'moon';
 
             try {
@@ -153,8 +153,8 @@ export function trackResourceSettingsPage(): void {
 
 function getLevelOrAmount(element: Element, id: number): number {
     const label =
-        element.querySelector(`tr[class~="${id}"] .label`)?.textContent ??
-        _throw(`no label element found for techid ${id}`);
+        element.querySelector(`tr[class~="${id}"] .label`)?.textContent
+        ?? _throw(`no label element found for techid ${id}`);
     const regex = /\b(?<level>\d+)\b/;
 
     const levelText = label.match(regex)?.groups?.level ?? _throw('no level text found');
@@ -181,8 +181,8 @@ function getAllianceClass(element: Element): AllianceClass {
 
 function getProductionPercentage(element: Element, techId: number): number {
     const select =
-        (element.querySelector(`select[name="productionFactor[${techId}]"]`) as HTMLSelectElement | null) ??
-        _throw(`select not found for techid ${techId}`);
+        (element.querySelector(`select[name="productionFactor[${techId}]"]`) as HTMLSelectElement | null)
+        ?? _throw(`select not found for techid ${techId}`);
 
     const levelOrAmount = getLevelOrAmount(element, techId);
     // sometimes production is set to 0% for level/count 0 items, but will change to 100 automatically afterwards, so we just set it to 100

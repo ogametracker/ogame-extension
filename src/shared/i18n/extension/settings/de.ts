@@ -134,8 +134,8 @@ export const de: SettingsTranslations = {
         deleteAccount: {
             button: (account: string) => `Alle Daten des aktuell gewählten Accounts (${account}) entfernen`,
             confirmationText: (account: string) =>
-                `Nach dem Bestätigen dieser Aktion werden alle gespeicherten Daten des aktuell gewählten Accounts (${account}) gelöscht.\n` +
-                `Dies beinhaltet die getrackte Universumshistorie dieses Servers sofern kein anderer Account für diesen Server getrackt ist.`,
+                `Nach dem Bestätigen dieser Aktion werden alle gespeicherten Daten des aktuell gewählten Accounts (${account}) gelöscht.\n`
+                + `Dies beinhaltet die getrackte Universumshistorie dieses Servers sofern kein anderer Account für diesen Server getrackt ist.`,
         },
         deleteUniverseHistory: {
             button: (server: string) => `Universumshistorie des aktuell gewählten Universums (${server}) entfernen`,
@@ -145,8 +145,8 @@ export const de: SettingsTranslations = {
         deleteEverything: {
             button: 'Alle Daten entfernen',
             confirmationText1:
-                `Nach dem Bestätigen dieser Aktion werden alle Daten gelöscht.\n` +
-                'Das heißt, alle Daten inklusive getrackter Expeditionen, Kämpfe, TF-Abbauberichte, Universumshistorie und mehr, werden entfernt.',
+                `Nach dem Bestätigen dieser Aktion werden alle Daten gelöscht.\n`
+                + 'Das heißt, alle Daten inklusive getrackter Expeditionen, Kämpfe, TF-Abbauberichte, Universumshistorie und mehr, werden entfernt.',
             confirmationText2: 'Bitte bestätige erneut, dass du alle Daten löschen möchtest.',
         },
     },
@@ -265,11 +265,11 @@ export const de: SettingsTranslations = {
     linkAccounts: {
         header: (account: string) => `Accounts mit dem aktuellen Account (${account}) verknüpfen`,
         descriptionHtml: (account: string) =>
-            `Hier sollten nur Accounts miteinander verknüpft werden, wenn die Daten der gewählten Accounts als Daten des aktuellen Accounts (${account}) behandelt werden sollen.<br/>` +
-            `Dies ist zum Beispiel gewünscht, wenn ein Account aufgrund einer Fusion von einem Server auf einen anderen verschoben wurde und somit im Tracker als separater Account behandelt wird, ` +
-            `aber bspw. die Expeditionen des ursprügnlichen Accounts weiterhin angezeigt werden sollen.<br/><br/>` +
-            `Beispiel: <br/>` +
-            `<ol>
+            `Hier sollten nur Accounts miteinander verknüpft werden, wenn die Daten der gewählten Accounts als Daten des aktuellen Accounts (${account}) behandelt werden sollen.<br/>`
+            + `Dies ist zum Beispiel gewünscht, wenn ein Account aufgrund einer Fusion von einem Server auf einen anderen verschoben wurde und somit im Tracker als separater Account behandelt wird, `
+            + `aber bspw. die Expeditionen des ursprügnlichen Accounts weiterhin angezeigt werden sollen.<br/><br/>`
+            + `Beispiel: <br/>`
+            + `<ol>
                     <li>der Spieler "OGame Profi" spielt auf dem Server "DE Milchstraße"</li>
                     <li>der Server "DE Milchstraße" wird nun Exodusuni bei einer Fusion</li>
                     <li>der Spieler "OGame Profi" fusioniert also seinen Account nach "DE Wagenrad"</li>   

@@ -342,8 +342,8 @@ function getEconomyPoints(): number {
             }
 
             return total + points;
-        }, 0) +
-        ownReturningFleets.value.reduce((total, fleet) => {
+        }, 0)
+        + ownReturningFleets.value.reduce((total, fleet) => {
             const points = civilShipTypes.reduce((total, shipType) => {
                 const count = fleet.ships[shipType];
                 const ship = ShipByTypes[shipType];
@@ -423,8 +423,8 @@ function getMilitaryPoints(): number {
             }
 
             return total + points;
-        }, 0) +
-        ownReturningFleets.value.reduce((total, fleet) => {
+        }, 0)
+        + ownReturningFleets.value.reduce((total, fleet) => {
             const points = militaryShipTypes.reduce((total, shipType) => {
                 const count = fleet.ships[shipType];
                 const ship = ShipByTypes[shipType];
@@ -464,8 +464,8 @@ function getMilitaryPoints(): number {
             }
 
             return total + points;
-        }, 0) +
-        ownReturningFleets.value.reduce((total, fleet) => {
+        }, 0)
+        + ownReturningFleets.value.reduce((total, fleet) => {
             const points = civilShipTypes.reduce((total, shipType) => {
                 const count = fleet.ships[shipType];
                 const ship = ShipByTypes[shipType];
@@ -560,8 +560,8 @@ const ownReturningFleets = computed<Fleet[]>(() => {
     const localPlanets = planetAndMoons.value;
     return fleets.filter(
         fleet =>
-            (fleet.isReturnFlight || fleet.mission == FleetMissionType.deployment) &&
-            localPlanets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates)),
+            (fleet.isReturnFlight || fleet.mission == FleetMissionType.deployment)
+            && localPlanets.some(p => coordinatesEqual(p.coordinates, fleet.originCoordinates)),
     );
 });
 

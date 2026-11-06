@@ -155,8 +155,8 @@ const columns = computed<GridTableColumn<keyof FindableUnits>[]>(() => {
         {
             key: 'maxShipUnitsConverted',
             label:
-                translations().extension.expeditions.possibleFinds.shipMaxUnitsConverted +
-                ` (${
+                translations().extension.expeditions.possibleFinds.shipMaxUnitsConverted
+                + ` (${
                     settingsStore.settings.conversionRates.mode == 'msu'
                         ? translations().extension.common.msu
                         : translations().extension.common.dsu
@@ -285,8 +285,8 @@ const info = computed(() => {
             const levelBonus =
                 planet.activeLifeform == LifeformType.none
                     ? 0
-                    : baseBonus *
-                      getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
             const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
             const total = baseBonus + levelBonus + buildingBonus;
@@ -307,8 +307,8 @@ const info = computed(() => {
             const levelBonus =
                 planet.activeLifeform == LifeformType.none
                     ? 0
-                    : baseBonus *
-                      getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
             const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
             const total = baseBonus + levelBonus + buildingBonus;
@@ -329,8 +329,8 @@ const info = computed(() => {
             const levelBonus =
                 planet.activeLifeform == LifeformType.none
                     ? 0
-                    : baseBonus *
-                      getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
             const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
             const total = baseBonus + levelBonus + buildingBonus;
@@ -351,8 +351,8 @@ const info = computed(() => {
             const levelBonus =
                 planet.activeLifeform == LifeformType.none
                     ? 0
-                    : baseBonus *
-                      getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
             const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
 
             const total = baseBonus + levelBonus + buildingBonus;
@@ -408,12 +408,12 @@ const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
     return createRecord(ExpeditionEventSizes, size =>
         findBaseAmounts[size].map<FindableUnits>(base => {
             const metal =
-                topPointsFactors *
-                base *
-                pathfinderFactor *
-                classFactor *
-                (1 + localInfo.resourceFindBonus) *
-                (1 + resourceSizeBoost);
+                topPointsFactors
+                * base
+                * pathfinderFactor
+                * classFactor
+                * (1 + localInfo.resourceFindBonus)
+                * (1 + resourceSizeBoost);
             const shipUnits =
                 (topPointsFactors * base * pathfinderFactor * classFactor * (1 + localInfo.shipFindBonus)) / 2;
             const maxShipUnitsConverted =

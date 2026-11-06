@@ -105,8 +105,8 @@ export class AmortizationExpeditionResultsBreakdown {
         const classBonusSlots =
             this.options.playerClass == PlayerClass.discoverer
                 ? Math.trunc(
-                      this.options.serverSettings.discovererExpeditionSlotBonus *
-                          (1 + this.#lifeformDiscovererClassBonus),
+                      this.options.serverSettings.discovererExpeditionSlotBonus
+                          * (1 + this.#lifeformDiscovererClassBonus),
                   )
                 : 0;
         const admiralSlots = this.options.admiral ? 1 : 0;
@@ -172,9 +172,9 @@ export class AmortizationExpeditionResultsBreakdown {
 
         const classFactor =
             this.options.playerClass == PlayerClass.discoverer
-                ? (1 + this.options.serverSettings.discovererExpeditionBonus) *
-                  (1 + this.#lifeformDiscovererClassBonus) *
-                  this.options.serverSettings.economySpeed
+                ? (1 + this.options.serverSettings.discovererExpeditionBonus)
+                  * (1 + this.#lifeformDiscovererClassBonus)
+                  * this.options.serverSettings.economySpeed
                 : 1;
 
         const eventBonuses = this.#lifeformExpeditionEventBonuses;
@@ -192,12 +192,12 @@ export class AmortizationExpeditionResultsBreakdown {
                                 resource => baseAmount * resourceProbabilities[resource] * resourceFactors[resource],
                             ),
                         },
-                        scoreFactor *
-                            classFactor *
-                            pathfinderFactor *
-                            eventTypeProbabilities.resources *
-                            (1 + eventBonuses.resources) *
-                            (1 + itemBonuses.resources),
+                        scoreFactor
+                            * classFactor
+                            * pathfinderFactor
+                            * eventTypeProbabilities.resources
+                            * (1 + eventBonuses.resources)
+                            * (1 + itemBonuses.resources),
                     );
                 })
                 .reduce((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
@@ -220,19 +220,19 @@ export class AmortizationExpeditionResultsBreakdown {
                                 ...createRecord(
                                     ResourceTypes,
                                     resource =>
-                                        baseAmount *
-                                        resourceFactors.crystal * // baseline for found fleet units is the same as crystal finds
-                                        fleetResourceFactors[resource],
+                                        baseAmount
+                                        * resourceFactors.crystal // baseline for found fleet units is the same as crystal finds
+                                        * fleetResourceFactors[resource],
                                 ),
                             },
                             { energy: 0, ...this.options.fleetFindsResourceFactors },
                         ),
-                        scoreFactor *
-                            classFactor *
-                            pathfinderFactor *
-                            eventTypeProbabilities.fleet *
-                            (1 + eventBonuses.fleet) *
-                            (1 + itemBonuses.fleet),
+                        scoreFactor
+                            * classFactor
+                            * pathfinderFactor
+                            * eventTypeProbabilities.fleet
+                            * (1 + eventBonuses.fleet)
+                            * (1 + itemBonuses.fleet),
                     );
                 })
                 .reduce((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });

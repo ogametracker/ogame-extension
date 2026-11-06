@@ -83,9 +83,9 @@ export const useUniversesAndAccountsStore = defineStore('universesAndAccounts', 
             ...account,
             linkedAccounts: (account.linkedAccounts ?? []).filter(
                 linked =>
-                    linked.id !== account.id ||
-                    linked.serverId !== account.serverId ||
-                    linked.serverLanguage !== account.serverLanguage,
+                    linked.id !== account.id
+                    || linked.serverId !== account.serverId
+                    || linked.serverLanguage !== account.serverLanguage,
             ),
         }));
         servers.value = await tx.objectStore('servers').getAll();

@@ -84,9 +84,9 @@ async function clearExpeditions() {
         translations().extension.settings.dangerZone.deleteExpeditions.confirmationText(
             accountAndServer.value,
             formatNumber(expeditionStore.count),
-        ) +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        )
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -103,9 +103,9 @@ async function clearCombats() {
         translations().extension.settings.dangerZone.deleteCombats.confirmationText(
             accountAndServer.value,
             formatNumber(combatReportStore.count),
-        ) +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        )
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -122,9 +122,9 @@ async function clearDebrisFieldReports() {
         translations().extension.settings.dangerZone.deleteDebrisFieldReports.confirmationText(
             accountAndServer.value,
             formatNumber(debrisFieldReportStore.count),
-        ) +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        )
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -138,9 +138,9 @@ async function clearDebrisFieldReports() {
 
 async function deleteAccount() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteAccount.confirmationText(accountAndServer.value) +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        translations().extension.settings.dangerZone.deleteAccount.confirmationText(accountAndServer.value)
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -153,9 +153,9 @@ async function deleteAccount() {
 
 async function deleteUniverseHistory() {
     const confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteUniverseHistory.confirmationText(accountAndServer.value) +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        translations().extension.settings.dangerZone.deleteUniverseHistory.confirmationText(accountAndServer.value)
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {
@@ -169,18 +169,18 @@ async function deleteUniverseHistory() {
 
 async function deleteEverything() {
     let confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteEverything.confirmationText1 +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        translations().extension.settings.dangerZone.deleteEverything.confirmationText1
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
     if (!confirmed) {
         return;
     }
 
     confirmed = window.confirm(
-        translations().extension.settings.dangerZone.deleteEverything.confirmationText2 +
-            '\n\n' +
-            translations().extension.settings.dangerZone.doYouWantToContinue,
+        translations().extension.settings.dangerZone.deleteEverything.confirmationText2
+            + '\n\n'
+            + translations().extension.settings.dangerZone.doYouWantToContinue,
     );
 
     if (confirmed) {

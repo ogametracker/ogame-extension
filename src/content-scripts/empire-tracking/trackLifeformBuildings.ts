@@ -16,8 +16,8 @@ export function trackLifeformBuildingsPage() {
         selector: '#technologies > .icons',
         callback: element => {
             const planetIdText =
-                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content ??
-                _throw('no meta element found for ogame-planet-id');
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+                ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
             const buildingLevels: Partial<Record<LifeformBuildingType, number>> = {};

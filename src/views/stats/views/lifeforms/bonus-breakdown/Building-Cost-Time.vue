@@ -132,9 +132,9 @@ function getPlanetBonus(tech: BuildingCostAndTimeReductionLifeformTechnology, pl
     };
 
     if (
-        planet.activeLifeform == LifeformType.none ||
-        !planet.activeLifeformTechnologies.includes(tech.type) ||
-        !tech.appliesTo(building.value)
+        planet.activeLifeform == LifeformType.none
+        || !planet.activeLifeformTechnologies.includes(tech.type)
+        || !tech.appliesTo(building.value)
     ) {
         return result;
     }

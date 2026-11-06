@@ -11,9 +11,9 @@ function collectRouteNames(records: readonly RouteRecordRaw[]) {
         if (typeof record.name === 'string') {
             routeNames.add(record.name);
             if (
-                typeof record.redirect === 'object' &&
-                'name' in record.redirect &&
-                typeof record.redirect.name === 'string'
+                typeof record.redirect === 'object'
+                && 'name' in record.redirect
+                && typeof record.redirect.name === 'string'
             ) {
                 defaultRouteNames.set(record.name, record.redirect.name);
             }

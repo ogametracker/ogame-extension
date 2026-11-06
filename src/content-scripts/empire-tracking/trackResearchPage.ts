@@ -18,8 +18,8 @@ export function trackResearchPage() {
 
             ResearchTypes.forEach(research => {
                 const levelText =
-                    element.querySelector(`[data-technology="${research}"] .level`)?.getAttribute('data-value') ??
-                    _throw(`did not find level of research '${ResearchType[research]}'`);
+                    element.querySelector(`[data-technology="${research}"] .level`)?.getAttribute('data-value')
+                    ?? _throw(`did not find level of research '${ResearchType[research]}'`);
                 const level = parseIntSafe(levelText, 10);
 
                 researchLevels[research] = level;

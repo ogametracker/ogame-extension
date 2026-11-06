@@ -15,8 +15,8 @@ function getCookies(): Record<string, string> {
 
 function getLanguageMeta(): string {
     return (
-        (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement | null)?.content ??
-        _throw('Cannot find language meta tag')
+        (document.querySelector('meta[name="ogame-language"]') as HTMLMetaElement | null)?.content
+        ?? _throw('Cannot find language meta tag')
     );
 }
 
@@ -35,8 +35,8 @@ export function getOgameMeta(): MessageOgameMeta {
     const userLanguage = getUserLanguage();
 
     const serverText =
-        (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)?.content ??
-        _throw('Cannot find universe meta tag');
+        (document.querySelector('meta[name="ogame-universe"]') as HTMLMetaElement | null)?.content
+        ?? _throw('Cannot find universe meta tag');
     const serverTextSplit = serverText.split('.')[0].split('-');
     const serverIdText = serverTextSplit[0].replace(/^s/, '');
     const language = serverTextSplit[1];
@@ -47,8 +47,8 @@ export function getOgameMeta(): MessageOgameMeta {
     const serverId = parseIntSafe(serverIdText, 10);
 
     const playerIdText =
-        (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null)?.content ??
-        _throw('Cannot find player id meta tag');
+        (document.querySelector('meta[name="ogame-player-id"]') as HTMLMetaElement | null)?.content
+        ?? _throw('Cannot find player id meta tag');
     const playerId = parseIntSafe(playerIdText, 10);
 
     return {

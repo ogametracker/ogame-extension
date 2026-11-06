@@ -345,8 +345,8 @@ async function getExportEmpire(
         technocrat: false,
     };
     const lifeformExperience =
-        ((await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined) ??
-        createRecord(ValidLifeformTypes, 0);
+        ((await store.get('lifeformExperience')) as DbPlayerLifeformExperience | undefined)
+        ?? createRecord(ValidLifeformTypes, 0);
 
     const keys = await store.getAllKeys();
 
@@ -355,19 +355,19 @@ async function getExportEmpire(
     const planets: V2ExportedEmpirePlanet[] = [];
     for (const planetId of planetIds) {
         const data =
-            ((await store.get(`planet.${planetId}`)) as DbBasicPlanetData | undefined) ??
-            _throw(`got planet with id '${planetId}'`);
+            ((await store.get(`planet.${planetId}`)) as DbBasicPlanetData | undefined)
+            ?? _throw(`got planet with id '${planetId}'`);
 
         const buildings =
-            ((await store.get(`planet.${planetId}.buildings`)) as DbPlanetBuildingLevels | undefined) ??
-            createRecord(PlanetBuildingTypes, 0);
+            ((await store.get(`planet.${planetId}.buildings`)) as DbPlanetBuildingLevels | undefined)
+            ?? createRecord(PlanetBuildingTypes, 0);
 
         const ships =
             ((await store.get(`planet.${planetId}.ships`)) as DbShipAmounts | undefined) ?? createRecord(ShipTypes, 0);
 
         const defenses =
-            ((await store.get(`planet.${planetId}.defenses`)) as DbDefenseAmounts | undefined) ??
-            (createRecord(DefenseTypes, def =>
+            ((await store.get(`planet.${planetId}.defenses`)) as DbDefenseAmounts | undefined)
+            ?? (createRecord(DefenseTypes, def =>
                 [DefenseType.smallShieldDome, DefenseType.largeShieldDome].includes(def) ? false : 0,
             ) as DbDefenseAmounts);
 
@@ -387,16 +387,15 @@ async function getExportEmpire(
         const activeLifeform =
             ((await store.get(`planet.${planetId}.lifeform`)) as LifeformType | undefined) ?? LifeformType.none;
         const lifeformBuildings =
-            ((await store.get(`planet.${planetId}.lifeformBuildings`)) as DbPlanetLifeformBuildingLevels | undefined) ??
-            createRecord(LifeformBuildingTypes, 0);
+            ((await store.get(`planet.${planetId}.lifeformBuildings`)) as DbPlanetLifeformBuildingLevels | undefined)
+            ?? createRecord(LifeformBuildingTypes, 0);
         const lifeformTechnologies =
             ((await store.get(`planet.${planetId}.lifeformTechnologies`)) as
                 | DbPlanetLifeformTechnologyLevels
                 | undefined) ?? createRecord(LifeformTechnologyTypes, 0);
         const activeLifeformTechnologies =
-            ((await store.get(`planet.${planetId}.activeLifeformTechnologies`)) as
-                | LifeformTechnologyType[]
-                | undefined) ?? [];
+            ((await store.get(`planet.${planetId}.activeLifeformTechnologies`)) as LifeformTechnologyType[] | undefined)
+            ?? [];
 
         planets.push({
             id: data.id,
@@ -422,19 +421,19 @@ async function getExportEmpire(
     const moons: V2ExportedEmpireMoon[] = [];
     for (const moonId of moonIds) {
         const data =
-            ((await store.get(`moon.${moonId}`)) as DbBasicMoonData | undefined) ??
-            _throw(`got moon with id '${moonId}'`);
+            ((await store.get(`moon.${moonId}`)) as DbBasicMoonData | undefined)
+            ?? _throw(`got moon with id '${moonId}'`);
 
         const buildings =
-            ((await store.get(`moon.${moonId}.buildings`)) as DbMoonBuildingLevels | undefined) ??
-            createRecord(MoonBuildingTypes, 0);
+            ((await store.get(`moon.${moonId}.buildings`)) as DbMoonBuildingLevels | undefined)
+            ?? createRecord(MoonBuildingTypes, 0);
 
         const ships =
             ((await store.get(`moon.${moonId}.ships`)) as DbShipAmounts | undefined) ?? createRecord(ShipTypes, 0);
 
         const defenses =
-            ((await store.get(`moon.${moonId}.defenses`)) as DbDefenseAmounts | undefined) ??
-            (createRecord(DefenseTypes, def =>
+            ((await store.get(`moon.${moonId}.defenses`)) as DbDefenseAmounts | undefined)
+            ?? (createRecord(DefenseTypes, def =>
                 [DefenseType.smallShieldDome, DefenseType.largeShieldDome].includes(def) ? false : 0,
             ) as DbDefenseAmounts);
 
@@ -536,8 +535,8 @@ function onImportProgress_v2(progress: ImportCallbackInfo): void {
                 case 'debris-fields':
                 case 'lifeform-discoveries':
                     if (
-                        progress.step.currentIndex % stepSize != 0 &&
-                        progress.step.currentIndex + 1 != progress.step.total
+                        progress.step.currentIndex % stepSize != 0
+                        && progress.step.currentIndex + 1 != progress.step.total
                     ) {
                         return;
                     }
