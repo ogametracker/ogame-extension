@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --config ../../.oxlintrc.json .",
+    "format": "oxfmt --config ../../.oxfmtrc.json .",
+    "format:check": "npm run format -- --check"
   },
   "dependencies": {
     "date-fns": "2.28.0",

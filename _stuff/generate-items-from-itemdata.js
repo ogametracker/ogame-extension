@@ -2,7 +2,7 @@
  * Generates the missing entries for
  *   - src/shared/models/ogame/items/ItemHash.ts   (enum members + `_ItemHashes` record)
  *   - src/shared/models/ogame/items/Items.ts      (item metadata)
- *   - src/shared/models/ogame/items/ItemEffects.ts (what an item actually does)
+ *   - src/shared/models/ogame/items/ItemEffects.generated.ts (what an item actually does)
  * from the item dump in `sources/itemdata.json`.
  *
  * The dump groups items by server generation. OGame issues a different uuid for the
@@ -183,7 +183,7 @@ function imageHash(cdnPath) {
     return match?.[1] ?? null;
 }
 
-//#region ItemEffects.ts
+//#region ItemEffects.generated.ts
 
 /**
  * The enum member names encode what an item does, which makes them the single source of
@@ -305,9 +305,9 @@ ${lines.join('\n')}
 };
 `;
 
-    const target = path.join(repoRoot, 'src/shared/models/ogame/items/ItemEffects.ts');
+    const target = path.join(repoRoot, 'src/shared/models/ogame/items/ItemEffects.generated.ts');
     fs.writeFileSync(target, output, 'utf-8');
-    console.log(`\ngenerated ItemEffects.ts with ${count} entries`);
+    console.log(`\ngenerated ItemEffects.generated.ts with ${count} entries`);
 }
 
 //#endregion

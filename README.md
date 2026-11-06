@@ -32,3 +32,8 @@ assemble these outputs, static assets, and the manifest into the extension's roo
 
 Run `npm run typecheck --workspace @ogame-tracker/stats` or substitute the Notifications workspace to check either Vue app. Run
 `npm run typecheck --workspace @ogame-tracker/shared` to check the shared library.
+
+Run `npm run lint`, `npm run format`, or `npm run format:check` from the repository root to lint, format, or
+check formatting across all workspaces. Add `--workspace @ogame-tracker/stats` (or another workspace name)
+to run the corresponding command for one module. All workspaces use the Oxlint and Oxfmt configs at the
+repository root.

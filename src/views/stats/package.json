@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "build": "tsx _build-hook.ts && npm run typecheck && vite build",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "oxlint --config ../../../.oxlintrc.json .",
+    "format": "oxfmt --config ../../../.oxfmtrc.json .",
+    "format:check": "npm run format -- --check"
   },
   "dependencies": {
     "@ogame-tracker/shared": "0.1.0",
