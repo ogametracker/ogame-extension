@@ -3,80 +3,83 @@
     <grid-table v-else :columns="allianceHistoryColumns" :items="allianceHistoryItems" inline>
         <template #cell-alliance="{ value }">
             <span v-if="value != null" v-text="`[${value.tag}] ${value.name}`" />
-            <i v-else v-text="$i18n.$t.extension.universeHistory.noAlliance" />
+            <i v-else v-text="translations().extension.universeHistory.noAlliance" />
         </template>
 
         <template #cell-start="{ value }">
-            <span v-if="value != null" v-text="$i18n.$d(value, 'date')" />
+            <span v-if="value != null" v-text="formatDate(value, 'date')" />
             <span v-else v-text="'?'" />
         </template>
 
         <template #cell-->-</template>
 
         <template #cell-end="{ value }">
-            <span v-if="value != null" v-text="$i18n.$d(value, 'date')" />
-            <span v-else v-text="$i18n.$t.extension.universeHistory.today" />
+            <span v-if="value != null" v-text="formatDate(value, 'date')" />
+            <span v-else v-text="translations().extension.universeHistory.today" />
         </template>
     </grid-table>
 </template>
 
-<script lang="ts">
-    import { OgameTrackerUniverseHistoryPlayerAlliance } from '@ogame-tracker/shared/db/schema/universe-history';
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
-    import { GridTableColumn } from '../common/GridTable.vue';
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { translations, formatDate } from '@stats/i18n';
+import type { OgameTrackerUniverseHistoryPlayerAlliance } from '@ogame-tracker/shared/db/schema/universe-history';
+import { useUniverseHistoryStore } from '../../data/UniverseHistoryDataModule';
+import type { GridTableColumn } from '../common/GridTable.vue';
 
-    interface AllianceHistoryItem {
-        alliance: { name: string; tag: string } | null;
-        start: number | null;
-        end: number | null;
-    }
+interface AllianceHistoryItem {
+    alliance: { name: string; tag: string } | null;
+    start: number | null;
+    end: number | null;
+}
 
-    @Component({})
-    export default class PlayerAllianceHistoryTable extends Vue {
-        @Prop({ required: true, type: Number })
-        private playerId!: number;
+const props = defineProps({
+    playerId: { required: true, type: Number },
+});
 
-        private history: OgameTrackerUniverseHistoryPlayerAlliance[] = [];
-        private loading = true;
+const universeHistoryStore = useUniverseHistoryStore();
 
-        @Watch('playerId', { immediate: true })
-        private async onPlayerIdChanged() {
-            this.history = await UniverseHistoryDataModule.getPlayerAllianceHistory(this.playerId);
-            this.loading = false;
-        }
+const history = ref<OgameTrackerUniverseHistoryPlayerAlliance[]>([]);
 
-        private get allianceHistoryColumns(): GridTableColumn<keyof AllianceHistoryItem | '-'>[] {
-            return [
-                {
-                    key: 'alliance',
-                    label: this.$i18n.$t.extension.universeHistory.alliance,
-                },
-                {
-                    key: 'start',
-                    label: this.$i18n.$t.extension.universeHistory.from,
-                },
-                {
-                    key: '-',
-                },
-                {
-                    key: 'end',
-                    label: this.$i18n.$t.extension.universeHistory.until,
-                },
-            ];
-        }
+const loading = ref(true);
 
-        private get allianceHistoryItems(): AllianceHistoryItem[] {
-            return this.history.map<AllianceHistoryItem>((item, i, history) => {
-                const start = i == 0 ? null : item.date;
-                const end = history[i + 1]?.date ?? null;
+async function onPlayerIdChanged() {
+    history.value = await universeHistoryStore.getPlayerAllianceHistory(props.playerId);
+    loading.value = false;
+}
 
-                return {
-                    alliance: UniverseHistoryDataModule.alliances.find(a => a.id == item.allianceId) ?? null,
-                    start,
-                    end,
-                };
-            }).reverse();
-        }
-    }
+const allianceHistoryColumns = computed<GridTableColumn<keyof AllianceHistoryItem | '-'>[]>(() => {
+    return [
+        {
+            key: 'alliance',
+            label: translations().extension.universeHistory.alliance,
+        },
+        {
+            key: 'start',
+            label: translations().extension.universeHistory.from,
+        },
+        {
+            key: '-',
+        },
+        {
+            key: 'end',
+            label: translations().extension.universeHistory.until,
+        },
+    ];
+});
+
+const allianceHistoryItems = computed<AllianceHistoryItem[]>(() => {
+    return history.value.map<AllianceHistoryItem>((item, i, nextHistory) => {
+        const start = i == 0 ? null : item.date;
+        const end = nextHistory[i + 1]?.date ?? null;
+
+        return {
+            alliance: universeHistoryStore.alliances.find(a => a.id == item.allianceId) ?? null,
+            start,
+            end,
+        };
+    }).reverse();
+});
+
+watch(() => props.playerId, onPlayerIdChanged, { immediate: true });
 </script>

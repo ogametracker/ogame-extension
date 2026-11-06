@@ -45,7 +45,7 @@
                     :key="tick.date"
                     class="x-tick"
                     :style="`--x-tick: ${tick.position}`"
-                    v-text="$i18n.$d(tick.date, 'date')"
+                    v-text="formatDate(tick.date, 'date')"
                 />
             </div>
         </div>
@@ -61,128 +61,131 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
-    import { addDays, startOfDay, subDays } from 'date-fns';
-    import { Component, Prop, Vue, Ref, Watch } from 'vue-property-decorator';
-    import { UniverseHistoryDataModule } from '../../data/UniverseHistoryDataModule';
+<script setup lang="ts">
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { translations, formatDate } from '@stats/i18n';
+import type { DbUniverseHistoryPlayerStateItem, OgameTrackerUniverseHistoryPlayerState } from '@ogame-tracker/shared/db/schema/universe-history';
+import { addDays, startOfDay, subDays } from 'date-fns';
+import { useUniverseHistoryStore } from '../../data/UniverseHistoryDataModule';
 
-    interface StatusHistoryItem {
-        status: string | null;
-        start: number;
-        end: number;
-        class: StatusHistoryItemClass;
+interface StatusHistoryItem {
+    status: string | null;
+    start: number;
+    end: number;
+    class: StatusHistoryItemClass;
+}
+
+type StatusHistoryItemClass = 'active' | DbUniverseHistoryPlayerStateItem | 'deleted';
+
+const props = defineProps({
+    playerId: { required: true, type: Number },
+});
+
+const universeHistoryStore = useUniverseHistoryStore();
+
+const history = ref<OgameTrackerUniverseHistoryPlayerState[]>([]);
+
+const loading = ref(true);
+
+const statusHistoryTickCount = 30;
+
+const statusHistoryGraphOffset = ref(0);
+
+const statusHistoryStartDate = computed<Date>(() => {
+    const nowMinusTicks = subDays(Date.now(), statusHistoryTickCount - 2);
+    if (history.value.length == 0) {
+        return nowMinusTicks;
     }
-    type StatusHistoryItemClass = 'active' | DbUniverseHistoryPlayerStateItem | 'deleted';
 
-    @Component({})
-    export default class StatusHistoryChart extends Vue {
+    const firstDay = startOfDay(history.value[0].date);
+    return firstDay < nowMinusTicks ? firstDay : nowMinusTicks;
+});
 
-        @Prop({ required: true, type: Number })
-        private playerId!: number;
+const statusHistoryItems = computed<StatusHistoryItem[]>(() => {
+    const ticks = (statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
+    const startDate = statusHistoryStartDate.value.getTime();
 
-        private history: OgameTrackerUniverseHistoryPlayerState[] = [];
-        private loading = true;
+    return history.value.flatMap<StatusHistoryItem>((item, i, nextHistory) => {
+        const start = (item.date - startDate) / ticks;
+        const end = ((nextHistory[i + 1]?.date ?? Date.now()) - startDate) / ticks;
 
-        private readonly statusHistoryTickCount = 30;
-        private statusHistoryGraphOffset = 0;
-
-        private get statusHistoryStartDate(): Date {
-            const nowMinusTicks = subDays(Date.now(), this.statusHistoryTickCount - 2);
-            if (this.history.length == 0) {
-                return nowMinusTicks;
-            }
-
-            const firstDay = startOfDay(this.history[0].date);
-            return firstDay < nowMinusTicks ? firstDay : nowMinusTicks;
+        if (item.state == 'deleted' || item.state == null) {
+            return [{
+                status: item.state,
+                start,
+                end,
+                class: item.state ?? 'active',
+            }];
         }
 
-        private get statusHistoryItems(): StatusHistoryItem[] {
-            const ticks = (this.statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
-            const startDate = this.statusHistoryStartDate.getTime();
+        return item.state.map(state => ({
+            status: state,
+            start,
+            end,
+            class: state,
+        }));
+    });
+});
 
-            return this.history.flatMap<StatusHistoryItem>((item, i, history) => {
-                const start = (item.date - startDate) / ticks;
-                const end = ((history[i + 1]?.date ?? Date.now()) - startDate) / ticks;
+const statusHistoryWidth = computed<number>(() => {
+    const time = Date.now() - statusHistoryStartDate.value.getTime();
+    const ticks = (statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
 
-                if (item.state == 'deleted' || item.state == null) {
-                    return [{
-                        status: item.state,
-                        start,
-                        end,
-                        class: item.state ?? 'active',
-                    }];
-                }
+    return time / ticks;
+});
 
-                return item.state.map(state => ({
-                    status: state,
-                    start,
-                    end,
-                    class: state,
-                }));
-            });
-        }
+const statusHistoryLabels = computed<string[]>(() => {
+    return [
+        translations().extension.universeHistory.status.active,
+        translations().extension.universeHistory.status.vacation,
+        translations().extension.universeHistory.status.inactive,
+        translations().extension.universeHistory.status.inactiveLong,
+        translations().extension.universeHistory.status.banned,
+        translations().extension.universeHistory.status.outlaw,
+        translations().extension.universeHistory.status.deleted,
+        translations().extension.universeHistory.status.admin,
+    ];
+});
 
-        private get statusHistoryWidth(): number {
-            const time = Date.now() - this.statusHistoryStartDate.getTime();
-            const ticks = (this.statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
+const statusHistoryTicks = computed<{ date: number; position: number }[]>(() => {
+    const now = Date.now();
+    const start = statusHistoryStartDate.value.getTime();
+    let cur = start;
+    const ticks = (statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
+    const result: { date: number; position: number }[] = [];
 
-            return time / ticks;
-        }
+    while (cur <= now) {
+        result.push({
+            date: cur,
+            position: (cur - start) / ticks,
+        });
 
-        private get statusHistoryLabels(): string[] {
-            return [
-                this.$i18n.$t.extension.universeHistory.status.active,
-                this.$i18n.$t.extension.universeHistory.status.vacation,
-                this.$i18n.$t.extension.universeHistory.status.inactive,
-                this.$i18n.$t.extension.universeHistory.status.inactiveLong,
-                this.$i18n.$t.extension.universeHistory.status.banned,
-                this.$i18n.$t.extension.universeHistory.status.outlaw,
-                this.$i18n.$t.extension.universeHistory.status.deleted,
-                this.$i18n.$t.extension.universeHistory.status.admin,
-            ];
-        }
-
-        private get statusHistoryTicks(): { date: number; position: number }[] {
-            const now = Date.now();
-            const start = this.statusHistoryStartDate.getTime();
-            let cur = start;
-            const ticks = (this.statusHistoryTickCount - 1) * 24 * 60 * 60 * 1000;
-            const result: { date: number; position: number }[] = [];
-
-            while (cur <= now) {
-                result.push({
-                    date: cur,
-                    position: (cur - start) / ticks,
-                });
-
-                cur = addDays(cur, 1).getTime();
-            }
-
-            return result;
-        }
-
-        @Watch('playerId', { immediate: true })
-        private async onPlayerIdChanged() {
-            this.history = await UniverseHistoryDataModule.getPlayerStateHistory(this.playerId);
-            this.loading = false;
-
-            await this.$nextTick();
-            this.statusHistoryXTicks!.scrollLeft = this.statusHistoryXTicks!.scrollWidth;
-        }
-
-        private onStatusHistoryScroll(event: Event) {
-            if (event.target == null) {
-                return;
-            }
-
-            const elem = event.target as HTMLElement;
-            this.statusHistoryGraphOffset = -elem.scrollLeft;
-        }
-
-        @Ref('statusHistoryXTicks')
-        private statusHistoryXTicks!: HTMLElement | null;
+        cur = addDays(cur, 1).getTime();
     }
+
+    return result;
+});
+
+async function onPlayerIdChanged() {
+    history.value = await universeHistoryStore.getPlayerStateHistory(props.playerId);
+    loading.value = false;
+
+    await nextTick();
+    statusHistoryXTicks.value!.scrollLeft = statusHistoryXTicks.value!.scrollWidth;
+}
+
+function onStatusHistoryScroll(event: Event) {
+    if (event.target == null) {
+        return;
+    }
+
+    const elem = event.target as HTMLElement;
+    statusHistoryGraphOffset.value = -elem.scrollLeft;
+}
+
+const statusHistoryXTicks = useTemplateRef<HTMLElement | null>('statusHistoryXTicks');
+
+watch(() => props.playerId, onPlayerIdChanged, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
