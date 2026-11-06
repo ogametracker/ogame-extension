@@ -129,7 +129,9 @@ export const de: EmpireTranslations = {
             expeditionSettings: {
                 header: 'Expeditionseinstellungen',
                 averageWavesPerDay: '⌀ Wellen pro Tag',
-                items: 'Slot-Items',
+                slotItems: 'Slot-Items',
+                resourceFindItems: 'Rohstoffbonus-Items',
+                improvedChanceItems: 'Expeditions-Computer',
                 averageExpeditionsPerDay: '⌀ Expeditionen pro Tag',
                 shipUnitFactors: 'Faktoren für Schiffseinheiten',
                 topPlayerScore: 'Punkte Platz 1',

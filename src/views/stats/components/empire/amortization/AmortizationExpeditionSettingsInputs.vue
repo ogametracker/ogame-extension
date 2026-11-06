@@ -12,10 +12,34 @@
                 <input type="number" v-model.number.lazy="settings.wavesPerDay" min="0" max="20" step="0.1" />
             </span>
 
-            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.items" />
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.slotItems" />
             <span class="item-grid">
                 <OItem
                     v-for="item in slotItems"
+                    :key="item"
+                    :item="item"
+                    :disabled="!settings.items.includes(item)"
+                    @click="toggleItem(item)"
+                />
+            </span>
+
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.resourceFindItems" />
+            <span class="item-grid">
+                <OItem
+                    v-for="item in resourceBonusItems"
+                    :key="item"
+                    :item="item"
+                    :disabled="!settings.items.includes(item)"
+                    @click="toggleResourceFindBonusItem(item)"
+                />
+            </span>
+
+            <span
+                v-text="translations().extension.empire.amortization.settings.expeditionSettings.improvedChanceItems"
+            />
+            <span class="item-grid">
+                <OItem
+                    v-for="item in chanceBonusItems"
                     :key="item"
                     :item="item"
                     :disabled="!settings.items.includes(item)"
@@ -115,6 +139,18 @@ const slotItems: ItemId[] = [
     'expeditionslots_3slots_7days',
 ];
 
+const resourceBonusItems: ItemId[] = [
+    'expedition_resourceBoost_10percent_7days',
+    'expedition_resourceBoost_15percent_7days',
+    'expedition_resourceBoost_20percent_7days',
+    'expedition_resourceBoost_25percent_7days',
+    'expedition_resourceBoost_30percent_7days',
+    'expedition_resourceBoost_35percent_7days',
+    'expedition_resourceBoost_40percent_7days',
+];
+
+const chanceBonusItems: ItemId[] = ['expedition_improvedChances_7days'];
+
 function onSettingsChanged() {
     const selected = settings.value.items.map(id => {
         const effect = Items[id]?.effect;
@@ -157,8 +193,27 @@ function toggleItem(item: ItemId) {
     const index = settings.value.items.indexOf(item);
     if (index < 0) {
         settings.value.items.push(item);
+        return true;
     } else {
         settings.value.items.splice(index, 1);
+        return false;
+    }
+}
+
+function toggleResourceFindBonusItem(item: ItemId) {
+    if (!toggleItem(item)) {
+        return;
+    }
+
+    for (const itemId of resourceBonusItems) {
+        if (itemId == item) {
+            continue;
+        }
+
+        const index = settings.value.items.indexOf(itemId);
+        if (index >= 0) {
+            settings.value.items.splice(index, 1);
+        }
     }
 }
 

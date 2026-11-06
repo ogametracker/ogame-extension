@@ -11,7 +11,7 @@ import { ExpeditionFindableShipTypes } from '../../expeditions/ExpeditionEvents'
 import { ShipByTypes } from '../../ogame/ships/ShipTypes';
 import { Reaper } from '../../ogame/ships/Reaper';
 import { LifeformTechnologyType } from '../../ogame/lifeforms/LifeformTechnologyType';
-import type { ItemId } from '../../ogame/items/Items.generated';
+import { Items, type ItemId } from '../../ogame/items/Items.generated';
 import { getExpeditionItemFindBonus } from '../../ogame/expeditions/getExpeditionItemFindBonus';
 
 export interface AmortizationExpeditionResultsPlanetState {
@@ -26,9 +26,15 @@ export interface AmortizationExpeditionResultsPlanetState {
 
 type ApplicableExpeditionEventType = ExpeditionEventType.resources | ExpeditionEventType.fleet;
 
-const eventTypeProbabilities: Record<ApplicableExpeditionEventType, number> = {
-    [ExpeditionEventType.resources]: 0.35,
-    [ExpeditionEventType.fleet]: 0.17,
+const eventTypeProbabilities: Record<'normal' | 'improved', Record<ApplicableExpeditionEventType, number>> = {
+    normal: {
+        [ExpeditionEventType.resources]: 0.35_0,
+        [ExpeditionEventType.fleet]: 0.17_0,
+    },
+    improved: {
+        [ExpeditionEventType.resources]: 0.40_5,
+        [ExpeditionEventType.fleet]: 0.19_5,
+    },
 };
 const resourceProbabilities: Record<ResourceType, number> = {
     [ResourceType.metal]: 3 / 6,
@@ -42,9 +48,9 @@ const resourceFactors: Record<ResourceType, number> = {
 };
 const eventSizeProbabilities: Record<ApplicableExpeditionEventType, Record<ExpeditionEventSize, number>> = {
     [ExpeditionEventType.resources]: {
-        [ExpeditionEventSize.small]: 0.89,
-        [ExpeditionEventSize.medium]: 0.1,
-        [ExpeditionEventSize.large]: 0.01,
+        [ExpeditionEventSize.small]: 0.92_3,
+        [ExpeditionEventSize.medium]: 0.07,
+        [ExpeditionEventSize.large]: 0.00_7,
     },
     [ExpeditionEventType.fleet]: {
         [ExpeditionEventSize.small]: 0.89,
@@ -171,15 +177,21 @@ export class AmortizationExpeditionResultsBreakdown {
         const pathfinderFactor = 2;
 
         const classFactor =
-            this.options.playerClass == PlayerClass.discoverer
-                ? (1 + this.options.serverSettings.discovererExpeditionBonus)
-                  * (1 + this.#lifeformDiscovererClassBonus)
-                  * this.options.serverSettings.economySpeed
-                : 1;
+            this.options.serverSettings.economySpeed
+            * (this.options.playerClass == PlayerClass.discoverer
+                ? (1 + this.options.serverSettings.discovererExpeditionBonus) * (1 + this.#lifeformDiscovererClassBonus)
+                : 1);
 
         const eventBonuses = this.#lifeformExpeditionEventBonuses;
 
         const itemBonuses = this.#itemEventBonuses;
+
+        const improvedExpeditions = this.options.expeditionBoostItems.some(
+            id => Items[id].effect?.type == 'expeditionImprovedChances',
+        );
+        const eventProbabilities = improvedExpeditions
+            ? eventTypeProbabilities.improved
+            : eventTypeProbabilities.normal;
 
         const averageResourceFindsBySize = createRecord(ExpeditionEventSizes, size => {
             const sum = findBaseAmounts[size]
@@ -195,7 +207,7 @@ export class AmortizationExpeditionResultsBreakdown {
                         scoreFactor
                             * classFactor
                             * pathfinderFactor
-                            * eventTypeProbabilities.resources
+                            * eventProbabilities.resources
                             * (1 + eventBonuses.resources)
                             * (1 + itemBonuses.resources),
                     );
@@ -230,7 +242,7 @@ export class AmortizationExpeditionResultsBreakdown {
                         scoreFactor
                             * classFactor
                             * pathfinderFactor
-                            * eventTypeProbabilities.fleet
+                            * eventProbabilities.fleet
                             * (1 + eventBonuses.fleet)
                             * (1 + itemBonuses.fleet),
                     );

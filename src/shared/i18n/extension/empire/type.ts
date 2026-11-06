@@ -123,7 +123,9 @@ export interface EmpireTranslations {
             expeditionSettings: {
                 header: string;
                 averageWavesPerDay: string;
-                items: string;
+                slotItems: string;
+                resourceFindItems: string;
+                improvedChanceItems: string;
                 averageExpeditionsPerDay: string;
                 shipUnitFactors: string;
                 topPlayerScore: string;

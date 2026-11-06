@@ -116,7 +116,7 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
             expeditionSettings: {
                 header: 'Definições de Expedições',
                 averageWavesPerDay: '⌀ Vagas por dia',
-                items: 'Slots de item',
+                slotItems: 'Slots de item',
                 averageExpeditionsPerDay: '⌀ Expedições por dia',
                 shipUnitFactors: 'Factor de recurso de naves',
                 topPlayerScore: 'Pontuação do Top player',

@@ -121,7 +121,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
             expeditionSettings: {
                 header: "Paramètres d'expédition",
                 averageWavesPerDay: '⌀ Vagues par jour',
-                items: "Objets d'expédition",
+                slotItems: "Objets d'expédition",
                 averageExpeditionsPerDay: '⌀ Expéditions par jour',
                 shipUnitFactors: "Facteurs d'unité de ressources des vaisseaux",
                 topPlayerScore: 'Score du meilleur joueur',
