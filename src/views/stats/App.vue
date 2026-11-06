@@ -2,14 +2,14 @@
     <div
         id="app"
         :style="{
-            '--color': getColorVariable(activeColor),
+            '--color': getColorVariable(activeColor) ?? undefined,
         }"
         :class="activeTab ? activeTab.appClass : ''"
     >
         <nav>
             <floating-menu
-                :value="tabWithMenu == tab"
-                @input="tabWithMenu = null"
+                :model-value="tabWithMenu == tab"
+                @update:model-value="tabWithMenu = null"
                 v-for="tab in tabs"
                 :key="tab.key"
                 :style="tab.noNavItem ? tab.style : null"
@@ -34,12 +34,12 @@
                         ]"
                         :style="[
                             {
-                                '--color': getColorVariable(getColor(tab)),
+                                '--color': getColorVariable(getColor(tab)) ?? undefined,
                             },
                             tab.noNavItem ? null : tab.style,
                         ]"
                         @click.left="() => (tab.customAction != null ? tab.customAction() : null)"
-                        :ref="`tab-${tab.key}`"
+                        @contextmenu="openTabMenu(tab, $event)"
                     >
                         <span v-if="tab.icon != null" class="nav-item-icon" :class="tab.icon" />
                         <span v-if="tab.label != null" class="nav-item-label">
@@ -54,7 +54,7 @@
                     </component>
                 </template>
 
-                <set-default-route-button v-if="tab.canBeDefault" :label="$i18n.$t.extension.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
+                <set-default-route-button v-if="tab.canBeDefault && tab.to" :label="translations().extension.settings.setDefaultRoute" rootRouteName="" :routeName="tab.to.name" />
             </floating-menu>
 
             <template v-if="isIframeMode">
@@ -69,9 +69,9 @@
         </main>
         <footer>
             <router-link :to="{ name: 'donate' }" class="made-with-love">
-                <span v-text="$i18n.$t.extension.common.madeWithLove1" class="mr-1" />
+                <span v-text="translations().extension.common.madeWithLove1" class="mr-1" />
                 <span class="mdi mdi-heart" style="color: #ff1f1f" />
-                <span v-text="$i18n.$t.extension.common.madeWithLove2" class="ml-1" />
+                <span v-text="translations().extension.common.madeWithLove2" class="ml-1" />
             </router-link>
 
             <span v-text="accountAndServer" />
@@ -81,290 +81,281 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue, Watch } from "vue-property-decorator";
-    import { UniversesAndAccountsDataModule } from "./data/UniversesAndAccountsDataModule";
-    import { GlobalOgameMetaData } from "./data/global";
-    import { getRGBString } from './utils/getRGBString';
-    import { delay } from '@ogame-tracker/shared/utils/delay';
-    import { _throw } from "@ogame-tracker/shared/utils/_throw";
-    import { SettingsDataModule } from "./data/SettingsDataModule";
-    import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
-    import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
-    import { _constants } from '@stats/_constants';
-    import { ogameTrackerCloseDialogEventName } from "@ogame-tracker/shared/messages/communication";
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { getDefaultRouteName } from './router';
+import { translations } from '@stats/i18n';
+import { useUniversesAndAccountsStore } from "./data/UniversesAndAccountsDataModule";
+import { getRGBString } from './utils/getRGBString';
+import { delay } from '@ogame-tracker/shared/utils/delay';
+import { useSettingsStore } from "./data/SettingsDataModule";
+import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
+import SwitchAccountDialog from '@stats/components/SwitchAccountDialog.vue';
+import { _constants } from '@stats/_constants';
+import { ogameTrackerCloseDialogEventName } from "@ogame-tracker/shared/messages/communication";
 
-    interface Tab {
-        key: string;
-        to?: { name: string };
-        href?: string;
-        icon?: string;
-        label?: string;
-        style?: string | Record<string, any>;
-        noNavItem?: boolean;
-        color?: string;
-        class?: string;
-        appClass?: string;
-        customAction?: () => void;
-        canBeDefault?: boolean;
+interface Tab {
+    key: string;
+    to?: { name: string };
+    href?: string;
+    icon?: string;
+    label?: string;
+    style?: string | Record<string, any>;
+    noNavItem?: boolean;
+    color?: string;
+    class?: string;
+    appClass?: string;
+    customAction?: () => void;
+    canBeDefault?: boolean;
 
-        keyboardKey?: string;
-        keyboardIcon?: string;
+    keyboardKey?: string;
+    keyboardIcon?: string;
+}
+
+const router = useRouter();
+
+const route = useRoute();
+
+const settingsStore = useSettingsStore();
+
+const universesAndAccountsStore = useUniversesAndAccountsStore();
+
+const colors = {
+    switchAccount: '#666666',
+    discord: '#5865f2',
+};
+
+const showAccountSwitchDialog = ref(false);
+
+const accountAndServer = ref('');
+
+const isIframeMode = computed(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get('iframe') != null;
+});
+
+const activeTab = computed<Tab | null>(() => {
+    return tabs.value.find(tab => tab.to != null &&
+        route.matched.some(route => route.name == tab.to?.name)
+    ) ?? null;
+});
+
+const tabWithMenu = ref<Tab | null>(null);
+
+function setTabWithMenu(tab: Tab) {
+    tabWithMenu.value = tab;
+}
+
+function isDefaultRoute(to?: { name: string }): boolean {
+    if (to == null) {
+        return false;
     }
 
-    @Component({
-        components: {
-            SetDefaultRouteButton,
-            SwitchAccountDialog,
+    const defaultRoute = settingsStore.settings.defaultRoutes[''] ?? getDefaultRouteName('');
+    return defaultRoute == to.name;
+}
+
+const tabs = computed<Tab[]>(() => {
+    const localTabs: Tab[] = [
+        {
+            key: 'expeditions',
+            to: { name: 'expeditions' },
+            icon: 'ogti ogti-expedition',
+            label: translations().extension.expeditions.header,
+            keyboardKey: '1',
+            keyboardIcon: 'mdi mdi-numeric-1',
+            canBeDefault: true,
         },
-    })
-    export default class App extends Vue {
-        private readonly colors = {
-            switchAccount: '#666666',
-            discord: '#5865f2',
-        };
+        {
+            key: 'combats',
+            to: { name: 'combats' },
+            icon: 'ogti ogti-attack',
+            label: translations().extension.combats.header,
+            keyboardKey: '2',
+            keyboardIcon: 'mdi mdi-numeric-2',
+            canBeDefault: true,
+        },
+        {
+            key: 'debris-fields',
+            to: { name: 'debris-fields' },
+            icon: 'ogti ogti-debris-field',
+            label: translations().extension.debrisFields.header,
+            keyboardKey: '3',
+            keyboardIcon: 'mdi mdi-numeric-3',
+            canBeDefault: true,
+        },
+        {
+            key: 'resource-balance',
+            to: { name: 'resource-balance' },
+            icon: 'ogti ogti-economy',
+            label: translations().extension.resourceBalance.header,
+            keyboardKey: '4',
+            keyboardIcon: 'mdi mdi-numeric-4',
+            canBeDefault: true,
+        },
+        {
+            key: 'empire',
+            to: { name: 'empire' },
+            icon: 'ogti ogti-planet-moon',
+            label: translations().extension.empire.header,
+            keyboardKey: '5',
+            keyboardIcon: 'mdi mdi-numeric-5',
+            canBeDefault: true,
+        },
+        {
+            key: 'lifeforms',
+            to: { name: 'lifeforms' },
+            icon: 'ogti ogti-dna',
+            label: translations().extension.empire.lifeforms.header,
+            keyboardKey: '6',
+            keyboardIcon: 'mdi mdi-numeric-6',
+            canBeDefault: true,
+        },
+        {
+            key: 'universe-history',
+            to: { name: 'universe-history' },
+            icon: 'mdi mdi-update',
+            label: translations().extension.universeHistory.header,
+            keyboardKey: '7',
+            keyboardIcon: 'mdi mdi-numeric-7',
+            canBeDefault: true,
+        },
+        // {
+        //     key: 'espionage',
+        //     to: { name: 'espionage' },
+        //     icon: 'mdi mdi-eye-outline',
+        //     label: 'LOCA: Espionage',
+        //     keyboardKey: '8',
+        //     keyboardIcon: 'mdi mdi-numeric-8',
+        //     canBeDefault: true,
+        // },
+        {
+            key: 'space',
+            style: {
+                'flex-grow': 1
+            },
+            noNavItem: true,
+        },
+        {
+            key: 'settings',
+            to: { name: 'settings' },
+            icon: 'mdi mdi-cog',
+        },
+        {
+            key: 'tools',
+            to: { name: 'tools' },
+            icon: 'mdi mdi-hammer-wrench',
+        },
+        {
+            key: 'excel-export',
+            to: { name: 'excel-export' },
+            icon: 'mdi mdi-microsoft-excel',
+        },
+        {
+            key: 'donate',
+            to: { name: 'donate' },
+            icon: 'mdi mdi-coffee',
+            label: translations().extension.donate.header,
+            class: 'donate',
+            appClass: 'donate-page',
+        },
+        {
+            key: 'discord',
+            href: _constants.discordInviteLink,
+            icon: 'ogti ogti-discord',
+            color: colors.discord,
+        },
+        {
+            key: 'about',
+            to: { name: 'about' },
+            icon: 'mdi mdi-help-box',
+        },
+        {
+            key: 'switch-account',
+            customAction: () => showAccountSwitchDialog.value = true,
+            icon: 'mdi mdi-account-multiple',
+            color: colors.switchAccount,
+        },
+    ];
 
-        private showAccountSwitchDialog = false;
-        private accountAndServer = '';
+    return localTabs;
+});
 
-        private get isIframeMode() {
-            const params = new URLSearchParams(location.search);
-            return params.get('iframe') != null;
-        }
+const activeColor = computed<string | null>(() => {
+    const matchedRoutes = route.matched;
+    return matchedRoutes.map(route => route.meta?.color)
+        .find(color => color != null)
+        ?? null;
+});
 
-        private get activeTab(): Tab | null {
-            return this.tabs.find(tab => tab.to != null &&
-                this.$route.matched.some(route => route.name == tab.to?.name)
-            ) ?? null;
-        }
-
-        private tabWithMenu: Tab | null = null;
-
-        private setTabWithMenu(tab: Tab) {
-            this.tabWithMenu = tab;
-        }
-
-        private isDefaultRoute(to?: { name: string }): boolean {
-            if (to == null) {
-                return false;
-            }
-
-            const defaultRoute = SettingsDataModule.settings.defaultRoutes[''] ?? 'expeditions';
-            return defaultRoute == to.name;
-        }
-
-        private get tabs(): Tab[] {
-            const tabs: Tab[] = [
-                {
-                    key: 'expeditions',
-                    to: { name: 'expeditions' },
-                    icon: 'ogti ogti-expedition',
-                    label: this.$i18n.$t.extension.expeditions.header,
-                    keyboardKey: '1',
-                    keyboardIcon: 'mdi mdi-numeric-1',
-                    canBeDefault: true,
-                },
-                {
-                    key: 'combats',
-                    to: { name: 'combats' },
-                    icon: 'ogti ogti-attack',
-                    label: this.$i18n.$t.extension.combats.header,
-                    keyboardKey: '2',
-                    keyboardIcon: 'mdi mdi-numeric-2',
-                    canBeDefault: true,
-                },
-                {
-                    key: 'debris-fields',
-                    to: { name: 'debris-fields' },
-                    icon: 'ogti ogti-debris-field',
-                    label: this.$i18n.$t.extension.debrisFields.header,
-                    keyboardKey: '3',
-                    keyboardIcon: 'mdi mdi-numeric-3',
-                    canBeDefault: true,
-                },
-                {
-                    key: 'resource-balance',
-                    to: { name: 'resource-balance' },
-                    icon: 'ogti ogti-economy',
-                    label: this.$i18n.$t.extension.resourceBalance.header,
-                    keyboardKey: '4',
-                    keyboardIcon: 'mdi mdi-numeric-4',
-                    canBeDefault: true,
-                },
-                {
-                    key: 'empire',
-                    to: { name: 'empire' },
-                    icon: 'ogti ogti-planet-moon',
-                    label: this.$i18n.$t.extension.empire.header,
-                    keyboardKey: '5',
-                    keyboardIcon: 'mdi mdi-numeric-5',
-                    canBeDefault: true,
-                },
-                {
-                    key: 'lifeforms',
-                    to: { name: 'lifeforms' },
-                    icon: 'ogti ogti-dna',
-                    label: this.$i18n.$t.extension.empire.lifeforms.header,
-                    keyboardKey: '6',
-                    keyboardIcon: 'mdi mdi-numeric-6',
-                    canBeDefault: true,
-                },
-                {
-                    key: 'universe-history',
-                    to: { name: 'universe-history' },
-                    icon: 'mdi mdi-update',
-                    label: this.$i18n.$t.extension.universeHistory.header,
-                    keyboardKey: '7',
-                    keyboardIcon: 'mdi mdi-numeric-7',
-                    canBeDefault: true,
-                },
-                // {
-                //     key: 'espionage',
-                //     to: { name: 'espionage' },
-                //     icon: 'mdi mdi-eye-outline',
-                //     label: 'LOCA: Espionage',
-                //     keyboardKey: '8',
-                //     keyboardIcon: 'mdi mdi-numeric-8',
-                //     canBeDefault: true,
-                // },
-                {
-                    key: 'space',
-                    style: {
-                        'flex-grow': 1
-                    },
-                    noNavItem: true,
-                },
-                {
-                    key: 'settings',
-                    to: { name: 'settings' },
-                    icon: 'mdi mdi-cog',
-                },
-                {
-                    key: 'tools',
-                    to: { name: 'tools' },
-                    icon: 'mdi mdi-hammer-wrench',
-                },
-                {
-                    key: 'excel-export',
-                    to: { name: 'excel-export' },
-                    icon: 'mdi mdi-microsoft-excel',
-                },
-                {
-                    key: 'donate',
-                    to: { name: 'donate' },
-                    icon: 'mdi mdi-coffee',
-                    label: this.$i18n.$t.extension.donate.header,
-                    class: 'donate',
-                    appClass: 'donate-page',
-                },
-                {
-                    key: 'discord',
-                    href: _constants.discordInviteLink,
-                    icon: 'ogti ogti-discord',
-                    color: this.colors.discord,
-                },
-                {
-                    key: 'about',
-                    to: { name: 'about' },
-                    icon: 'mdi mdi-help-box',
-                },
-                {
-                    key: 'switch-account',
-                    customAction: () => this.showAccountSwitchDialog = true,
-                    icon: 'mdi mdi-account-multiple',
-                    color: this.colors.switchAccount,
-                },
-            ];
-
-            return tabs;
-        }
-
-        private get activeColor(): string | null {
-            const matchedRoutes = this.$route.matched;
-            return matchedRoutes.map(route => route.meta?.color)
-                .find(color => color != null)
-                ?? null;
-        }
-
-        private getColor(tab: Tab): string | null {
-            if (tab.color != null) {
-                return tab.color;
-            }
-
-            const routes = this.$router.getRoutes();
-            const route = routes.find(route => route.name == tab.to?.name);
-
-            return route?.meta?.color ?? null;
-        }
-
-        private getColorVariable(hexColor: string | null): string | null {
-            return getRGBString(hexColor);
-        }
-
-
-        private closeOverlay() {
-            window.parent.postMessage(ogameTrackerCloseDialogEventName, '*');
-        }
-
-        private async mounted() {
-            window.addEventListener('keypress', e => {
-                if (e.composedPath().some(elem => elem instanceof HTMLInputElement)) {
-                    return;
-                }
-
-                const selectedTab = this.tabs.find(tab => tab.keyboardKey == e.key);
-                const to = selectedTab?.to;
-                if (to != null && !this.$route.matched.some(route => route.name == to.name)) {
-                    this.$router.push(to);
-                }
-            });
-
-            await document.fonts.ready;
-            await delay(100);
-
-            await this.setWindowTitleAndFooter();
-
-            await this.$nextTick();
-            this.onRefsChanged();
-            window.focus();
-
-            const splashscreen = document.querySelector('#splashscreen');
-            splashscreen?.classList.add('fade');
-            setTimeout(() => splashscreen?.remove(), 500);
-        }
-
-        private onRefsChanged() {
-            // this method exists because @contextmenu does not seem to get passed to dynamic <component>
-            const refKeys = Object.keys(this.$refs).filter(key => key.startsWith('tab-'));
-            refKeys.forEach(key => {
-                const tabKey = key.substring('tab-'.length);
-                const tab = this.tabs.find(tab => tab.key == tabKey) ?? _throw(`tab with key '${tabKey}' not found`);
-
-                if (!tab.canBeDefault) {
-                    return;
-                }
-
-                const refElem = (this.$refs[key] as Vue[])[0];
-                refElem.$el.addEventListener('contextmenu', e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.setTabWithMenu(tab);
-                });
-            });
-        }
-
-        private async setWindowTitleAndFooter() {
-            await UniversesAndAccountsDataModule.ready;
-
-            const account = UniversesAndAccountsDataModule.currentAccount;
-            const server = UniversesAndAccountsDataModule.currentServer;
-
-            const title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;
-            document.title = title;
-
-            this.accountAndServer = title;
-        }
+function getColor(tab: Tab): string | null {
+    if (tab.color != null) {
+        return tab.color;
     }
+
+    const routes = router.getRoutes();
+    const route = routes.find(route => route.name == tab.to?.name);
+
+    return route?.meta?.color ?? null;
+}
+
+function getColorVariable(hexColor: string | null): string | null {
+    return getRGBString(hexColor);
+}
+
+function closeOverlay() {
+    window.parent.postMessage(ogameTrackerCloseDialogEventName, '*');
+}
+
+function openTabMenu(tab: Tab, event: MouseEvent) {
+    if (!tab.canBeDefault) {
+        return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    setTabWithMenu(tab);
+}
+
+async function setWindowTitleAndFooter() {
+    await universesAndAccountsStore.ready;
+
+    const account = universesAndAccountsStore.currentAccount;
+    const server = universesAndAccountsStore.currentServer;
+
+    const title = `${account.name} - ${server.language.toUpperCase()} ${server.name}`;
+    document.title = title;
+
+    accountAndServer.value = title;
+}
+
+function onShortcut(e: KeyboardEvent) {
+    if (e.composedPath().some(elem => elem instanceof HTMLInputElement)) {
+        return;
+    }
+
+    const selectedTab = tabs.value.find(tab => tab.keyboardKey == e.key);
+    const to = selectedTab?.to;
+    if (to != null && !route.matched.some(route => route.name == to.name)) {
+        router.push(to);
+    }
+}
+
+onMounted(async () => {
+    window.addEventListener('keypress', onShortcut);
+
+    await document.fonts.ready;
+    await delay(100);
+
+    await setWindowTitleAndFooter();
+
+    window.focus();
+
+    const splashscreen = document.querySelector('#splashscreen');
+    splashscreen?.classList.add('fade');
+    setTimeout(() => splashscreen?.remove(), 500);
+});
+onUnmounted(() => window.removeEventListener('keypress', onShortcut));
 </script>
 
 <style lang="scss" scoped>
@@ -499,7 +490,7 @@
     }
 
     .tab_floating-menu {
-        &::v-deep .floating-menu {
+        &:deep(.floating-menu) {
             left: 50%;
             top: 50%;
             z-index: 0 !important;

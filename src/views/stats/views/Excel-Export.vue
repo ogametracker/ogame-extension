@@ -1,142 +1,140 @@
 <template>
     <div>
-        <h3 v-text="$i18n.$t.extension.excelExport.header" />
-        <span v-text="$i18n.$t.extension.excelExport.chooseBelowMessage" />
+        <h3 v-text="translations().extension.excelExport.header" />
+        <span v-text="translations().extension.excelExport.chooseBelowMessage" />
 
         <div class="export-settings">
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="$i18n.$t.extension.excelExport.groups.expeditions.header" />
+                    <span v-text="translations().extension.excelExport.groups.expeditions.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.expeditions.rawData" :label="$i18n.$t.extension.excelExport.groups.expeditions.rawData" />
+                    <checkbox v-model="exportOptions.expeditions.rawData" :label="translations().extension.excelExport.groups.expeditions.rawData" />
 
-                    <checkbox v-model="exportOptions.expeditions.overviewPerDay" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyOverview" />
-                    <checkbox v-model="exportOptions.expeditions.depletionPerDay" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyDepletion" />
+                    <checkbox v-model="exportOptions.expeditions.overviewPerDay" :label="translations().extension.excelExport.groups.expeditions.dailyOverview" />
+                    <checkbox v-model="exportOptions.expeditions.depletionPerDay" :label="translations().extension.excelExport.groups.expeditions.dailyDepletion" />
 
-                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyResources" />
-                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyResourceSizes" />
+                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.amount" :label="translations().extension.excelExport.groups.expeditions.dailyResources" />
+                    <checkbox v-model="exportOptions.expeditions.resourcesPerDay.sizes" :label="translations().extension.excelExport.groups.expeditions.dailyResourceSizes" />
 
-                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.amount" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyShips" />
-                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.sizes" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyShipSizes" />
+                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.amount" :label="translations().extension.excelExport.groups.expeditions.dailyShips" />
+                    <checkbox v-model="exportOptions.expeditions.shipsPerDay.sizes" :label="translations().extension.excelExport.groups.expeditions.dailyShipSizes" />
 
-                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.amount" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyDarkMatter" />
-                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.sizes" :label="$i18n.$t.extension.excelExport.groups.expeditions.dailyDarkMatterSizes" />
+                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.amount" :label="translations().extension.excelExport.groups.expeditions.dailyDarkMatter" />
+                    <checkbox v-model="exportOptions.expeditions.darkMatterPerDay.sizes" :label="translations().extension.excelExport.groups.expeditions.dailyDarkMatterSizes" />
                 </div>
             </div>
 
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="$i18n.$t.extension.excelExport.groups.combats.header" />
+                    <span v-text="translations().extension.excelExport.groups.combats.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.combats.rawData" :label="$i18n.$t.extension.excelExport.groups.combats.rawData" />
+                    <checkbox v-model="exportOptions.combats.rawData" :label="translations().extension.excelExport.groups.combats.rawData" />
 
-                    <checkbox v-model="exportOptions.combats.overviewPerDay" :label="$i18n.$t.extension.excelExport.groups.combats.dailyResults" />
-                    <checkbox v-model="exportOptions.combats.lootBalancePerDay" :label="$i18n.$t.extension.excelExport.groups.combats.dailyLoot" />
-                    <checkbox v-model="exportOptions.combats.lostShipsPerDay" :label="$i18n.$t.extension.excelExport.groups.combats.dailyLostShips" />
+                    <checkbox v-model="exportOptions.combats.overviewPerDay" :label="translations().extension.excelExport.groups.combats.dailyResults" />
+                    <checkbox v-model="exportOptions.combats.lootBalancePerDay" :label="translations().extension.excelExport.groups.combats.dailyLoot" />
+                    <checkbox v-model="exportOptions.combats.lostShipsPerDay" :label="translations().extension.excelExport.groups.combats.dailyLostShips" />
                 </div>
             </div>
 
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="$i18n.$t.extension.excelExport.groups.debrisFields.header" />
+                    <span v-text="translations().extension.excelExport.groups.debrisFields.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.debrisFields.rawData" :label="$i18n.$t.extension.excelExport.groups.debrisFields.rawData" />
+                    <checkbox v-model="exportOptions.debrisFields.rawData" :label="translations().extension.excelExport.groups.debrisFields.rawData" />
 
-                    <checkbox v-model="exportOptions.debrisFields.resourcesPerDay" :label="$i18n.$t.extension.excelExport.groups.debrisFields.dailyResources" />
+                    <checkbox v-model="exportOptions.debrisFields.resourcesPerDay" :label="translations().extension.excelExport.groups.debrisFields.dailyResources" />
                 </div>
             </div>
 
             <div class="fake-table">
                 <div class="fake-table-header">
-                    <span v-text="$i18n.$t.extension.excelExport.groups.lifeformDiscoveries.header" />
+                    <span v-text="translations().extension.excelExport.groups.lifeformDiscoveries.header" />
                 </div>
                 <div class="fake-table-body">
-                    <checkbox v-model="exportOptions.lifeformDiscoveries.rawData" :label="$i18n.$t.extension.excelExport.groups.lifeformDiscoveries.rawData" />
+                    <checkbox v-model="exportOptions.lifeformDiscoveries.rawData" :label="translations().extension.excelExport.groups.lifeformDiscoveries.rawData" />
 
-                    <checkbox v-model="exportOptions.lifeformDiscoveries.experiencePerDay" :label="$i18n.$t.extension.excelExport.groups.lifeformDiscoveries.dailyExperience" />
+                    <checkbox v-model="exportOptions.lifeformDiscoveries.experiencePerDay" :label="translations().extension.excelExport.groups.lifeformDiscoveries.dailyExperience" />
                 </div>
             </div>
         </div>
 
         <div class="export-area">
-            <button v-text="$i18n.$t.extension.excelExport.generateButton" @click="generateExport()" :disabled="!isAnyOptionSet || isExporting" />
+            <button v-text="translations().extension.excelExport.generateButton" @click="generateExport()" :disabled="!isAnyOptionSet || isExporting" />
             <loading-spinner v-if="isExporting" />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ExcelExport as Export, ExcelExportOptions } from '@stats/models/excel-export';
-    import { format } from 'date-fns';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import { ExcelExport as Export } from '@stats/models/excel-export';
+import type { ExcelExportOptions } from '@stats/models/excel-export';
+import { format } from 'date-fns';
 
-    @Component({})
-    export default class ExcelExport extends Vue {
-        private readonly exportOptions: ExcelExportOptions = {
-            expeditions: {
-                rawData: false,
-                overviewPerDay: false,
-                depletionPerDay: false,
+const exportOptions: ExcelExportOptions = {
+    expeditions: {
+        rawData: false,
+        overviewPerDay: false,
+        depletionPerDay: false,
 
-                resourcesPerDay: {
-                    amount: false,
-                    sizes: false,
-                },
-                shipsPerDay: {
-                    amount: false,
-                    sizes: false,
-                },
-                darkMatterPerDay: {
-                    amount: false,
-                    sizes: false,
-                },
-            },
+        resourcesPerDay: {
+            amount: false,
+            sizes: false,
+        },
+        shipsPerDay: {
+            amount: false,
+            sizes: false,
+        },
+        darkMatterPerDay: {
+            amount: false,
+            sizes: false,
+        },
+    },
 
-            combats: {
-                rawData: false,
-                overviewPerDay: false,
-                lootBalancePerDay: false,
-                lostShipsPerDay: false,
-            },
+    combats: {
+        rawData: false,
+        overviewPerDay: false,
+        lootBalancePerDay: false,
+        lostShipsPerDay: false,
+    },
 
-            debrisFields: {
-                rawData: false,
-                resourcesPerDay: false,
-            },
+    debrisFields: {
+        rawData: false,
+        resourcesPerDay: false,
+    },
 
-            lifeformDiscoveries: {
-                rawData: false,
-                experiencePerDay: false,
-            },
-        };
+    lifeformDiscoveries: {
+        rawData: false,
+        experiencePerDay: false,
+    },
+};
 
-        private isExporting = false;
+const isExporting = ref(false);
 
-        private get isAnyOptionSet() {
-            const isSet = (obj: Record<string, any>): boolean => {
-                return Object.values(obj).some(value => {
-                    if(typeof value === 'boolean') {
-                        return value;
-                    }
-                    return isSet(value);
-                });
+const isAnyOptionSet = computed(() => {
+    const isSet = (obj: Record<string, any>): boolean => {
+        return Object.values(obj).some(value => {
+            if (typeof value === 'boolean') {
+                return value;
             }
-
-            return isSet(this.exportOptions);
-        }
-
-
-        private async generateExport() {
-            this.isExporting = true;
-            await Export.create(this.exportOptions, `OGame Tracker ${format(Date.now(), 'yyyy-MM-dd_HH-mm-ss')}.xlsx`);
-            this.isExporting = false;
-        }
+            return isSet(value);
+        });
     }
 
+    return isSet(exportOptions);
+});
+
+async function generateExport() {
+    isExporting.value = true;
+    await Export.create(exportOptions, `OGame Tracker ${format(Date.now(), 'yyyy-MM-dd_HH-mm-ss')}.xlsx`);
+    isExporting.value = false;
+}
 </script>
+
 <style lang="scss" scoped>
     .export-settings {
         display: flex;

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h2>{{ $i18n.$t.extension.donate.subHeader }}</h2>
+        <h2>{{ translations().extension.donate.subHeader }}</h2>
 
         <div class="fake-table kofi-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.extension.donate.kofi.header" />
+                <span v-text="translations().extension.donate.kofi.header" />
             </div>
             <div class="fake-table-body" style="justify-items: center">
                  <a
@@ -14,23 +14,21 @@
                     class="donate-button"
                 >
                     <img src="/img/extern/kofi-logo.svg" />
-                    {{ $i18n.$t.extension.donate.kofi.buttonText }} 
+                    {{ translations().extension.donate.kofi.buttonText }}
                 </a>
-                <small v-text="$i18n.$t.extension.donate.kofi.message" />
+                <small v-text="translations().extension.donate.kofi.message" />
             </div>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { _constants } from '../_constants';
+<script setup lang="ts">
+import { translations } from '@stats/i18n';
+import { _constants } from '../_constants';
 
-    @Component({})
-    export default class Donate extends Vue {
-        private readonly kofiLink = _constants.kofiLink;
-    }
+const kofiLink = _constants.kofiLink;
 </script>
+
 <style lang="scss" scoped>
     .fake-table {
         width: 450px;
