@@ -171,7 +171,11 @@ export class AmortizationExpeditionResultsBreakdown {
         return result;
     }
 
-    get averageExpeditionFinds(): Cost {
+    get averageExpeditionFinds(): {
+        resources: Cost;
+        fleet: Cost;
+        total: Cost;
+    } {
         const scoreFactor = this.#resourceFindFactor;
 
         const pathfinderFactor = 2;
@@ -257,7 +261,11 @@ export class AmortizationExpeditionResultsBreakdown {
             multiplyCost(averageFleetFindsBySize.large, eventSizeProbabilities.fleet.large),
         );
 
-        return addCost(totalAvgResourceFind, totalAvgFleetFind);
+        return {
+            fleet: totalAvgFleetFind,
+            resources: totalAvgResourceFind,
+            total: addCost(totalAvgResourceFind, totalAvgFleetFind),
+        };
     }
 
     clone(): AmortizationExpeditionResultsBreakdown {

@@ -1,8 +1,4 @@
-import { DefenseCount } from '@ogame-tracker/shared/models/empire/DefenseCount';
-import { PlanetBuildingLevels } from '@ogame-tracker/shared/models/empire/PlanetBuildingLevels';
 import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-import { PlanetShipCount } from '@ogame-tracker/shared/models/empire/PlanetShipCount';
-import { ProductionSettings } from '@ogame-tracker/shared/models/empire/ProductionSettings';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
 import { CrystalMine } from '@ogame-tracker/shared/models/ogame/buildings/CrystalMine';
 import { DeuteriumSynthesizer } from '@ogame-tracker/shared/models/ogame/buildings/DeuteriumSynthesizer';
@@ -11,7 +7,6 @@ import {
     ProductionBuilding,
     ProductionBuildingDependencies,
 } from '@ogame-tracker/shared/models/ogame/buildings/ProductionBuilding';
-import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 import { addCost, Cost, multiplyCost, multiplyCostInt, subCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import {
@@ -23,11 +18,8 @@ import {
 } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/interfaces';
 import {
     AnyBuildingCostAndTimeReductionLifeformBuildings,
-    AnyBuildingCostAndTimeReductionLifeformBuildingsByLifeform,
     LifeformTechnologyBonusLifeformBuildings,
     LifeformTechnologyBonusLifeformBuildingsByLifeform,
-    LifeformTechnologyResearchBuildings,
-    LifeformTechnologyResearchBuildingsByLifeform,
     ResourceProductionBonusLifeformBuildingsByLifeform,
 } from '@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings';
 import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
@@ -52,14 +44,6 @@ import {
     ResearchCostAndTimeReductionLifeformTechnology,
     ResourceProductionBonusLifeformTechnology,
 } from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/interfaces';
-import {
-    ClassBonusLifeformTechnologies,
-    CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies,
-    ExpeditionBonusLifeformTechnologies,
-    ExpeditionEventProbabilityBonusLifeformTechnologies,
-    ResearchCostAndTimeReductionLifeformTechnologies,
-    ResourceProductionBonusLifeformTechnologies,
-} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
 import { hasCommandStaff } from '@ogame-tracker/shared/models/ogame/premium/hasCommandStaff';
 import { Astrophysics } from '@ogame-tracker/shared/models/ogame/research/Astrophysics';
 import { PlasmaTechnology } from '@ogame-tracker/shared/models/ogame/research/PlasmaTechnology';
@@ -77,14 +61,11 @@ import { ServerSettings } from '@ogame-tracker/shared/models/server-settings/Ser
 import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { __measure } from '@ogame-tracker/shared/utils/performance/__measure';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
-import { formatWithOptions } from 'date-fns/fp';
 import { ExpeditionEventType, ExpeditionEventTypes } from '../../expeditions/ExpeditionEventType';
 import { PlayerClass } from '../../ogame/classes/PlayerClass';
 import { getItemSlotBonus } from '../../ogame/expeditions/getItemSlotBonus';
-import { getLifeformTechnologyBonus } from '../../ogame/lifeforms/buildings/getLifeformTechnologyBonus';
 import { LifeformBuilding } from '../../ogame/lifeforms/buildings/LifeformBuilding';
 import { getTechnologyBonusFactor } from '../../ogame/lifeforms/utils';
-import { MissileType } from '../../ogame/missiles/MissileType';
 import { AmortizationAstrophysicsSettings } from './AmortizationAstrophysicsSettings';
 import {
     AmortizationExpeditionResultsBreakdown,
@@ -418,7 +399,7 @@ export class AmortizationItemGenerator {
         this.#state.research = researchLevels;
         this.#state.productionBreakdowns = productionBreakdowns;
 
-        const globalActiveItems = createRecord(this.#settings.expeditions.items, _ => 'permanent' as const);
+        const globalActiveItems = createRecord(this.#settings.expeditions.items, () => 'permanent' as const);
         this.#state.expeditions = new AmortizationExpeditionResultsBreakdown({
             admiral: this.#settings.player.officers.admiral,
             astrophysicsLevel: researchLevels[ResearchType.astrophysics],
@@ -743,7 +724,10 @@ export class AmortizationItemGenerator {
 
         let planetExpeditionState = getPlanetExpeditionState(planetState);
         const expeditionsPerHour = (expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
-        const curExpeditionFindsPerHour = multiplyCost(expeditionBreakdown.averageExpeditionFinds, expeditionsPerHour);
+        const curExpeditionFindsPerHour = multiplyCost(
+            expeditionBreakdown.averageExpeditionFinds.total,
+            expeditionsPerHour,
+        );
 
         const planetSettings = this.#settings.astrophysics;
         const position = planetSettings.position;
@@ -955,7 +939,7 @@ export class AmortizationItemGenerator {
                     (newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
                 newExpeditionBreakdown.options.planets[planetExpeditionState.id] = planetExpeditionState;
                 const newExpeditionFindsPerHour = multiplyCost(
-                    newExpeditionBreakdown.averageExpeditionFinds,
+                    newExpeditionBreakdown.averageExpeditionFinds.total,
                     newExpeditionsPerHour,
                 );
                 const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
@@ -983,7 +967,7 @@ export class AmortizationItemGenerator {
             const newExpeditionsPerHour = (newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
             newExpeditionBreakdown.options.planets[planetExpeditionState.id] = planetExpeditionState;
             const newExpeditionFindsPerHour = multiplyCost(
-                newExpeditionBreakdown.averageExpeditionFinds,
+                newExpeditionBreakdown.averageExpeditionFinds.total,
                 newExpeditionsPerHour,
             );
 
@@ -1162,7 +1146,7 @@ export class AmortizationItemGenerator {
 
             const expeditionsPerHour = (expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
             const curExpeditionFindsPerHour = multiplyCost(
-                expeditionBreakdown.averageExpeditionFinds,
+                expeditionBreakdown.averageExpeditionFinds.total,
                 expeditionsPerHour,
             );
             const newExpeditionBreakdown = expeditionBreakdown.clone();
@@ -1175,7 +1159,7 @@ export class AmortizationItemGenerator {
             });
             const newExpeditionsPerHour = (newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
             const newExpeditionFindsPerHour = multiplyCost(
-                newExpeditionBreakdown.averageExpeditionFinds,
+                newExpeditionBreakdown.averageExpeditionFinds.total,
                 newExpeditionsPerHour,
             );
             const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
@@ -1571,7 +1555,10 @@ export class AmortizationItemGenerator {
 
         if (includeExpeditions) {
             const expeditionsPerHour = (expeditions.slots * this.#settings.expeditions.wavesPerDay) / 24;
-            const curExpeditionFindsPerHour = multiplyCost(expeditions.averageExpeditionFinds, expeditionsPerHour);
+            const curExpeditionFindsPerHour = multiplyCost(
+                expeditions.averageExpeditionFinds.total,
+                expeditionsPerHour,
+            );
 
             const newExpeditionBreakdown = expeditions.clone();
             LifeformTechnologyTypes.forEach(tech => {
@@ -1579,7 +1566,7 @@ export class AmortizationItemGenerator {
                     additionalTechnologyBoost[tech];
             });
             const newExpeditionFindsPerHour = multiplyCost(
-                newExpeditionBreakdown.averageExpeditionFinds,
+                newExpeditionBreakdown.averageExpeditionFinds.total,
                 expeditionsPerHour,
             );
             const expeditionDelta = subCost(newExpeditionFindsPerHour, curExpeditionFindsPerHour);
