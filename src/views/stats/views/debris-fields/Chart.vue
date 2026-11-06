@@ -21,107 +21,94 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { DailyDebrisFieldReportResult, DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
-    import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
-    import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
-    import { getRGB, getRGBString } from '../../utils/getRGBString';
-    import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
+import type { DailyDebrisFieldReportResult } from '../../data/DebrisFieldReportDataModule';
+import { useSettingsStore } from '../../data/SettingsDataModule';
+import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+import ManuallyAddDebrisFieldMenu from '@stats/components/debris-fields/ManuallyAddDebrisFieldMenu.vue';
+import SeparateExpeditionAndNormalDebrisFieldSettings from '@stats/components/settings/debris-fields/SeparateExpeditionAndNormalDebrisFieldSettings.vue';
+import { getMsuOrDsu } from '../../models/settings/getMsuOrDsu';
 
-    @Component({
-        components: {
-            StatsChart,
-            ResourceColorSettings,
-            ConversionRateSettings,
-            ManuallyAddDebrisFieldMenu,
-            SeparateExpeditionAndNormalDebrisFieldSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const debrisFieldReportStore = useDebrisFieldReportStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.resources;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return DebrisFieldReportDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.resources);
 
-        private get reportsPerDay() {
-            return DebrisFieldReportDataModule.dailyResults;
-        }
+const firstDay = computed(() => debrisFieldReportStore.firstDay);
 
-        private get separateResults() {
-            return SettingsDataModule.settings.debrisFields.separateExpeditionDebrisFields;
-        }
+const reportsPerDay = computed(() => debrisFieldReportStore.dailyResults);
 
-        private readonly alternativeColors: Record<ResourceType, string> = {
-            metal: '#fbbc04',
-            crystal: '#4b17da',
-            deuterium: '#ff0000', //TODO: 
-        }
+const separateResults = computed(() => settingsStore.settings.debrisFields.separateExpeditionDebrisFields);
 
-        private get datasets(): StatsChartDataset<DailyDebrisFieldReportResult>[] {
-            if (!this.separateResults) {
-                return [
-                    ...ResourceTypes.map(resource => ({
-                        key: resource,
-                        label: this.$i18n.$t.extension.resources[resource],
-                        color: this.colors[resource],
-                        filled: true,
-                        getValue: (result: DailyDebrisFieldReportResult) => result.total[resource],
-                        showAverage: true,
-                    })),
-                    {
-                        key: 'total',
-                        label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
-                        color: this.colors.totalConverted,
-                        filled: false,
-                        getValue: result => getMsuOrDsu(result.total),
-                        stack: false,
-                        showAverage: true,
-                    }
-                ];
+const alternativeColors: Record<ResourceType, string> = {
+    metal: '#fbbc04',
+    crystal: '#4b17da',
+    deuterium: '#ff0000', //TODO:
+};
+
+const datasets = computed<StatsChartDataset<DailyDebrisFieldReportResult>[]>(() => {
+    if (!separateResults.value) {
+        return [
+            ...ResourceTypes.map(resource => ({
+                key: resource,
+                label: translations().extension.resources[resource],
+                color: colors.value[resource],
+                filled: true,
+                getValue: (result: DailyDebrisFieldReportResult) => result.total[resource],
+                showAverage: true,
+            })),
+            {
+                key: 'total',
+                label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
+                color: colors.value.totalConverted,
+                filled: false,
+                getValue: result => getMsuOrDsu(result.total),
+                stack: false,
+                showAverage: true,
             }
-
-            return [
-                ...ResourceTypes.map(resource => ({
-                    key: `${resource}-normal`,
-                    label: `${this.$i18n.$t.extension.resources[resource]} (${this.$i18n.$t.extension.debrisFields.position} 1-15)`,
-                    color: this.colors[resource],
-                    filled: true,
-                    getValue: (result: DailyDebrisFieldReportResult) => result.normal[resource],
-                    showAverage: true,
-                })),
-                ...ResourceTypes.map(resource => ({
-                    key: `${resource}-pos16`,
-                    label: `${this.$i18n.$t.extension.resources[resource]} (${this.$i18n.$t.extension.debrisFields.position} 16)`,
-                    color: this.alternativeColors[resource],
-                    filled: true,
-                    getValue: (result: DailyDebrisFieldReportResult) => result.expedition[resource],
-                    showAverage: true,
-                })),
-                {
-                    key: 'total',
-                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
-                    color: this.colors.totalConverted,
-                    filled: false,
-                    getValue: result => getMsuOrDsu(result.total),
-                    stack: false,
-                    showAverage: true,
-                }
-            ];
-        }
+        ];
     }
+
+    return [
+        ...ResourceTypes.map(resource => ({
+            key: `${resource}-normal`,
+            label: `${translations().extension.resources[resource]} (${translations().extension.debrisFields.position} 1-15)`,
+            color: colors.value[resource],
+            filled: true,
+            getValue: (result: DailyDebrisFieldReportResult) => result.normal[resource],
+            showAverage: true,
+        })),
+        ...ResourceTypes.map(resource => ({
+            key: `${resource}-pos16`,
+            label: `${translations().extension.resources[resource]} (${translations().extension.debrisFields.position} 16)`,
+            color: alternativeColors[resource],
+            filled: true,
+            getValue: (result: DailyDebrisFieldReportResult) => result.expedition[resource],
+            showAverage: true,
+        })),
+        {
+            key: 'total',
+            label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
+            color: colors.value.totalConverted,
+            filled: false,
+            getValue: result => getMsuOrDsu(result.total),
+            stack: false,
+            showAverage: true,
+        }
+    ];
+});
 </script>
+
 <style lang="scss" scoped>
     .chart-container {
         display: grid;
@@ -136,7 +123,7 @@
         gap: 4px;
     }
 
-    .floating-settings::v-deep .floating-menu {
+    .floating-settings:deep(.floating-menu) {
         display: grid;
         grid-template-columns: repeat(2, auto);
         column-gap: 8px;
