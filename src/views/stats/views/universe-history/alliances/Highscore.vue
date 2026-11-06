@@ -8,9 +8,9 @@
                         <input
                             type="text"
                             v-model="selectedAllianceName"
-                            :placeholder="$i18n.$t.extension.universeHistory.allianceSelection.search"
+                            :placeholder="translations().extension.universeHistory.allianceSelection.search"
                             list="alliance-list"
-                            @change="onAllianceSelected($event.target.value)"
+                            @change="onAllianceSelected(($event.target as HTMLInputElement).value)"
                             style="width: 100%"
                         />
                         <datalist id="alliance-list">
@@ -28,8 +28,7 @@
             </grid-table>
 
             <tabs :tabs="tabs">
-                <template v-for="key in keys">
-                    <template :slot="`tab-content-${key}`">
+                <template v-for="key in keys" #[`tab-content-${key}`]>
                         <span v-if="allianceScoresLoading" :key="`score-${key}-loading`" class="loading" />
                         <scrollable-chart
                             v-else-if="allianceIds.length > 0"
@@ -42,338 +41,342 @@
                             :tick-list="days"
                             :min-tick="firstDay"
                             :max-tick="nextDay"
-                            :x-label-formatter="(x) => $i18n.$d(x, 'date')"
-                            :x-label-tooltip-formatter="(x) => $i18n.$d(x, 'datetime')"
+                            :x-label-formatter="(x: number) => formatDate(x, 'date')"
+                            :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
                         />
-                    </template>
                 </template>
             </tabs>
         </template>
     </div>
 </template>
 
-<script lang="ts">
-    import { DbUniverseHistoryScoreType } from '@ogame-tracker/shared/db/schema/universe-history';
-    import { HighscoreTypeNames } from '@ogame-tracker/shared/models/ogame/highscore';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
-    import { _throw } from '@ogame-tracker/shared/utils/_throw';
-    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
-    import { ScrollableChartDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { Tab } from '@stats/components/common/Tabs.vue';
-    import { ServerSettingsDataModule } from '@stats/data/ServerSettingsDataModule';
-    import { UniverseHistoryDataModule, UniverseHistoryAlliance } from '@stats/data/UniverseHistoryDataModule';
-    import { UniverseSpecificSettingsDataModule } from '@stats/data/UniverseSpecificSettingsDataModule';
-    import { addDays } from 'date-fns';
-    import startOfDay from 'date-fns/startOfDay';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, nextTick, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { translations, formatDate } from '@stats/i18n';
+import type { DbUniverseHistoryScoreType } from '@ogame-tracker/shared/db/schema/universe-history';
+import { HighscoreTypeNames } from '@ogame-tracker/shared/models/ogame/highscore';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
+import type { ScrollableChartDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import type { Tab } from '@stats/components/common/Tabs.vue';
+import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
+import { useUniverseHistoryStore } from '@stats/data/UniverseHistoryDataModule';
+import type { UniverseHistoryAlliance } from '@stats/data/UniverseHistoryDataModule';
+import { useUniverseSpecificSettingsStore } from '@stats/data/UniverseSpecificSettingsDataModule';
+import { addDays } from 'date-fns';
+import startOfDay from 'date-fns/startOfDay';
 
-    @Component({})
-    export default class Highscore extends Vue {
-        private readonly colors = [
-            '#F48FB1', // pink lighten-3
-            '#673AB7', // deep-purple
-            '#E53935', // red darken-1
-            '#3F51B5', // indigo
-            '#006064', // cyan darken-4
-            '#546E7A', // blue-grey darken-1
-            '#EF9A9A', // red lighten-3
-            '#64B5F6', // blue lighten-2
-            '#FFE082', // amber lighten-3
-            '#E91E63', // pink
-            '#BA68C8', // purple lighten-2
-            '#BF360C', // deep-orange darken-4
-            '#039BE5', // light-blue darken-1
-            '#8E24AA', // purple darken-1
-            '#9CCC65', // light-green lighten-1
-            '#A1887F', // brown lighten-2
-            '#0097A7', // cyan darken-2
-            '#FFAB91', // deep-orange lighten-3
-            '#009688', // teal
-            '#43A047', // green darken-1
-            '#1A237E', // indigo darken-4
-            '#558B2F', // light-green darken-3
-            '#311B92', // deep-purple darken-4
-            '#880E4F', // pink darken-4
-            '#01579B', // light-blue darken-4
-            '#AFB42B', // lime darken-2
-            '#1E88E5', // blue darken-1
-            '#827717', // lime darken-4
-            '#FFF176', // yellow lighten-2
-            '#BDBDBD', // grey lighten-1
-            '#FFC107', // amber
-            '#FFA726', // orange lighten-1
-            '#FF5722', // deep-orange
-            '#795548', // brown
-            '#004D40', // teal darken-4
-            '#81C784', // green lighten-2
-            '#90A4AE', // blue-grey lighten-2
-            '#757575', // grey darken-1
-            '#FDD835', // yellow darken-1
-        ];
+const router = useRouter();
 
-        private leftX = 0;
-        private rightX = 1;
-        private dataModuleLoading = true;
-        private allianceScoresLoading = true;
+const route = useRoute();
 
-        private selectedAllianceName = '';
-        private scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
-        private firstDay = 0;
+const serverSettingsStore = useServerSettingsStore();
 
-        private readonly keys = HighscoreTypeNames;
-        private get tabs(): (Tab & { key: DbUniverseHistoryScoreType })[] {
-            const tabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
-                {
-                    key: 'total',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.total,
-                },
-                {
-                    key: 'economy',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.economy,
-                },
-                {
-                    key: 'research',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.research,
-                },
-                {
-                    key: 'military',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.military,
-                },
-                {
-                    key: 'militaryBuilt',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryBuilt,
-                },
-                {
-                    key: 'militaryDestroyed',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryDestroyed,
-                },
-                {
-                    key: 'militaryLost',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryLost,
-                },
-                {
-                    key: 'honor',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.honor,
-                },
-                {
-                    key: 'numberOfShips',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.numberOfShips,
-                },
-            ];
+const universeSpecificSettingsStore = useUniverseSpecificSettingsStore();
 
-            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
-                tabs.push(
-                    {
-                        key: 'lifeform',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeform,
-                    },
-                    {
-                        key: 'lifeformEconomy',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformEconomy,
-                    },
-                    {
-                        key: 'lifeformTechnology',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformTechnology,
-                    },
-                    {
-                        key: 'lifeformDiscoveries',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformDiscoveries,
-                    }
-                );
+const universeHistoryStore = useUniverseHistoryStore();
+
+const colors = [
+    '#F48FB1', // pink lighten-3
+    '#673AB7', // deep-purple
+    '#E53935', // red darken-1
+    '#3F51B5', // indigo
+    '#006064', // cyan darken-4
+    '#546E7A', // blue-grey darken-1
+    '#EF9A9A', // red lighten-3
+    '#64B5F6', // blue lighten-2
+    '#FFE082', // amber lighten-3
+    '#E91E63', // pink
+    '#BA68C8', // purple lighten-2
+    '#BF360C', // deep-orange darken-4
+    '#039BE5', // light-blue darken-1
+    '#8E24AA', // purple darken-1
+    '#9CCC65', // light-green lighten-1
+    '#A1887F', // brown lighten-2
+    '#0097A7', // cyan darken-2
+    '#FFAB91', // deep-orange lighten-3
+    '#009688', // teal
+    '#43A047', // green darken-1
+    '#1A237E', // indigo darken-4
+    '#558B2F', // light-green darken-3
+    '#311B92', // deep-purple darken-4
+    '#880E4F', // pink darken-4
+    '#01579B', // light-blue darken-4
+    '#AFB42B', // lime darken-2
+    '#1E88E5', // blue darken-1
+    '#827717', // lime darken-4
+    '#FFF176', // yellow lighten-2
+    '#BDBDBD', // grey lighten-1
+    '#FFC107', // amber
+    '#FFA726', // orange lighten-1
+    '#FF5722', // deep-orange
+    '#795548', // brown
+    '#004D40', // teal darken-4
+    '#81C784', // green lighten-2
+    '#90A4AE', // blue-grey lighten-2
+    '#757575', // grey darken-1
+    '#FDD835', // yellow darken-1
+];
+
+const leftX = ref(0);
+
+const rightX = ref(1);
+
+const dataModuleLoading = ref(true);
+
+const allianceScoresLoading = ref(true);
+
+const selectedAllianceName = ref('');
+
+const scoreDatasets = ref({} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>);
+
+const firstDay = ref(0);
+
+const keys = HighscoreTypeNames;
+
+const tabs = computed<(Tab & { key: DbUniverseHistoryScoreType })[]>(() => {
+    const localTabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
+        {
+            key: 'total',
+            label: translations().extension.universeHistory.highscoreTabs.total,
+        },
+        {
+            key: 'economy',
+            label: translations().extension.universeHistory.highscoreTabs.economy,
+        },
+        {
+            key: 'research',
+            label: translations().extension.universeHistory.highscoreTabs.research,
+        },
+        {
+            key: 'military',
+            label: translations().extension.universeHistory.highscoreTabs.military,
+        },
+        {
+            key: 'militaryBuilt',
+            label: translations().extension.universeHistory.highscoreTabs.militaryBuilt,
+        },
+        {
+            key: 'militaryDestroyed',
+            label: translations().extension.universeHistory.highscoreTabs.militaryDestroyed,
+        },
+        {
+            key: 'militaryLost',
+            label: translations().extension.universeHistory.highscoreTabs.militaryLost,
+        },
+        {
+            key: 'honor',
+            label: translations().extension.universeHistory.highscoreTabs.honor,
+        },
+        {
+            key: 'numberOfShips',
+            label: translations().extension.universeHistory.highscoreTabs.numberOfShips,
+        },
+    ];
+
+    if (serverSettingsStore.serverSettings.lifeforms.enabled) {
+        localTabs.push(
+            {
+                key: 'lifeform',
+                label: translations().extension.universeHistory.highscoreTabs.lifeform,
+            },
+            {
+                key: 'lifeformEconomy',
+                label: translations().extension.universeHistory.highscoreTabs.lifeformEconomy,
+            },
+            {
+                key: 'lifeformTechnology',
+                label: translations().extension.universeHistory.highscoreTabs.lifeformTechnology,
+            },
+            {
+                key: 'lifeformDiscoveries',
+                label: translations().extension.universeHistory.highscoreTabs.lifeformDiscoveries,
             }
-
-            return tabs;
-        }
-
-        private get tableColumns(): GridTableColumn<'alliance'>[] {
-            return [{
-                key: 'alliance',
-                label: this.$i18n.$t.extension.universeHistory.allianceSelection.header,
-                headerClass: 'alliance-selection-table-cell',
-                class: 'alliance-selection-table-cell',
-            }];
-        }
-
-        private get tableItems(): { alliance: UniverseHistoryAlliance | null }[] {
-            return [
-                { alliance: null },
-                ...this.selectedAlliances.map(alliance => ({ alliance })),
-            ];
-        }
-
-
-        private get allianceIds(): number[] {
-            return (this.$route.query.alliances as string | null ?? '')
-                .split(',')
-                .filter(id => id.length > 0)
-                .map(allianceId => parseIntSafe(allianceId, 10));
-        }
-
-        private async mounted() {
-            await UniverseSpecificSettingsDataModule.ready;
-            await this.redirectToDefault();
-
-            this.dataModuleLoading = true;
-            await UniverseHistoryDataModule.ready;
-            this.dataModuleLoading = false;
-
-            await this.loadAllianceScores();
-        }
-
-        private async redirectToDefault() {
-            if (this.allianceIds.length != 0) {
-                return;
-            }
-
-            const defaultIds = UniverseSpecificSettingsDataModule.settings.universeHistory.alliances.highscore;
-            if (defaultIds.length != 0) {
-                await this.updateAllianceIdRoute(defaultIds);
-            }
-        }
-
-
-        private async loadAllianceScores() {
-            this.allianceScoresLoading = true;
-
-
-            this.scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
-
-            const datasetsByAlliance: Record<number, Record<DbUniverseHistoryScoreType, ScrollableChartDataset>> = {};
-            this.allianceIds.forEach(p => datasetsByAlliance[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>);
-
-            this.keys.forEach(key => {
-                this.scoreDatasets[key] = [];
-
-                this.allianceIds.forEach((pid, i) => datasetsByAlliance[pid][key] = {
-                    key: `${pid}-${key}`,
-                    values: [],
-                    color: this.colors[i % this.colors.length],
-                    label: this.getAllianceString(this.alliances.find(p => p.id == pid) ?? _throw(`no alliance with id '${pid}' found`)),
-                    filled: false,
-                    stack: false,
-                    hidePoints: false,
-                });
-            });
-
-            let minDate = Number.MAX_SAFE_INTEGER;
-
-            const scores = await UniverseHistoryDataModule.getAllianceScoreHistory(this.allianceIds);
-            const types = HighscoreTypeNames;
-            const lastScores = createRecord(this.allianceIds, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
-
-            scores.forEach((score, i) => {
-                minDate = Math.min(minDate, score.date);
-
-                if (lastScores[score.allianceId][score.type] == score.score) { //no duplicates if only position changed
-                    return;
-                }
-                if (!types.includes(score.type)) {
-                    return; // happens if beta data available
-                }
-
-                datasetsByAlliance[score.allianceId][score.type].values.push({
-                    x: score.date,
-                    y: score.score,
-                });
-                lastScores[score.allianceId][score.type] = score.score;
-            });
-
-            this.keys.forEach(key => {
-                this.allianceIds.forEach(pid => {
-                    this.scoreDatasets[key].push(datasetsByAlliance[pid][key]);
-                });
-            });
-
-            this.firstDay = startOfDay(minDate).getTime();
-
-            this.allianceScoresLoading = false;
-        }
-
-        private get nextDay() {
-            return addDays(startOfDay(Date.now()), 1).getTime();
-        }
-
-        private get days() {
-            const days: number[] = [];
-
-            const maxDay = this.nextDay;
-            for (let day = this.firstDay; day <= maxDay; day = addDays(day, 1).getTime()) {
-                days.push(day);
-            }
-
-            return days;
-        }
-
-
-
-        private get alliances() {
-            return UniverseHistoryDataModule.alliances;
-        }
-
-        private getAllianceString(ally: UniverseHistoryAlliance) {
-            return `[${ally.tag}] ${ally.name}`;
-        }
-
-        private get allianceNames() {
-            return this.alliances
-                .map(alliance => this.getAllianceString(alliance))
-                .sort();
-        }
-
-        private get selectedAlliances() {
-            return this.allianceIds.map(pid => this.alliances.find(p => p.id == pid)!);
-        }
-
-        private async onAllianceSelected(name: string) {
-            const alliance = this.alliances.find(a => this.getAllianceString(a).toLowerCase() == name.toLowerCase());
-            if (alliance == null) {
-                return;
-            }
-
-            await this.$nextTick();
-            this.selectedAllianceName = '';
-
-            const allianceIds = (this.$route.query.alliances as string | null)?.split(',') ?? [];
-            await this.updateAllianceIdRoute([
-                ...allianceIds.filter(pid => pid != alliance.id.toString()),
-                alliance.id,
-            ]);
-            await this.loadAllianceScores();
-        }
-
-        private async removeAlliance(id: number) {
-            await this.updateAllianceIdRoute(this.allianceIds.filter(pid => pid != id));
-
-            await this.loadAllianceScores();
-        }
-
-
-        private updateSettings(allyIds: number[]) {
-            const settings = UniverseSpecificSettingsDataModule.settings;
-            UniverseSpecificSettingsDataModule.updateSettings({
-                ...settings,
-                universeHistory: {
-                    ...settings.universeHistory,
-                    alliances: {
-                        ...settings.universeHistory.alliances,
-                        highscore: allyIds,
-                    },
-                },
-            });
-        }
-
-        private async updateAllianceIdRoute(ids: (string | number)[]) {
-            this.updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
-
-            await this.$router.replace({
-                query: {
-                    alliances: ids.join(','),
-                },
-            });
-        }
+        );
     }
+
+    return localTabs;
+});
+
+const tableColumns = computed<GridTableColumn<'alliance'>[]>(() => {
+    return [{
+        key: 'alliance',
+        label: translations().extension.universeHistory.allianceSelection.header,
+        headerClass: 'alliance-selection-table-cell',
+        class: 'alliance-selection-table-cell',
+    }];
+});
+
+const tableItems = computed<{ alliance: UniverseHistoryAlliance | null }[]>(() => {
+    return [
+        { alliance: null },
+        ...selectedAlliances.value.map(alliance => ({ alliance })),
+    ];
+});
+
+const allianceIds = computed<number[]>(() => {
+    return (route.query.alliances as string | null ?? '')
+        .split(',')
+        .filter(id => id.length > 0)
+        .map(allianceId => parseIntSafe(allianceId, 10));
+});
+
+async function redirectToDefault() {
+    if (allianceIds.value.length != 0) {
+        return;
+    }
+
+    const defaultIds = universeSpecificSettingsStore.settings.universeHistory.alliances.highscore;
+    if (defaultIds.length != 0) {
+        await updateAllianceIdRoute(defaultIds);
+    }
+}
+
+async function loadAllianceScores() {
+    allianceScoresLoading.value = true;
+
+    scoreDatasets.value = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
+
+    const datasetsByAlliance: Record<number, Record<DbUniverseHistoryScoreType, ScrollableChartDataset>> = {};
+    allianceIds.value.forEach(p => datasetsByAlliance[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>);
+
+    keys.forEach(key => {
+        scoreDatasets.value[key] = [];
+
+        allianceIds.value.forEach((pid, i) => datasetsByAlliance[pid][key] = {
+            key: `${pid}-${key}`,
+            values: [],
+            color: colors[i % colors.length],
+            label: getAllianceString(alliances.value.find(p => p.id == pid) ?? _throw(`no alliance with id '${pid}' found`)),
+            filled: false,
+            stack: false,
+            hidePoints: false,
+        });
+    });
+
+    let minDate = Number.MAX_SAFE_INTEGER;
+
+    const scores = await universeHistoryStore.getAllianceScoreHistory(allianceIds.value);
+    const types = HighscoreTypeNames;
+    const lastScores = createRecord(allianceIds.value, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
+
+    scores.forEach((score, i) => {
+        minDate = Math.min(minDate, score.date);
+
+        if (lastScores[score.allianceId][score.type] == score.score) { //no duplicates if only position changed
+            return;
+        }
+        if (!types.includes(score.type)) {
+            return; // happens if beta data available
+        }
+
+        datasetsByAlliance[score.allianceId][score.type].values.push({
+            x: score.date,
+            y: score.score,
+        });
+        lastScores[score.allianceId][score.type] = score.score;
+    });
+
+    keys.forEach(key => {
+        allianceIds.value.forEach(pid => {
+            scoreDatasets.value[key].push(datasetsByAlliance[pid][key]);
+        });
+    });
+
+    firstDay.value = startOfDay(minDate).getTime();
+
+    allianceScoresLoading.value = false;
+}
+
+const nextDay = computed(() => addDays(startOfDay(Date.now()), 1).getTime());
+
+const days = computed(() => {
+    const localDays: number[] = [];
+
+    const maxDay = nextDay.value;
+    for (let day = firstDay.value;day <= maxDay;day = addDays(day, 1).getTime()) {
+        localDays.push(day);
+    }
+
+    return localDays;
+});
+
+const alliances = computed(() => universeHistoryStore.alliances);
+
+function getAllianceString(ally: UniverseHistoryAlliance) {
+    return `[${ally.tag}] ${ally.name}`;
+}
+
+const allianceNames = computed(() => {
+    return alliances.value
+        .map(alliance => getAllianceString(alliance))
+        .sort();
+});
+
+const selectedAlliances = computed(() => allianceIds.value.map(pid => alliances.value.find(p => p.id == pid)!));
+
+async function onAllianceSelected(name: string) {
+    const alliance = alliances.value.find(a => getAllianceString(a).toLowerCase() == name.toLowerCase());
+    if (alliance == null) {
+        return;
+    }
+
+    await nextTick();
+    selectedAllianceName.value = '';
+
+    const localAllianceIds = (route.query.alliances as string | null)?.split(',') ?? [];
+    await updateAllianceIdRoute([
+        ...localAllianceIds.filter(pid => pid != alliance.id.toString()),
+        alliance.id,
+    ]);
+    await loadAllianceScores();
+}
+
+async function removeAlliance(id: number) {
+    await updateAllianceIdRoute(allianceIds.value.filter(pid => pid != id));
+
+    await loadAllianceScores();
+}
+
+function updateSettings(allyIds: number[]) {
+    const settings = universeSpecificSettingsStore.settings;
+    universeSpecificSettingsStore.updateSettings({
+        ...settings,
+        universeHistory: {
+            ...settings.universeHistory,
+            alliances: {
+                ...settings.universeHistory.alliances,
+                highscore: allyIds,
+            },
+        },
+    });
+}
+
+async function updateAllianceIdRoute(ids: (string | number)[]) {
+    updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
+
+    await router.replace({
+        query: {
+            alliances: ids.join(','),
+        },
+    });
+}
+
+onMounted(async () => {
+    await universeSpecificSettingsStore.ready;
+    await redirectToDefault();
+
+    dataModuleLoading.value = true;
+    await universeHistoryStore.ready;
+    dataModuleLoading.value = false;
+
+    await loadAllianceScores();
+});
 </script>
+
 <style lang="scss" scoped>
     .highscores {
         display: grid;
@@ -388,12 +391,10 @@
             height: fit-content;
             margin-right: 16px;
 
-            &::v-deep {
-                .alliance-selection-table-cell {
-                    text-align: left;
-                    justify-content: start;
-                    border-bottom: 1px solid rgba(var(--color), 0.5);
-                }
+            :deep(.alliance-selection-table-cell) {
+                text-align: left;
+                justify-content: start;
+                border-bottom: 1px solid rgba(var(--color), 0.5);
             }
         }
     }
