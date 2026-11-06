@@ -4,9 +4,9 @@
             <template #cell-label="{ value }">
                 <span v-text="value" />
 
-                <span v-if="value == $i18n.$t.extension.expeditions.expeditionEventSizes.small" class="mdi mdi-hexagon-slice-1" :style="{ color: colors.small }" />
-                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEventSizes.medium" class="mdi mdi-hexagon-slice-3" :style="{ color: colors.medium }" />
-                <span v-else-if="value == $i18n.$t.extension.expeditions.expeditionEventSizes.large" class="mdi mdi-hexagon-slice-5" :style="{ color: colors.large }" />
+                <span v-if="value == translations().extension.expeditions.expeditionEventSizes.small" class="mdi mdi-hexagon-slice-1" :style="{ color: colors.small }" />
+                <span v-else-if="value == translations().extension.expeditions.expeditionEventSizes.medium" class="mdi mdi-hexagon-slice-3" :style="{ color: colors.medium }" />
+                <span v-else-if="value == translations().extension.expeditions.expeditionEventSizes.large" class="mdi mdi-hexagon-slice-5" :style="{ color: colors.large }" />
             </template>
         </ranged-stats-table>
 
@@ -22,52 +22,48 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import type { PropType } from 'vue';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-        },
-    })
-    export default class Table extends Vue {
+const props = defineProps({
+    resource: { required: true, type: String as PropType<ResourceType>, validator: (value: ResourceType) => ResourceTypes.includes(value) },
+});
 
-        @Prop({ required: true, type: String as PropType<ResourceType>, validator: (value: ResourceType) => ResourceTypes.includes(value) })
-        private resource!: ResourceType;
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const expeditionStore = useExpeditionStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.sizes;
-        }
+const showSettings = ref(false);
 
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
+const colors = computed(() => settingsStore.settings.colors.expeditions.sizes);
 
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return ExpeditionEventSizes.map(size => ({
-                label: this.$i18n.$t.extension.expeditions.expeditionEventSizes[size],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.eventSizes.resourceCount[this.resource][size], 0),
-            }));
-        }
+const expos = computed(() => expeditionStore.dailyResultsArray);
 
-        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.sum,
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.resourceCount[this.resource], 0),
-            }];
-        }
-    }
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return ExpeditionEventSizes.map(size => ({
+        label: translations().extension.expeditions.expeditionEventSizes[size],
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.eventSizes.resourceCount[props.resource][size], 0),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [{
+        label: translations().extension.common.sum,
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.resourceCount[props.resource], 0),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .ranged-stats-table .mdi {
         transform: translateX(-30%) scale(1.6);

@@ -4,21 +4,17 @@
     <span v-else-if="size == ExpeditionEventSize.large" class="mdi mdi-hexagon-slice-5" :style="{ color: colors.large }" />
 </template>
 
-<script lang="ts">
-    import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import type { PropType } from 'vue';
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class ExpeditionSizeIcon extends Vue {
-        @Prop({ required: true, type: String as PropType<ExpeditionEventSize> })
-        private size!: ExpeditionEventSize;
+defineProps({
+    size: { required: true, type: String as PropType<ExpeditionEventSize> },
+});
 
-        private readonly ExpeditionEventSize = ExpeditionEventSize;
+const settingsStore = useSettingsStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.sizes;
-        }
-    }
+const colors = computed(() => settingsStore.settings.colors.expeditions.sizes);
 </script>

@@ -13,34 +13,22 @@
     <span v-else-if="type == ExpeditionEventType.lostFleet" class="mdi mdi-cross" :style="{ color: colors.lostFleet }" />
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-    import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
+import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { useSettingsStore } from '../../data/SettingsDataModule';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
 
-    @Component({
-        components: {
-            ExpeditionEventResourcesIcon,
-        },
-    })
-    export default class ExpeditionEventTypeIcon extends Vue {
-        @Prop({
-            required: true,
-            type: String as PropType<ExpeditionEventType>,
-            validator: (value: ExpeditionEventType) => ExpeditionEventTypes.includes(value)
-        })
-        private type!: ExpeditionEventType;
+defineProps({
+    type: { required: true, type: String as PropType<ExpeditionEventType>, validator: (value: ExpeditionEventType) => ExpeditionEventTypes.includes(value) },
+});
 
-        private readonly ExpeditionEventType = ExpeditionEventType;
-        private readonly ShipType = ShipType;
-        private readonly detroidItem = ItemHash.detroid_bronze;
+const settingsStore = useSettingsStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.events;
-        }
-    }
+const detroidItem = ItemHash.detroid_bronze;
+
+const colors = computed(() => settingsStore.settings.colors.expeditions.events);
 </script>
