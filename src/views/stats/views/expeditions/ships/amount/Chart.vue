@@ -15,17 +15,17 @@
                         <div
                             class="number"
                             v-text="
-                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
+                                formatNumber(getSum(getVisibleDatasets(datasets)))
                             "
                         />
-                    <div v-text="$i18n.$t.extension.expeditions.shipsFound" />
+                    <div v-text="translations().extension.expeditions.shipsFound" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.expeditions.shipsFound} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div v-text="`${translations().extension.expeditions.shipsFound} (${translations().extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -42,57 +42,50 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ShipColorSettings from '@stats/components/settings/colors/ShipColorSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            ShipColorSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const expeditionStore = useExpeditionStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.ships;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return ExpeditionDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.ships);
 
-        private get exposPerDay() {
-            return ExpeditionDataModule.dailyResults;
-        }
+const firstDay = computed(() => expeditionStore.firstDay);
 
-        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return ExpeditionFindableShipTypes.map(ship => ({
-                key: `${ship}`,
-                label: this.$i18n.$t.ogame.ships[ship],
-                color: this.colors[ship],
-                filled: true,
-                getValue: result => result.findings.fleet[ship],
-                showAverage: true,
-            }));
-        }
+const exposPerDay = computed(() => expeditionStore.dailyResults);
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
+    return ExpeditionFindableShipTypes.map(ship => ({
+        key: `${ship}`,
+        label: translations().ogame.ships[ship],
+        color: colors.value[ship],
+        filled: true,
+        getValue: result => result.findings.fleet[ship],
+        showAverage: true,
+    }));
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;

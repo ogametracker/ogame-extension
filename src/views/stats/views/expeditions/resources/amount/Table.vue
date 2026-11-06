@@ -24,80 +24,76 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
-    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
 import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            ConversionRateSettings,
-            ShowConvertedResourcesInCellsSettings,
+const expeditionStore = useExpeditionStore();
+
+const settingsStore = useSettingsStore();
+
+const showSettings = ref(false);
+
+const avgNumberFormat: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+};
+
+const expos = computed(() => expeditionStore.dailyResultsArray);
+
+const resourceTypes = computed<Record<string, ResourceType>>(() => {
+    return {
+        [translations().extension.resources.metal]: ResourceType.metal,
+        [translations().extension.resources.crystal]: ResourceType.crystal,
+        [translations().extension.resources.deuterium]: ResourceType.deuterium,
+    };
+});
+
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return ResourceTypes.map(resource => ({
+        label: translations().extension.resources[resource],
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.resources[resource], 0),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
+        {
+            label: translations().extension.common.resourceUnits,
+            getValue: nextExpos => nextExpos.reduce(
+                (acc, expo) => acc
+                    + expo.findings.resources.metal
+                    + expo.findings.resources.crystal
+                    + expo.findings.resources.deuterium,
+                0
+            ),
         },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+    ];
 
-        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
-
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
-
-        private get resourceTypes(): Record<string, ResourceType> {
-            return {
-                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
-            };
-        }
-
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.extension.resources[resource],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.resources[resource], 0),
-            }));
-        }
-
-        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            const result: RangedStatsTableItem<DailyExpeditionResult>[] = [
-                {
-                    label: this.$i18n.$t.extension.common.resourceUnits,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc
-                            + expo.findings.resources.metal
-                            + expo.findings.resources.crystal
-                            + expo.findings.resources.deuterium,
-                        0
-                    ),
-                },
-            ];
-
-            if (SettingsDataModule.settings.showCellsWithConvertedResourceUnits) {
-                result.push({
-                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
-                    getValue: expos => expos.reduce(
-                        (acc, expo) => acc + getMsuOrDsu(expo.findings.resources),
-                        0
-                    ),
-                });
-            }
-
-            return result;
-        }
+    if (settingsStore.settings.showCellsWithConvertedResourceUnits) {
+        result.push({
+            label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
+            getValue: nextExpos => nextExpos.reduce(
+                (acc, expo) => acc + getMsuOrDsu(expo.findings.resources),
+                0
+            ),
+        });
     }
+
+    return result;
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;

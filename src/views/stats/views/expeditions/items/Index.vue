@@ -1,5 +1,5 @@
 <template>
-    <div class="item-chart" :style="{ '--ticks': ticks }">
+    <div ref="rootElement" class="item-chart" :style="{ '--ticks': ticks }">
         <div
             class="day-column"
             v-for="(itemHashes, x) in itemsPerDays"
@@ -10,56 +10,59 @@
             </div>
 
             <div class="day-label">
-                <span v-text="formatDate(x)" />
+                <span v-text="formatEventDate(x)" />
             </div>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { startOfDay, subDays } from 'date-fns';
-    import differenceInDays from 'date-fns/differenceInDays';
-    import addDays from 'date-fns/esm/addDays/index';
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+<script setup lang="ts">
+import { computed, onMounted, useTemplateRef } from 'vue';
+import { formatDate } from '@stats/i18n';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import { startOfDay, subDays } from 'date-fns';
+import differenceInDays from 'date-fns/differenceInDays';
+import addDays from 'date-fns/esm/addDays/index';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 
-    @Component({})
-    export default class Charts extends Vue {
-        private readonly ticks = 30;
+const expeditionStore = useExpeditionStore();
 
-        private get minDay() {
-            const firstDay = ExpeditionDataModule.firstDay;
-            const today = startOfDay(Date.now());
-            return Math.min(firstDay, subDays(today, this.ticks - 1).getTime());
-        }
+const rootElement = useTemplateRef<HTMLElement>('rootElement');
 
-        private get itemsPerDays(): ItemHash[][] {
-            const perDay = ExpeditionDataModule.dailyResults;
-            const firstDay = this.minDay;
-            const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
-            const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
+const ticks = 30;
 
-            const itemsPerDay = days.map(day => (perDay[day] ?? null)?.findings.items ?? []);
-            while (itemsPerDay.length < this.ticks) {
-                itemsPerDay.push([]);
-            }
+const minDay = computed(() => {
+    const firstDay = expeditionStore.firstDay;
+    const today = startOfDay(Date.now());
+    return Math.min(firstDay, subDays(today, ticks - 1).getTime());
+});
 
-            return itemsPerDay;
-        }
+const itemsPerDays = computed<ItemHash[][]>(() => {
+    const perDay = expeditionStore.dailyResults;
+    const firstDay = minDay.value;
+    const dayCount = differenceInDays(startOfDay(Date.now()), firstDay);
+    const days = Array.from({ length: dayCount + 1 }).map((_, add) => addDays(firstDay, add).getTime());
 
-        private formatDate(x: number): string {
-            const firstDay = this.minDay;
-            const day = addDays(firstDay, x);
-
-            return this.$i18n.$d(day, 'date');
-        }
-
-        private mounted() {
-            this.$el.scrollLeft = this.$el.scrollWidth - this.$el.clientWidth;
-        }
+    const itemsPerDay = days.map(day => (perDay[day] ?? null)?.findings.items ?? []);
+    while (itemsPerDay.length < ticks) {
+        itemsPerDay.push([]);
     }
+
+    return itemsPerDay;
+});
+
+function formatEventDate(x: number): string {
+    const firstDay = minDay.value;
+    const day = addDays(firstDay, x);
+
+    return formatDate(day, 'date');
+}
+
+onMounted(() => {
+    rootElement.value!.scrollLeft = rootElement.value!.scrollWidth - rootElement.value!.clientWidth;
+});
 </script>
+
 <style lang="scss" scoped>
     .item-chart {
         width: 100%;

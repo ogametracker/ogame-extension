@@ -25,39 +25,34 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-        },
-    })
-    export default class Table extends Vue {
+const expeditionStore = useExpeditionStore();
 
-        private showSettings = false;
+const showSettings = ref(false);
 
-        private avgFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const avgFormat = ref<Intl.NumberFormatOptions>({
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+});
 
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
+const expos = computed(() => expeditionStore.dailyResultsArray);
 
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.ogame.premium.darkMatter,
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
-            }];
-        }
-    }
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [{
+        label: translations().ogame.premium.darkMatter,
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;

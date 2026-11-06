@@ -26,75 +26,71 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const expeditionStore = useExpeditionStore();
 
-        private avgFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const showSettings = ref(false);
 
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
+const avgFormat = ref<Intl.NumberFormatOptions>({
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+});
 
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return ExpeditionFindableShipTypes.map(ship => ({
-                label: this.$i18n.$t.ogame.ships[ship],
-                getValue: expos => expos.reduce((acc, expo) => acc + (expo.findings.fleet[ship] ?? 0), 0),
-            }));
-        }
+const expos = computed(() => expeditionStore.dailyResultsArray);
 
-        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.sum,
-                getValue: expos => expos.reduce(
-                    (acc, expo) => acc + ExpeditionFindableShipTypes.reduce(
-                        (acc, ship) => acc + (expo.findings.fleet[ship] ?? 0),
-                        0
-                    ),
-                    0
-                ),
-            }];
-        }
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return ExpeditionFindableShipTypes.map(ship => ({
+        label: translations().ogame.ships[ship],
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + (expo.findings.fleet[ship] ?? 0), 0),
+    }));
+});
 
-        private get shipTable(): Record<string, ShipType> {
-            return {
-                [this.$i18n.$t.ogame.ships[ShipType.lightFighter]]: ShipType.lightFighter,
-                [this.$i18n.$t.ogame.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
-                [this.$i18n.$t.ogame.ships[ShipType.cruiser]]: ShipType.cruiser,
-                [this.$i18n.$t.ogame.ships[ShipType.battleship]]: ShipType.battleship,
-                [this.$i18n.$t.ogame.ships[ShipType.bomber]]: ShipType.bomber,
-                [this.$i18n.$t.ogame.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
-                [this.$i18n.$t.ogame.ships[ShipType.destroyer]]: ShipType.destroyer,
-                [this.$i18n.$t.ogame.ships[ShipType.reaper]]: ShipType.reaper,
-                [this.$i18n.$t.ogame.ships[ShipType.pathfinder]]: ShipType.pathfinder,
-                [this.$i18n.$t.ogame.ships[ShipType.smallCargo]]: ShipType.smallCargo,
-                [this.$i18n.$t.ogame.ships[ShipType.largeCargo]]: ShipType.largeCargo,
-                [this.$i18n.$t.ogame.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
-                [this.$i18n.$t.ogame.ships[ShipType.recycler]]: ShipType.recycler,
-                [this.$i18n.$t.ogame.ships[ShipType.deathStar]]: ShipType.deathStar,
-                [this.$i18n.$t.ogame.ships[ShipType.crawler]]: ShipType.crawler,
-                [this.$i18n.$t.ogame.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
-                [this.$i18n.$t.ogame.ships[ShipType.colonyShip]]: ShipType.colonyShip,
-            };
-        }
-    }
+const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [{
+        label: translations().extension.common.sum,
+        getValue: nextExpos => nextExpos.reduce(
+            (acc, expo) => acc + ExpeditionFindableShipTypes.reduce(
+                (acc, ship) => acc + (expo.findings.fleet[ship] ?? 0),
+                0
+            ),
+            0
+        ),
+    }];
+});
+
+const shipTable = computed<Record<string, ShipType>>(() => {
+    return {
+        [translations().ogame.ships[ShipType.lightFighter]]: ShipType.lightFighter,
+        [translations().ogame.ships[ShipType.heavyFighter]]: ShipType.heavyFighter,
+        [translations().ogame.ships[ShipType.cruiser]]: ShipType.cruiser,
+        [translations().ogame.ships[ShipType.battleship]]: ShipType.battleship,
+        [translations().ogame.ships[ShipType.bomber]]: ShipType.bomber,
+        [translations().ogame.ships[ShipType.battlecruiser]]: ShipType.battlecruiser,
+        [translations().ogame.ships[ShipType.destroyer]]: ShipType.destroyer,
+        [translations().ogame.ships[ShipType.reaper]]: ShipType.reaper,
+        [translations().ogame.ships[ShipType.pathfinder]]: ShipType.pathfinder,
+        [translations().ogame.ships[ShipType.smallCargo]]: ShipType.smallCargo,
+        [translations().ogame.ships[ShipType.largeCargo]]: ShipType.largeCargo,
+        [translations().ogame.ships[ShipType.espionageProbe]]: ShipType.espionageProbe,
+        [translations().ogame.ships[ShipType.recycler]]: ShipType.recycler,
+        [translations().ogame.ships[ShipType.deathStar]]: ShipType.deathStar,
+        [translations().ogame.ships[ShipType.crawler]]: ShipType.crawler,
+        [translations().ogame.ships[ShipType.solarSatellite]]: ShipType.solarSatellite,
+        [translations().ogame.ships[ShipType.colonyShip]]: ShipType.colonyShip,
+    };
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;

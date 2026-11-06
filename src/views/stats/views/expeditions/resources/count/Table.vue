@@ -27,64 +27,56 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
-    import ShowConvertedResourcesInCellsSettings from '@stats/components/settings/ShowConvertedResourcesInCellsSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            ConversionRateSettings,
-            ShowConvertedResourcesInCellsSettings,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const expeditionStore = useExpeditionStore();
 
-        private readonly avgNumberFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const showSettings = ref(false);
 
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
+const avgNumberFormat: Intl.NumberFormatOptions = {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+};
 
-        private get resourceTypes(): Record<string, ResourceType> {
-            return {
-                [this.$i18n.$t.extension.resources.metal]: ResourceType.metal,
-                [this.$i18n.$t.extension.resources.crystal]: ResourceType.crystal,
-                [this.$i18n.$t.extension.resources.deuterium]: ResourceType.deuterium,
-            };
-        }
+const expos = computed(() => expeditionStore.dailyResultsArray);
 
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return ResourceTypes.map(resource => ({
-                label: this.$i18n.$t.extension.resources[resource],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.resourceCount[resource], 0),
-            }));
-        }
+const resourceTypes = computed<Record<string, ResourceType>>(() => {
+    return {
+        [translations().extension.resources.metal]: ResourceType.metal,
+        [translations().extension.resources.crystal]: ResourceType.crystal,
+        [translations().extension.resources.deuterium]: ResourceType.deuterium,
+    };
+});
 
-        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.resourceUnits,
-                getValue: expos => expos.reduce(
-                    (acc, expo) => acc
-                        + expo.findings.resourceCount.metal
-                        + expo.findings.resourceCount.crystal
-                        + expo.findings.resourceCount.deuterium,
-                    0
-                ),
-            }];
-        }
-    }
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return ResourceTypes.map(resource => ({
+        label: translations().extension.resources[resource],
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.resourceCount[resource], 0),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [{
+        label: translations().extension.common.resourceUnits,
+        getValue: nextExpos => nextExpos.reduce(
+            (acc, expo) => acc
+                + expo.findings.resourceCount.metal
+                + expo.findings.resourceCount.crystal
+                + expo.findings.resourceCount.deuterium,
+            0
+        ),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .table-container {
         display: grid;

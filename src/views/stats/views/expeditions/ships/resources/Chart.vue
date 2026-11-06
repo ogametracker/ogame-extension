@@ -4,21 +4,21 @@
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                        <div v-text="$i18n.$t.extension.common.resourceUnits" />
+                        <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
+                        <div v-text="translations().extension.common.resourceUnits" />
 
-                        <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(getVisibleDatasets(datasets)))" />
-                        <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})`" />
+                        <div class="number" v-text="formatNumber(getConvertedResourceUnits(getVisibleDatasets(datasets)))" />
+                        <div v-text="`${translations().extension.common.resourceUnits} (${conversionModeText})`" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.common.resourceUnits} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div v-text="`${translations().extension.common.resourceUnits} (${translations().extension.common.total})`" />
 
-                    <div class="number" v-text="$i18n.$n(getConvertedResourceUnits(datasets))" />
-                    <div v-text="`${`${$i18n.$t.extension.common.resourceUnits} (${conversionModeText})`} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getConvertedResourceUnits(datasets))" />
+                    <div v-text="`${`${translations().extension.common.resourceUnits} (${conversionModeText})`} (${translations().extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -39,100 +39,91 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
-    import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+import ExpeditionShipResourceUnitsFactorSettings from '@stats/components/settings/ExpeditionShipResourceUnitsFactorSettings.vue';
 import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
 
-    @Component({
-        components: {
-            StatsChart,
-            ResourceColorSettings,
-            ConversionRateSettings,
-            ExpeditionShipResourceUnitsFactorSettings,
+const settingsStore = useSettingsStore();
+
+const expeditionStore = useExpeditionStore();
+
+const showSettings = ref(false);
+
+const colors = computed(() => settingsStore.settings.colors.resources);
+
+const factors = computed(() => {
+    const localFactors = settingsStore.settings.expeditionFoundShipsResourceUnits;
+    return {
+        [ResourceType.metal]: localFactors.factor,
+        [ResourceType.crystal]: localFactors.factor,
+        [ResourceType.deuterium]: localFactors.deuteriumFactor,
+    };
+});
+
+const firstDay = computed(() => expeditionStore.firstDay);
+
+const exposPerDay = computed(() => expeditionStore.dailyResults);
+
+const conversionModeText = computed(() => {
+    return settingsStore.settings.conversionRates.mode == 'msu'
+        ? translations().extension.common.msu
+        : translations().extension.common.dsu;
+});
+
+const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
+    return [
+        ...ResourceTypes.map(resource => ({
+            key: resource,
+            label: translations().extension.resources[resource],
+            color: colors.value[resource],
+            filled: true,
+            getValue: (result: DailyExpeditionResult) => result.findings.fleetResourceUnits[resource] * factors.value[resource],
+            showAverage: true,
+        })),
+        {
+            key: 'total',
+            label: `${translations().extension.common.resourceUnits} (${settingsStore.settings.conversionRates.mode == 'msu' ? translations().extension.common.msu : translations().extension.common.dsu})`,
+            color: colors.value.totalConverted,
+            filled: false,
+            getValue: result => getMsuOrDsu(result.findings.fleetResourceUnits, factors.value),
+            stack: false,
+            showAverage: true,
         },
-    })
-    export default class Charts extends Vue {
+    ];
+});
 
-        private showSettings = false;
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.resources;
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
+    return nextDatasets
+        .filter(d => resources.includes(d.key.toString()))
+        .reduce((acc, cur) => acc + cur.value, 0);
+}
+
+function getConvertedResourceUnits(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => {
+        if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
+            return acc;
         }
-
-        private get factors() {
-            const factors = SettingsDataModule.settings.expeditionFoundShipsResourceUnits;
-            return {
-                [ResourceType.metal]: factors.factor,
-                [ResourceType.crystal]: factors.factor,
-                [ResourceType.deuterium]: factors.deuteriumFactor,
-            };
-        }
-
-        private get firstDay() {
-            return ExpeditionDataModule.firstDay;
-        }
-
-        private get exposPerDay() {
-            return ExpeditionDataModule.dailyResults;
-        }
-
-        private get conversionModeText() {
-            return SettingsDataModule.settings.conversionRates.mode == 'msu'
-                ? this.$i18n.$t.extension.common.msu
-                : this.$i18n.$t.extension.common.dsu;
-        }
-
-        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return [
-                ...ResourceTypes.map(resource => ({
-                    key: resource,
-                    label: this.$i18n.$t.extension.resources[resource],
-                    color: this.colors[resource],
-                    filled: true,
-                    getValue: (result: DailyExpeditionResult) => result.findings.fleetResourceUnits[resource] * this.factors[resource],
-                    showAverage: true,
-                })),
-                {
-                    key: 'total',
-                    label: `${this.$i18n.$t.extension.common.resourceUnits} (${SettingsDataModule.settings.conversionRates.mode == 'msu' ? this.$i18n.$t.extension.common.msu : this.$i18n.$t.extension.common.dsu})`,
-                    color: this.colors.totalConverted,
-                    filled: false,
-                    getValue: result => getMsuOrDsu(result.findings.fleetResourceUnits, this.factors),
-                    stack: false,
-                    showAverage: true,
-                },
-            ];
-        }
-
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
-
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
-            return datasets
-                .filter(d => resources.includes(d.key.toString()))
-                .reduce((acc, cur) => acc + cur.value, 0);
-        }
-
-        private getConvertedResourceUnits(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => {
-                if (!(ResourceTypes as (string | number)[]).includes(cur.key)) {
-                    return acc;
-                }
-                return acc + getMsuOrDsu({ [cur.key as ResourceType]: cur.value });
-            }, 0);
-        }
-    }
+        return acc + getMsuOrDsu({ [cur.key as ResourceType]: cur.value });
+    }, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;

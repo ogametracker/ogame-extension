@@ -2,23 +2,21 @@
     <tab-view :tabs="tabs" root-route-name="expeditions/overview" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { Tab } from '@stats/components/common/TabView.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { Tab } from '@stats/components/common/TabView.vue';
 
-    @Component({})
-    export default class Index extends Vue {
-        private get tabs(): Tab[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.common.chart,
-                    to: { name: 'expeditions/overview/chart' },
-                },
-                {
-                    label: this.$i18n.$t.extension.common.table,
-                    to: { name: 'expeditions/overview/table' },
-                },
-            ];
-        }
-    }
+const tabs = computed<Tab[]>(() => {
+    return [
+        {
+            label: translations().extension.common.chart,
+            to: { name: 'expeditions/overview/chart' },
+        },
+        {
+            label: translations().extension.common.table,
+            to: { name: 'expeditions/overview/table' },
+        },
+    ];
+});
 </script>

@@ -4,15 +4,15 @@
             <template #tooltip-footer="{ datasets }">
                 <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div class="number" v-text="$i18n.$n(getSum(getVisibleDatasets(datasets)))" />
-                    <div v-text="$i18n.$t.extension.expeditions.finds" />
+                        <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
+                    <div v-text="translations().extension.expeditions.finds" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.expeditions.finds} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div v-text="`${translations().extension.expeditions.finds} (${translations().extension.common.total})`" />
                 </div>
             </template>
         </stats-chart>
@@ -31,68 +31,60 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
-    import { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
-    import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ResourceColorSettings from '@stats/components/settings/colors/ResourceColorSettings.vue';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            ResourceColorSettings,
-            ConversionRateSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const expeditionStore = useExpeditionStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.resources;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return ExpeditionDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.resources);
 
-        private get exposPerDay() {
-            return ExpeditionDataModule.dailyResults;
-        }
+const firstDay = computed(() => expeditionStore.firstDay);
 
-        private get conversionModeText() {
-            return SettingsDataModule.settings.conversionRates.mode == 'msu'
-                ? this.$i18n.$t.extension.common.msu
-                : this.$i18n.$t.extension.common.dsu;
-        }
+const exposPerDay = computed(() => expeditionStore.dailyResults);
 
-        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return ResourceTypes.map(resource => ({
-                key: resource,
-                label: this.$i18n.$t.extension.resources[resource],
-                color: this.colors[resource],
-                filled: true,
-                getValue: (result: DailyExpeditionResult) => result.findings.resourceCount[resource],
-                showAverage: true,
-            }));
-        }
+const conversionModeText = computed(() => {
+    return settingsStore.settings.conversionRates.mode == 'msu'
+        ? translations().extension.common.msu
+        : translations().extension.common.dsu;
+});
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
+    return ResourceTypes.map(resource => ({
+        key: resource,
+        label: translations().extension.resources[resource],
+        color: colors.value[resource],
+        filled: true,
+        getValue: (result: DailyExpeditionResult) => result.findings.resourceCount[resource],
+        showAverage: true,
+    }));
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
-            return datasets
-                .filter(d => resources.includes(d.key.toString()))
-                .reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    const resources: string[] = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];
+    return nextDatasets
+        .filter(d => resources.includes(d.key.toString()))
+        .reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
     .footer-item {
         display: grid;

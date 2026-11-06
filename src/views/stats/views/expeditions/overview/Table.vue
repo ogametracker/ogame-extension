@@ -20,71 +20,65 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
-    import ExpeditionEventTypeIcon from '@stats/components/expeditions/ExpeditionEventTypeIcon.vue';
-    import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { ExpeditionEventType, ExpeditionEventTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
+import ExpeditionEventTypeIcon from '@stats/components/expeditions/ExpeditionEventTypeIcon.vue';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            ExpeditionEventTypeIcon,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
-        private readonly detroidItem = ItemHash.detroid_bronze;
-        private readonly ShipType = ShipType;
+const settingsStore = useSettingsStore();
 
-        private avgFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const expeditionStore = useExpeditionStore();
 
-        private getExpeditionEventType(text: string): ExpeditionEventType {
-            const reverseMap = createRecord(ExpeditionEventTypes, type => this.$i18n.$t.extension.expeditions.expeditionEvents[type]);
-            return (Object.entries(reverseMap) as [ExpeditionEventType, string][])
-                .find(e => e[1] == text)?.[0]
-                ?? _throw('failed to find fitting type');
-        }
+const showSettings = ref(false);
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.events;
-        }
+const detroidItem = ItemHash.detroid_bronze;
 
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
+const avgFormat = ref<Intl.NumberFormatOptions>({
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+});
 
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return ExpeditionEventTypes
-                .filter(type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type))
-                .map(type => ({
-                    label: this.$i18n.$t.extension.expeditions.expeditionEvents[type],
-                    getValue: expos => expos.reduce((acc, expo) => acc + expo.events[type], 0),
-                }));
-        }
+function getExpeditionEventType(text: string): ExpeditionEventType {
+    const reverseMap = createRecord(ExpeditionEventTypes, type => translations().extension.expeditions.expeditionEvents[type]);
+    return (Object.entries(reverseMap) as [ExpeditionEventType, string][])
+        .find(e => e[1] == text)?.[0]
+        ?? _throw('failed to find fitting type');
+}
 
-        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.sum,
-                getValue: expos => ExpeditionEventTypes.reduce(
-                    (acc, type) => acc + expos.reduce((acc, expo) => acc + expo.events[type], 0),
-                    0
-                ),
-            }];
-        }
-    }
+const colors = computed(() => settingsStore.settings.colors.expeditions.events);
+
+const expos = computed(() => expeditionStore.dailyResultsArray);
+
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return ExpeditionEventTypes
+        .filter(type => ![ExpeditionEventType.aliens, ExpeditionEventType.pirates].includes(type))
+        .map(type => ({
+            label: translations().extension.expeditions.expeditionEvents[type],
+            getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.events[type], 0),
+        }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [{
+        label: translations().extension.common.sum,
+        getValue: nextExpos => ExpeditionEventTypes.reduce(
+            (acc, type) => acc + nextExpos.reduce((acc, expo) => acc + expo.events[type], 0),
+            0
+        ),
+    }];
+});
 </script>
+
 <style lang="scss" scoped>
     .ranged-stats-table .mdi {
         transform: translateX(-30%) scale(1.6);

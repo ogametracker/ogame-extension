@@ -2,29 +2,27 @@
     <page :nav-items="navItems" :root-route-name="rootRoute" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@stats/components/common/ListNav.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { ListNavItem } from '@stats/components/common/ListNav.vue';
 
-    @Component({})
-    export default class Index extends Vue {
-        private readonly rootRoute = 'expeditions/ships';
+const rootRoute = 'expeditions/ships';
 
-        private get navItems(): ListNavItem[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.amount,
-                    to: { name: 'expeditions/ships/amount' },
-                },
-                {
-                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.sizes,
-                    to: { name: 'expeditions/ships/sizes' },
-                },
-                {
-                    label: this.$i18n.$t.extension.expeditions.tabHeaders.subHeaders.resources,
-                    to: { name: 'expeditions/ships/resources' },
-                },
-            ];
-        }
-    }
+const navItems = computed<ListNavItem[]>(() => {
+    return [
+        {
+            label: translations().extension.expeditions.tabHeaders.subHeaders.amount,
+            to: { name: 'expeditions/ships/amount' },
+        },
+        {
+            label: translations().extension.expeditions.tabHeaders.subHeaders.sizes,
+            to: { name: 'expeditions/ships/sizes' },
+        },
+        {
+            label: translations().extension.expeditions.tabHeaders.subHeaders.resources,
+            to: { name: 'expeditions/ships/resources' },
+        },
+    ];
+});
 </script>

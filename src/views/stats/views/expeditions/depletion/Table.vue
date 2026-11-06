@@ -30,67 +30,61 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@stats/data/SettingsDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
-    import ExpeditionEventResourcesIcon from '@ogame-tracker/view-shared/components/ExpeditionEventResourcesIcon.vue';
-    import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
-    import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-    import { _throw } from '@ogame-tracker/shared/utils/_throw';
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+import { ExpeditionDepletionLevel, ExpeditionDepletionLevels } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
-            ExpeditionEventResourcesIcon,
-        },
-    })
-    export default class Table extends Vue {
-        private showSettings = false;
+const settingsStore = useSettingsStore();
 
-        private avgFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
+const expeditionStore = useExpeditionStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.depletion;
-        }
+const showSettings = ref(false);
 
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
+const avgFormat = ref<Intl.NumberFormatOptions>({
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+});
 
-        private readonly depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
+const colors = computed(() => settingsStore.settings.colors.expeditions.depletion);
 
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return this.depletionLevels.map<RangedStatsTableItem<DailyExpeditionResult>>(level => ({
-                label: this.$i18n.$t.extension.expeditions.depletionLevels[level],
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.depletion[level], 0),
-            }));
-        }
+const expos = computed(() => expeditionStore.dailyResultsArray);
 
-        private get footerItems(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.extension.common.sum,
-                getValue: expos => this.depletionLevels.reduce(
-                    (acc, type) => acc + expos.reduce((acc, expo) => acc + expo.depletion[type], 0),
-                    0
-                ),
-            }];
-        }
+const depletionLevels: (ExpeditionDepletionLevel | 'unknown')[] = [...ExpeditionDepletionLevels, 'unknown'];
 
-        private get depletionLevelsByLabel(): Record<string, ExpeditionDepletionLevel | 'unknown'> {
-            return createRecord(
-                this.depletionLevels.map(level => this.$i18n.$t.extension.expeditions.depletionLevels[level]),
-                label => this.depletionLevels.find(level => label == this.$i18n.$t.extension.expeditions.depletionLevels[level]) ?? _throw(`failed to find depletion level for label '${label}'`),
-            );
-        }
-    }
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return depletionLevels.map<RangedStatsTableItem<DailyExpeditionResult>>(level => ({
+        label: translations().extension.expeditions.depletionLevels[level],
+        getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.depletion[level], 0),
+    }));
+});
+
+const footerItems = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [{
+        label: translations().extension.common.sum,
+        getValue: nextExpos => depletionLevels.reduce(
+            (acc, type) => acc + nextExpos.reduce((acc, expo) => acc + expo.depletion[type], 0),
+            0
+        ),
+    }];
+});
+
+const depletionLevelsByLabel = computed<Record<string, ExpeditionDepletionLevel | 'unknown'>>(() => {
+    return createRecord(
+        depletionLevels.map(level => translations().extension.expeditions.depletionLevels[level]),
+        label => depletionLevels.find(level => label == translations().extension.expeditions.depletionLevels[level]) ?? _throw(`failed to find depletion level for label '${label}'`),
+    );
+});
 </script>
+
 <style lang="scss" scoped>
     .ranged-stats-table .mdi {
         transform: translateX(-30%) scale(1.6);
