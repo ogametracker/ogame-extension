@@ -145,7 +145,7 @@ export class UniverseHistoryModule {
     });
 
     private readonly meta: MessageOgameMeta;
-    private timeout: number | undefined = undefined;
+    private timeout: ReturnType<typeof setTimeout> | undefined = undefined;
     private inUpdate = false;
 
     private get settings() {

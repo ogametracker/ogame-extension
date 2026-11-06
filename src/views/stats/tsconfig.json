@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "rootDir": "../..",
+        "rootDir": ".",
         "target": "esnext",
         "module": "esnext",
         "strict": true,
@@ -10,27 +10,23 @@
         "esModuleInterop": true,
         "sourceMap": true,
         "types": [
-            "chrome"
+            "chrome",
+            "vite/client"
         ],
         "lib": [
             "esnext",
             "dom",
             "dom.iterable"
         ],
-        "jsx": "preserve",
-        "importHelpers": true,
-        "experimentalDecorators": true,
         "paths": {
             "@stats/*": [
                 "./*"
             ],
             "vue": [
                 "./node_modules/vue"
-            ],
-            "vue/types/*": [
-                "./node_modules/vue/types/*"
             ]
-        }
+        },
+        "noEmit": true
     },
     "include": [
         "**/*.ts",

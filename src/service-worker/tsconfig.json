@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "rootDir": "..",
+        "rootDir": ".",
         "target": "esnext",
         "module": "esnext",
         "strict": true,
@@ -15,7 +15,8 @@
             "esnext",
             "dom",
             "dom.iterable"
-        ]
+        ],
+        "noEmit": true
     },
     "include": [
         "**/*.ts"

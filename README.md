@@ -20,9 +20,8 @@ How to build:
 
 Alternatively run `npm run publish` which will create zipped production builds for both Chrome and Firefox ready to upload.
 
-The repository uses npm workspaces. Stats owns its Vue 2 toolchain, and Notifications owns its
-Vue 3 toolchain. The service worker has its own package, and the content scripts are built as
-separate Vite entries in `@ogame-tracker/content-scripts`. Browser modules import TypeScript from
+The repository uses npm workspaces. Stats and Notifications use Vue 3, Pinia, and Vite. Vite
+bundles the service worker and builds each content script as its own entry. Browser modules import TypeScript from
 `@ogame-tracker/shared`. The two views also use `@ogame-tracker/view-shared` for common icons and
 styles.
 
@@ -31,5 +30,5 @@ workspace) to build just that package into its own `dist` directory. Standalone 
 to Chrome. Set the `BROWSER` environment variable to `firefox` for Firefox. The root build commands
 assemble these outputs, static assets, and the manifest into the extension's root `dist` directory.
 
-Run `npm run typecheck --workspace @ogame-tracker/notifications` to check the Vue 3 app, or
+Run `npm run typecheck --workspace @ogame-tracker/stats` or substitute the Notifications workspace to check either Vue app. Run
 `npm run typecheck --workspace @ogame-tracker/shared` to check the shared library.

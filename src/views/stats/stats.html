@@ -6,9 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>
-        <%= htmlWebpackPlugin.options.title %>
-    </title>
+    <title>OGame Tracker Stats</title>
     <style>
         #splashscreen {
             position: fixed;
@@ -71,7 +69,7 @@
 
 <body>
     <noscript>
-        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        <strong>We're sorry but OGame Tracker Stats doesn't work properly without JavaScript enabled.
                 Please enable it to continue.</strong>
     </noscript>
     <div id="splashscreen">
@@ -79,8 +77,8 @@
             <div class="logo"></div>
         </div>
     </div>
-    <div id="app"></div>
-    <!-- Vue CLI injects the Stats bundle here. -->
+    <div id="stats"></div>
+    <script type="module" src="./main.ts"></script>
 </body>
 
 </html>

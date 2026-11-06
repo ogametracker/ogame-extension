@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "scripts/browser-script-build",
     "src/shared",
     "src/views/_shared",
     "src/views/stats",
