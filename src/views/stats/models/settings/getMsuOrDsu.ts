@@ -1,5 +1,5 @@
 import { ResourceType, ResourceTypes } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
-import { SettingsDataModule } from "../../data/SettingsDataModule";
+import { useSettingsStore } from "../../data/SettingsDataModule";
 
 export function getMsuOrDsu(resources: Partial<Record<ResourceType, number>>, factors: Partial<Record<ResourceType, number>> = {}): number {
     const cost: Record<ResourceType, number> = {
@@ -16,7 +16,7 @@ export function getMsuOrDsu(resources: Partial<Record<ResourceType, number>>, fa
     };
     ResourceTypes.forEach(resource => cost[resource] *= costFactors[resource]);
 
-    const { mode, msu, dsu } = SettingsDataModule.settings.conversionRates;
+    const { mode, msu, dsu } = useSettingsStore().settings.conversionRates;
     if (mode == 'msu') {
         return cost.metal + cost.crystal * msu.crystal + cost.deuterium * msu.deuterium;
     }

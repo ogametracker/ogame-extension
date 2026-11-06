@@ -1,6 +1,7 @@
-import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
+import type { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
 import { PlayerClass } from "@ogame-tracker/shared/models/ogame/classes/PlayerClass";
-import { addCost, Cost } from "@ogame-tracker/shared/models/ogame/common/Cost";
+import { addCost } from "@ogame-tracker/shared/models/ogame/common/Cost";
+import type { Cost } from "@ogame-tracker/shared/models/ogame/common/Cost";
 import { LifeformTechnologyBonusLifeformBuildingsByLifeform, ResourceProductionBonusLifeformBuildingsByLifeform } from "@ogame-tracker/shared/models/ogame/lifeforms/buildings/LifeformBuildings";
 import { LifeformTechnologyType, LifeformTechnologyTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType";
 import { ClassBonusLifeformTechnologies, ResourceProductionBonusLifeformTechnologies } from "@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";

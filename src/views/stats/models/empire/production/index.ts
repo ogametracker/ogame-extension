@@ -1,25 +1,27 @@
-import { LocalPlayerData } from "@ogame-tracker/shared/models/empire/LocalPlayerData";
-import { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
+import type { LocalPlayerData } from "@ogame-tracker/shared/models/empire/LocalPlayerData";
+import type { PlanetData } from "@ogame-tracker/shared/models/empire/PlanetData";
 import { BuildingType } from "@ogame-tracker/shared/models/ogame/buildings/BuildingType";
 import { CrystalMine } from "@ogame-tracker/shared/models/ogame/buildings/CrystalMine";
 import { DeuteriumSynthesizer } from "@ogame-tracker/shared/models/ogame/buildings/DeuteriumSynthesizer";
 import { FusionReactor } from "@ogame-tracker/shared/models/ogame/buildings/FusionReactor";
 import { MetalMine } from "@ogame-tracker/shared/models/ogame/buildings/MetalMine";
-import { ProductionBuildingDependencies } from "@ogame-tracker/shared/models/ogame/buildings/ProductionBuilding";
-import { Cost } from "@ogame-tracker/shared/models/ogame/common/Cost";
+import type { ProductionBuildingDependencies } from "@ogame-tracker/shared/models/ogame/buildings/ProductionBuilding";
+import type { Cost } from "@ogame-tracker/shared/models/ogame/common/Cost";
 import { getLifeformLevelTechnologyBonus } from "@ogame-tracker/shared/models/ogame/lifeforms/experience";
-import { LifeformType, LifeformTypes, ValidLifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType, LifeformTypes } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
+import type { ValidLifeformType } from "@ogame-tracker/shared/models/ogame/lifeforms/LifeformType";
 import { CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies } from "@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies";
 import { hasCommandStaff } from "@ogame-tracker/shared/models/ogame/premium/hasCommandStaff";
 import { ResearchType } from "@ogame-tracker/shared/models/ogame/research/ResearchType";
 import { getCrystalBaseProduction } from "@ogame-tracker/shared/models/ogame/resource-production/getCrystalProduction";
 import { getItemBonus } from "@ogame-tracker/shared/models/ogame/resource-production/getItemBonus";
 import { getMetalBaseProduction } from "@ogame-tracker/shared/models/ogame/resource-production/getMetalProduction";
-import { EmpireProductionBreakdown, EmpireProductionPlanetState } from "@ogame-tracker/shared/models/ogame/resource-production/types";
+import { EmpireProductionBreakdown } from "@ogame-tracker/shared/models/ogame/resource-production/types";
+import type { EmpireProductionPlanetState } from "@ogame-tracker/shared/models/ogame/resource-production/types";
 import { ResourceType } from "@ogame-tracker/shared/models/ogame/resources/ResourceType";
 import { ShipType } from "@ogame-tracker/shared/models/ogame/ships/ShipType";
 import { createRecord } from "@ogame-tracker/shared/utils/createRecord";
-import { ServerSettingsDataModule } from "@stats/data/ServerSettingsDataModule";
+import { useServerSettingsStore } from "@stats/data/ServerSettingsDataModule";
 import { getPlanetCollectorClassBonusFactor, getPlanetLifeformBuildingBonusProductionFactor, getPlanetLifeformTechnologyBonusProductionFactor, getPlanetLifeformTechnologyBoost } from "../../lifeforms";
 
 export interface EmpireProductionBreakdowns extends Record<ResourceType, EmpireProductionBreakdown> {
@@ -42,7 +44,7 @@ export function getProductionBreakdowns(empire: LocalPlayerData, lifeformExperie
 
     const plasmaTechLevel = empire.research[ResearchType.plasmaTechnology];
 
-    const serverSettings = ServerSettingsDataModule.serverSettings;
+    const serverSettings = useServerSettingsStore().serverSettings;
     const productionServerSettings = {
         collectorProductionFactor: serverSettings.playerClasses.collector.productionFactorBonus,
         geologistActiveCrawlerFactorBonus: serverSettings.playerClasses.collector.crawlers.geologistActiveCrawlerFactorBonus,
