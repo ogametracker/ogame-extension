@@ -22,42 +22,45 @@
 </template>
 
 <script lang="ts">
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-
-    export interface Tab {
-        key: string | number;
-        label: string;
-    }
-
-    @Component({})
-    export default class Tabs extends Vue {
-
-        @Prop({ required: true, type: Array as PropType<Tab[]>, validator: (tabs: Tab[]) => tabs.length > 0 })
-        private tabs!: Tab[];
-
-        private activeTab: Tab = null!;
-
-        @Watch('tabs', { immediate: true })
-        private onTabsChanged() {
-            if (this.tabs.includes(this.activeTab)) {
-                return;
-            }
-
-            this.setActiveTab(this.tabs[0]);
-        }
-
-        private setActiveTab(tab: Tab) {
-            this.activeTab = tab;
-            this.$emit('tab-selected', tab);
-        }
-    }
+export interface Tab {
+    key: string | number;
+    label: string;
+}
 </script>
+
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import type { PropType } from 'vue';
+
+const props = defineProps({
+    tabs: { required: true, type: Array as PropType<Tab[]>, validator: (tabs: Tab[]) => tabs.length > 0 },
+});
+
+const emit = defineEmits<{ 'tab-selected': [tab: Tab] }>();
+
+const activeTab = ref<Tab>(null!);
+
+function onTabsChanged() {
+    if (props.tabs.includes(activeTab.value)) {
+        return;
+    }
+
+    setActiveTab(props.tabs[0]);
+}
+
+function setActiveTab(tab: Tab) {
+    activeTab.value = tab;
+    emit('tab-selected', tab);
+}
+
+watch(() => props.tabs, onTabsChanged, { immediate: true, deep: 1 });
+</script>
+
 <style lang="scss" scoped>
     .tabs {
         display: grid;
         grid-template-rows: auto 1fr;
-        height: 100%; 
+        height: 100%;
         overflow: auto;
 
         > header {
@@ -91,11 +94,9 @@
                     );
                 }
 
-                &::v-deep {
-                    .mdi::before,
-                    .ogti::before {
-                        transform: scale(1.5) translateX(-25%);
-                    }
+                :deep(.mdi::before),
+                :deep(.ogti::before) {
+                    transform: scale(1.5) translateX(-25%);
                 }
             }
         }

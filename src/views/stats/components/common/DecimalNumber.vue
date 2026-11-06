@@ -9,61 +9,50 @@
     >
         <span v-if="prefix != ''" v-text="prefix" />
 
-        <span v-text="$i18n.$n(integerValue, format)" />
-        <span v-if="digits > 0" class="fraction" v-text="$i18n.$n(decimalValue, fractionNumberFormat).substring(1)" />
+        <span v-text="formatNumber(integerValue, format)" />
+        <span v-if="digits > 0" class="fraction" v-text="formatNumber(decimalValue, fractionNumberFormat).substring(1)" />
 
         <span v-if="suffix != ''" v-text="suffix" />
     </span>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { formatNumber } from '@stats/i18n';
 
-    @Component({})
-    export default class DecimalNumber extends Vue {
-        @Prop({ required: true, type: Number, validator: (n: number) => !isNaN(n) })
-        private value!: number;
+const props = defineProps({
+    value: { required: true, type: Number, validator: (n: number) => !isNaN(n) },
+    digits: { required: false, type: Number, default: 2, validator: (n: number) => n >= 0 },
+    fadeDecimals: { required: false, type: Boolean, default: true },
+    prefix: { required: false, type: String, default: () => '' },
+    suffix: { required: false, type: String, default: () => '' },
+    smallFraction: { required: false, type: Boolean, default: true },
+});
 
-        @Prop({ required: false, type: Number, default: 2, validator: (n: number) => n >= 0 })
-        private digits!: number;
+const format: Intl.NumberFormatOptions = {
+    maximumFractionDigits: 0,
+};
 
-        @Prop({ required: false, type: Boolean, default: true })
-        private fadeDecimals!: boolean;
+const fractionNumberFormat = computed<Intl.NumberFormatOptions>(() => {
+    return {
+        minimumFractionDigits: props.digits,
+        maximumFractionDigits: props.digits,
+    };
+});
 
-        @Prop({ required: false, type: String, default: () => '' })
-        private prefix!: string;
+const decimalValue = computed(() => Math.abs(props.value) % 1);
 
-        @Prop({ required: false, type: String, default: () => '' })
-        private suffix!: string;
+const integerValue = computed(() => {
+    const dec = decimalValue.value;
+    const value = Math.trunc(props.value);
 
-        @Prop({ required: false, type: Boolean, default: true })
-        private smallFraction!: boolean;
-
-
-        private readonly format: Intl.NumberFormatOptions = {
-            maximumFractionDigits: 0,
-        };
-        private get fractionNumberFormat(): Intl.NumberFormatOptions {
-            return {
-                minimumFractionDigits: this.digits,
-                maximumFractionDigits: this.digits,
-            };
-        }
-
-        private get decimalValue() {
-            return Math.abs(this.value) % 1;
-        }
-        private get integerValue() {
-            const dec = this.decimalValue;
-            const value = Math.trunc(this.value);
-
-            if(dec > 0.9995 && dec < 1) {
-                return value + 1;
-            }
-            return value;
-        }
+    if (dec > 0.9995 && dec < 1) {
+        return value + 1;
     }
+    return value;
+});
 </script>
+
 <style lang="scss" scoped>
     .decimal-number {
         --small-fraction-size: 0.65em;

@@ -11,20 +11,16 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from './ListNav.vue';
+<script setup lang="ts">
+import type { PropType } from 'vue';
+import type { ListNavItem } from './ListNav.vue';
 
-    @Component({})
-    export default class Page extends Vue {
-        @Prop({ required: true, type: Array as PropType<ListNavItem[]> })
-        private navItems!: ListNavItem[];
-
-        @Prop({ required: false, type: String, default: () => null })
-        private rootRouteName!: string | null;
-    }
+defineProps({
+    navItems: { required: true, type: Array as PropType<ListNavItem[]> },
+    rootRouteName: { required: false, type: String as PropType<string | null>, default: () => null },
+});
 </script>
+
 <style lang="scss" scoped>
     .page {
         display: grid;

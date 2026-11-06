@@ -19,29 +19,17 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { $i18n } from '@stats/i18n';
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { formatNumber } from '@stats/i18n';
+import type { PropType } from 'vue';
 
-    @Component({})
-    export default class ScrollableChartXAxisLabels extends Vue {
-
-        @Prop({ required: true, type: Number })
-        private width!: number;
-
-        @Prop({ required: true, type: Number })
-        private maxXNormalized!: number;
-
-        @Prop({ required: true, type: Array })
-        private xAxisTicks!: number[];
-
-        @Prop({ required: true, type: Array })
-        private xAxisTicksNormalized!: number[];
-
-        @Prop({ required: true, type: Function as PropType<(value: number) => string>, default: (value: number) => $i18n.$n(value) })
-        private xLabelFormatter!: (value: number) => string;
-    }
+defineProps({
+    width: { required: true, type: Number },
+    maxXNormalized: { required: true, type: Number },
+    xAxisTicks: { required: true, type: Array as PropType<number[]> },
+    xAxisTicksNormalized: { required: true, type: Array as PropType<number[]> },
+    xLabelFormatter: { required: true, type: Function as PropType<(value: number) => string>, default: (value: number) => formatNumber(value) },
+});
 </script>
 
 <style lang="scss" scoped>

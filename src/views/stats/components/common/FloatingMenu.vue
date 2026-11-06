@@ -1,5 +1,6 @@
 <template>
     <span
+        ref="rootElement"
         class="floating-menu-wrapper"
         :class="{ 'floating-menu-wrapper--active': show }"
     >
@@ -15,32 +16,36 @@
     </span>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
+<script setup lang="ts">
+import { onMounted, onUnmounted, useTemplateRef } from 'vue';
 
-    @Component({})
-    export default class FloatingMenu extends Vue {
-        @VModel({ required: true, type: Boolean })
-        private show!: boolean;
+defineProps({
+    left: { required: false, type: Boolean },
+});
 
-        @Prop({ required: false, type: Boolean })
-        private left!: boolean;
+const rootElement = useTemplateRef<HTMLElement>('rootElement');
 
-        private mounted() {
-            window.addEventListener('click', this.onMouseEvent);
-            window.addEventListener('contextmenu', this.onMouseEvent);
-            window.addEventListener('mouseup', this.onMouseEvent);
-        }
+const show = defineModel<boolean>({ required: true, type: Boolean });
 
-        private onMouseEvent(e: MouseEvent) {
-            const path = e.composedPath();
+function onMouseEvent(e: MouseEvent) {
+    const path = e.composedPath();
 
-            if (!path.includes(this.$el)) {
-                this.show = false;
-            }
-        }
+    if (!path.includes(rootElement.value!)) {
+        show.value = false;
     }
+}
+
+const mouseEvents = ['click', 'contextmenu', 'mouseup'] as const;
+
+onMounted(() => {
+    mouseEvents.forEach(event => window.addEventListener(event, onMouseEvent));
+});
+
+onUnmounted(() => {
+    mouseEvents.forEach(event => window.removeEventListener(event, onMouseEvent));
+});
 </script>
+
 <style lang="scss" scoped>
     .floating-menu {
         position: absolute;

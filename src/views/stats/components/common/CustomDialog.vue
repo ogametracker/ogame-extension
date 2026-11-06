@@ -5,7 +5,7 @@
                 class="dialog-header"
                 :class="{ 'dialog-header--close': showClose }"
             >
-                <div v-if="$scopedSlots.header != null">
+                <div v-if="$slots.header != null">
                     <slot name="header" />
                 </div>
                 <span v-else v-text="header" />
@@ -13,7 +13,7 @@
                 <span
                     v-if="showClose"
                     class="close-dialog mdi mdi-close"
-                    @click="$emit('close')"
+                    @click="emit('close')"
                 />
             </div>
             <div class="dialog-body">
@@ -23,18 +23,15 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+defineProps({
+    showClose: { required: false, type: Boolean },
+    header: { required: false, type: String },
+});
 
-    @Component({})
-    export default class Dialog extends Vue {
-        @Prop({ required: false, type: Boolean })
-        private showClose!: boolean;
-
-        @Prop({ required: false, type: String })
-        private header!: string;
-    }
+const emit = defineEmits(['close']);
 </script>
+
 <style lang="scss" scoped>
     .dialog-wrapper {
         display: flex;

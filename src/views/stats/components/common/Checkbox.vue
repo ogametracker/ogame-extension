@@ -1,8 +1,8 @@
 <template>
     <span class="checkbox" @click="onClick($event)" :class="{disabled: disabled}">
         <span class="checkmark">
-            <span class="mdi" :style="{ color: color }" :class="checked ? 'mdi-checkbox-blank' : 'mdi-checkbox-blank-outline'" />
-            <span class="check-icon mdi mdi-check" v-if="checked" :style="{ color: checkColor }"/>
+            <span class="mdi" :style="{ color: color ?? undefined }" :class="checked ? 'mdi-checkbox-blank' : 'mdi-checkbox-blank-outline'" />
+            <span class="check-icon mdi mdi-check" v-if="checked" :style="{ color: checkColor ?? undefined }"/>
         </span>
 
         <span v-if="$slots.label != null">
@@ -12,39 +12,37 @@
     </span>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
+<script setup lang="ts">
+import type { PropType } from 'vue';
 
-    @Component({})
-    export default class Checkbox extends Vue {
+const props = defineProps({
+    disabled: { required: false, type: Boolean },
+    color: { required: false, type: String as PropType<string | null>, default: () => null },
+    checkColor: { required: false, type: String as PropType<string | null>, default: () => null },
+    label: { required: false, type: String as PropType<string | null>, default: () => null },
+});
 
-        @VModel({ required: true, type: Boolean })
-        private checked!: boolean;
+const emit = defineEmits<{ 'input-extended': [event: { value: boolean; shift: boolean; ctrl: boolean; alt: boolean }] }>();
 
-        @Prop({ required: false, type: Boolean })
-        private disabled!: boolean;
+const checked = defineModel<boolean>({ required: true, type: Boolean });
 
-        @Prop({ required: false, type: String, default: () => null })
-        private color!: string | null;
-
-        @Prop({ required: false, type: String, default: () => null })
-        private checkColor!: string | null;
-
-        @Prop({ required: false, type: String, default: () => null })
-        private label!: string | null;
-
-        private onClick(event: MouseEvent) {
-            this.checked = !this.checked;
-
-            this.$emit('input-extended', {
-                value: this.checked,
-                shift: event.shiftKey,
-                ctrl: event.ctrlKey,
-                alt: event.altKey,
-            });
-        }
+function onClick(event: MouseEvent) {
+    if (props.disabled) {
+        return;
     }
+
+    const nextChecked = !checked.value;
+    checked.value = nextChecked;
+
+    emit('input-extended', {
+        value: nextChecked,
+        shift: event.shiftKey,
+        ctrl: event.ctrlKey,
+        alt: event.altKey,
+    });
+}
 </script>
+
 <style lang="scss" scoped>
     .checkbox {
         display: inline-flex;

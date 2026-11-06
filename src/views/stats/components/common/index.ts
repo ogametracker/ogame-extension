@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import type { App } from 'vue';
 import DecimalNumber from './DecimalNumber.vue';
 import LoadingSpinner from './LoadingSpinner.vue';
 
@@ -13,15 +13,17 @@ import ScrollableChart from './scrollable-chart/ScrollableChart.vue';
 import TabView from './TabView.vue';
 import Tabs from './Tabs.vue';
 
-Vue.component('decimal-number', DecimalNumber);
-Vue.component('loading-spinner', LoadingSpinner);
-Vue.component('checkbox', Checkbox);
-Vue.component('checkbox-button', CheckboxButton);
-Vue.component('custom-dialog', CustomDialog);
-Vue.component('floating-menu', FloatingMenu);
-Vue.component('grid-table', GridTable);
-Vue.component('list-nav', ListNav);
-Vue.component('page', Page);
-Vue.component('scrollable-chart', ScrollableChart);
-Vue.component('tab-view', TabView);
-Vue.component('tabs', Tabs);
+export function registerCommonComponents(app: App) {
+    app.component('decimal-number', DecimalNumber);
+    app.component('loading-spinner', LoadingSpinner);
+    app.component('checkbox', Checkbox);
+    app.component('checkbox-button', CheckboxButton);
+    app.component('custom-dialog', CustomDialog);
+    app.component('floating-menu', FloatingMenu);
+    app.component('grid-table', GridTable);
+    app.component('list-nav', ListNav);
+    app.component('page', Page);
+    app.component('scrollable-chart', ScrollableChart);
+    app.component('tab-view', TabView);
+    app.component('tabs', Tabs);
+}
