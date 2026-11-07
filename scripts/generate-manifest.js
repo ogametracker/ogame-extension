@@ -47,7 +47,6 @@ const manifest = {
         [128]: isDev ? 'icon128-dev.png' : 'icon128.png',
     },
     permissions: [
-        'storage',
         'unlimitedStorage',
     ],
     host_permissions: [
@@ -67,7 +66,7 @@ const manifest = {
 
 if (browser == 'chrome') {
     manifest.background.service_worker = 'service-worker.js';
-} 
+}
 else if (browser == 'firefox') {
     manifest.background.scripts = ['service-worker.js'];
     manifest.browser_specific_settings = {
