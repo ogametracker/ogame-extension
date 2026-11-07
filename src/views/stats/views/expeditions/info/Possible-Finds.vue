@@ -157,16 +157,6 @@ const columns = computed<GridTableColumn<keyof FindableUnits>[]>(() => {
             key: 'shipUnits',
             label: translations().extension.expeditions.possibleFinds.shipUnits,
         },
-        {
-            key: 'maxShipUnitsConverted',
-            label:
-                translations().extension.expeditions.possibleFinds.shipMaxUnitsConverted
-                + ` (${
-                    settingsStore.settings.conversionRates.mode == 'msu'
-                        ? translations().extension.common.msu
-                        : translations().extension.common.dsu
-                })`,
-        },
     ];
 });
 
@@ -434,8 +424,6 @@ const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
             score: converted / units,
         };
     }).sort((a, b) => b.score - a.score)[0];
-
-    const firstPlanet = Object.values(empireStore.empire.planets).find(p => !p.isMoon) as PlanetData | undefined;
 
     return createRecord(ExpeditionEventSizes, size =>
         findBaseAmounts[size].map<FindableUnits>(base => {
