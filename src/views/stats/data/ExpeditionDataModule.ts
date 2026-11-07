@@ -105,7 +105,7 @@ export const useExpeditionStore = defineStore('expedition', () => {
             const db = await getPlayerDatabase(account);
 
             const expeditions = await db.getAll('expeditions');
-            rawExpeditions.push(...expeditions);
+            expeditions.forEach(expedition => rawExpeditions.push(expedition));
         }
         return rawExpeditions;
     }

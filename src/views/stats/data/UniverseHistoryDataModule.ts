@@ -91,7 +91,7 @@ export const useUniverseHistoryStore = defineStore('universeHistory', () => {
                 id,
                 name: playerNames[id],
             }));
-        players.value.push(...loadedPlayers);
+        loadedPlayers.forEach(player => players.value.push(player));
     }
 
     async function loadAlliances() {
@@ -139,7 +139,7 @@ export const useUniverseHistoryStore = defineStore('universeHistory', () => {
                 name: allianceNames[id],
                 tag: allianceTags[id],
             }));
-        alliances.value.push(...loadedAlliances);
+        loadedAlliances.forEach(alliance => alliances.value.push(alliance));
     }
 
     async function getPlayerScoreHistory(playerIds: number[]): Promise<OgameTrackerUniverseHistoryPlayerScore[]> {

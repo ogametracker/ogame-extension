@@ -1406,9 +1406,9 @@ function showGroupedItems() {
                         const planetItem = getPlanetItem(lfStuff.planetId);
                         const levels = getLevelRangeArray(lfStuff.levels);
                         if ('building' in lfStuff) {
-                            planetItem.lifeformBuildings[lfStuff.building!].push(...levels);
+                            levels.forEach(level => planetItem.lifeformBuildings[lfStuff.building!].push(level));
                         } else {
-                            planetItem.lifeformTechnologies[lfStuff.technology!].push(...levels);
+                            levels.forEach(level => planetItem.lifeformTechnologies[lfStuff.technology!].push(level));
                         }
                     });
                     return groups;
@@ -1420,7 +1420,7 @@ function showGroupedItems() {
 
                     cur.additionalLifeformBuildings.forEach(add => {
                         const levels = getLevelRangeArray(add.levels);
-                        item.lifeformBuildings[add.building].push(...levels);
+                        levels.forEach(level => item.lifeformBuildings[add.building].push(level));
                     });
 
                     return groups;
@@ -1430,17 +1430,17 @@ function showGroupedItems() {
                     const item = getPlanetItem(cur.newPlanetId);
                     mineBuildingTypes.forEach(mine => {
                         const levels = getLevelRangeArray(cur.builtLevels.mines[mine]);
-                        item.mines[mine].push(...levels);
+                        levels.forEach(level => item.mines[mine].push(level));
                     });
                     LifeformBuildingTypes.forEach(b => {
                         const levels = getLevelRangeArray(cur.builtLevels.lifeformBuildings[b]);
-                        item.lifeformBuildings[b].push(...levels);
+                        levels.forEach(level => item.lifeformBuildings[b].push(level));
                     });
                     LifeformTechnologyTypes.forEach(t => {
                         const levels = getLevelRangeArray(cur.builtLevels.lifeformTechnologies[t]);
-                        item.lifeformTechnologies[t].push(...levels);
+                        levels.forEach(level => item.lifeformTechnologies[t].push(level));
                     });
-                    item.astrophysicsLevels.push(...cur.levels);
+                    cur.levels.forEach(level => item.astrophysicsLevels.push(level));
 
                     return groups;
                 }
@@ -1450,7 +1450,7 @@ function showGroupedItems() {
                     item.lifeformBuildings[cur.building].push(cur.level);
                     cur.additionalLifeformBuildings.forEach(b => {
                         const levels = getLevelRangeArray(b.levels);
-                        item.lifeformBuildings[b.building].push(...levels);
+                        levels.forEach(level => item.lifeformBuildings[b.building].push(level));
                     });
 
                     return groups;
@@ -1461,7 +1461,7 @@ function showGroupedItems() {
                     item.lifeformTechnologies[cur.technology].push(cur.level);
                     cur.additionalLifeformBuildings.forEach(b => {
                         const levels = getLevelRangeArray(b.levels);
-                        item.lifeformBuildings[b.building].push(...levels);
+                        levels.forEach(level => item.lifeformBuildings[b.building].push(level));
                     });
 
                     return groups;

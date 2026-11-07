@@ -512,7 +512,9 @@ const columns = computed<GridTableColumn<keyof ProductionItem | 'breakdown'>[]>(
     return result;
 });
 
-const maxItemCount = computed(() => Math.max(...items.value.map(i => i.activeItems.length)));
+const maxItemCount = computed(() =>
+    items.value.reduce((max, item) => Math.max(max, item.activeItems.length), -Infinity),
+);
 
 const productionBreakdowns = computed(() => {
     const lifeformExperience = createRecord(ValidLifeformTypes, lf =>

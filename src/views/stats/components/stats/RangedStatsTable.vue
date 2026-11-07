@@ -7,8 +7,8 @@
         class="ranged-stats-table"
     >
         <!-- oh god this is ugly -->
-        <template v-for="(column, i) in columns" v-slot:[`cell-${column.key}`]="{ value, item }">
-            <span :key="column.key" class="ranged-stats-table-cell">
+        <template v-for="(column, i) in columns" v-slot:[`cell-${column.key}`]="{ value, item }" :key="column.key">
+            <span class="ranged-stats-table-cell">
                 <template v-if="column.key == 'label'">
                     <slot
                         v-if="column.slotName != null && $slots[column.slotName] != null"
@@ -141,7 +141,10 @@ const dataItemsByRange = computed<T[][]>(() => {
 });
 
 const firstDay = computed(() => {
-    return dataItemsByRange.value.reduce((acc, cur) => Math.min(acc, Math.min(...cur.map(t => t.date))), Date.now());
+    return dataItemsByRange.value.reduce(
+        (minDate, items) => items.reduce((minDate, item) => Math.min(minDate, item.date), minDate),
+        Date.now(),
+    );
 });
 
 const columns = computed<RangeStatsTableColumn[]>(() => {
@@ -160,14 +163,14 @@ const columns = computed<RangeStatsTableColumn[]>(() => {
         });
     }
 
-    localColumns.push(
-        ...dateRanges.value.map((range, i) => ({
+    dateRanges.value.forEach((range, i) => {
+        localColumns.push({
             key: i,
             label:
                 range.label ?? translations().extension.settings.dateRanges.since(formatDate(firstDay.value, 'date')),
             formatter: (value: number) => formatNumber(value, props.numberFormatOptions),
-        })),
-    );
+        });
+    });
 
     if (props.showAverage) {
         localColumns.push({

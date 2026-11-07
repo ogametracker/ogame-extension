@@ -107,7 +107,7 @@ export const useLifeformDiscoveryStore = defineStore('lifeformDiscovery', () => 
         for (const account of accounts) {
             const db = await getPlayerDatabase(account);
             const accLfMissions = await db.getAll('lifeformDiscoveries');
-            lifeformDiscoveries.push(...accLfMissions);
+            accLfMissions.forEach(discovery => lifeformDiscoveries.push(discovery));
         }
 
         return lifeformDiscoveries;
