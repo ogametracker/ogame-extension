@@ -1,65 +1,58 @@
 <template>
     <div class="fake-table">
         <div class="fake-table-header">
-            <span v-text="$i18n.$t.extension.settings.resourceBalance.includeShipsFoundOnExpeditions.header" />
+            <span v-text="translations().extension.settings.resourceBalance.includeShipsFoundOnExpeditions.header" />
         </div>
         <div class="fake-table-body">
-            <checkbox
-                :value="include"
-                @input="toggleInclude($event)"
-                :label="$i18n.$t.extension.settings.resourceBalance.includeShipsFoundOnExpeditions.checkboxLabel"
+            <Checkbox
+                :model-value="include"
+                @update:model-value="toggleInclude($event)"
+                :label="translations().extension.settings.resourceBalance.includeShipsFoundOnExpeditions.checkboxLabel"
             />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../../data/SettingsDataModule';
+<script setup lang="ts">
+import Checkbox from '@stats/components/common/Checkbox.vue';
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { useSettingsStore } from '../../../data/SettingsDataModule';
 
-    @Component({})
-    export default class IncludeShipsFoundOnExpeditionsInResourceBalanceSettings extends Vue {
+const settingsStore = useSettingsStore();
 
-        private get include() {
-            return SettingsDataModule.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits;
-        }
+const include = computed(() => settingsStore.settings.resourceBalance.includeExpeditionFoundShipsResourceUnits);
 
-        private toggleInclude(includeExpeditionFoundShipsResourceUnits: boolean) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                resourceBalance: {
-                    ...SettingsDataModule.settings.resourceBalance,
-                    includeExpeditionFoundShipsResourceUnits,
-                },
-            });
-        }
-
-    }
+function toggleInclude(includeExpeditionFoundShipsResourceUnits: boolean) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        resourceBalance: {
+            ...settingsStore.settings.resourceBalance,
+            includeExpeditionFoundShipsResourceUnits,
+        },
+    });
+}
 </script>
+
 <style lang="scss" scoped>
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
-        max-width: 400px;
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
+    max-width: 400px;
 
-        &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
-            justify-content: center;
-        }
-
-        &-header,
-        &-body {
-            height: 100%;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-        }
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
     }
+
+    &-header,
+    &-body {
+        height: 100%;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+    }
+}
 </style>

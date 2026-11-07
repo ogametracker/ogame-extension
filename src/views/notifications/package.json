@@ -1,0 +1,31 @@
+{
+    "name": "@ogame-tracker/notifications",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "npm run typecheck && vite build",
+        "typecheck": "vue-tsc --noEmit",
+        "lint": "oxlint --fix --config ../../../.oxlintrc.json .",
+        "lint:check": "oxlint --config ../../../.oxlintrc.json .",
+        "format": "oxfmt --config ../../../.oxfmtrc.json .",
+        "format:check": "npm run format -- --check"
+    },
+    "dependencies": {
+        "@ogame-tracker/shared": "0.1.0",
+        "@ogame-tracker/view-shared": "0.1.0",
+        "pinia": "4.1.0",
+        "uuid": "8.3.2",
+        "vue": "3.5.45"
+    },
+    "devDependencies": {
+        "@types/chrome": "0.0.208",
+        "@types/node": "26.6.6",
+        "@types/uuid": "8.3.4",
+        "@vitejs/plugin-vue": "^6.0.0",
+        "sass": "^1.107.1",
+        "typescript": "5.9.3",
+        "vite": "8.3.6",
+        "vue-tsc": "3.3.14"
+    }
+}

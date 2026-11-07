@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { AboutTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { AboutTranslations } from './type';
 
 export const pt_pt: RecursivePartial<AboutTranslations> = {
     faqHelp: {
@@ -19,21 +19,24 @@ export const pt_pt: RecursivePartial<AboutTranslations> = {
                 text: 'A tua produção de recursos depende de vários factores e seria necessário uma monitorização permanente. É possível mas a implementação desta funcionalidade é muito mais complexa do que a utilizade real para o jogador.',
             },
             whatAreAverages: {
-                header: 'O que significa \'⌀ por dia\'?',
+                header: "O que significa '⌀ por dia'?",
                 text: 'Significa a média global de dias com pelo menos um evento.',
             },
         },
         tips: {
             header: 'Dicas',
-            rightClickDefaultRoute: 'Podes usar o botão direito do ratona tab principal do lado esquerdo ou em qualquer sub-menu para o tornar como standard para a rota selecionada.',
+            rightClickDefaultRoute:
+                'Podes usar o botão direito do ratona tab principal do lado esquerdo ou em qualquer sub-menu para o tornar como standard para a rota selecionada.',
             numbersKeyboardNavigation: 'Podes abrir as tab carregando no respectivo digito no teclado.',
             amortizationTable: {
                 part1: 'Queres saber o que construir ou pesquisar para aumentar a tua produção de recursos da maneira mais eficiente? Tenta a\xa0',
                 name: 'calculadora de amortização interactiva',
                 part2: '.',
             },
-            inlineSettings: 'Poderás altera as definições relacionadas clicando no ícone da roda dentada no lado direito.',
-            switchAccountHtml: 'Poderás abrir o OGame Tracker para uma outra conta clicando no ícone <span class="mdi mdi-account-multiple"></span> e selecionando a respectiva conta.',
+            inlineSettings:
+                'Poderás altera as definições relacionadas clicando no ícone da roda dentada no lado direito.',
+            switchAccountHtml:
+                'Poderás abrir o OGame Tracker para uma outra conta clicando no ícone <span class="mdi mdi-account-multiple"></span> e selecionando a respectiva conta.',
         },
 
         messageDiscord: {

@@ -1,4 +1,4 @@
-import { SettingsTranslations } from "./type";
+import { SettingsTranslations } from './type';
 
 export const de: SettingsTranslations = {
     tabs: {
@@ -14,8 +14,6 @@ export const de: SettingsTranslations = {
         dangerZone: 'Gefahrenzone',
         accessbility: 'Barrierefreiheit',
         linkAccounts: 'Accounts verknüpfen',
-
-        migrateOldData: 'Altdaten migrieren',
     },
     dateRanges: {
         defaultNames: {
@@ -26,7 +24,7 @@ export const de: SettingsTranslations = {
             currentMonth: 'Aktueller Monat',
             newRange: 'Neuer Bereich',
         },
-        since: (date) => `Seit ${date}`,
+        since: date => `Seit ${date}`,
         firstDayTemplate: '<erster Tag>',
         headers: {
             label: 'Benennung',
@@ -59,7 +57,8 @@ export const de: SettingsTranslations = {
     },
     common: {
         extensionLanguage: 'UI-Sprache (im OGame Tracker)',
-        extensionLanguageFallbackHint: 'Sollten Texte nicht in der gewählten Sprache verfügbar sein, werden englische Texte angezeigt.',
+        extensionLanguageFallbackHint:
+            'Sollten Texte nicht in der gewählten Sprache verfügbar sein, werden englische Texte angezeigt.',
         conversionRates: {
             title: 'Umrechnungskurse',
             msuLong: 'Umrechnung nach Metall',
@@ -73,7 +72,8 @@ export const de: SettingsTranslations = {
         },
     },
     expeditions: {
-        resourceUnitFactorsOfShipFoundOnExpeditions: 'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
+        resourceUnitFactorsOfShipFoundOnExpeditions:
+            'Faktoren der Rohstoffeinheiten auf Expeditionen gefundener Schiffe',
     },
     combats: {
         resourceUnitFactorsOfLostShips: 'Faktoren der Rohstoffeinheiten in Kämpfen verlorener Schiffe',
@@ -115,29 +115,37 @@ export const de: SettingsTranslations = {
         doYouWantToContinue: 'BIST DU SICHER, DASS DU FORTFAHREN WILLST?',
 
         deleteExpeditions: {
-            button: (account: string) => `Alle getrackten Expeditionen des aktuell gewählten Accounts (${account}) entfernen`,
-            confirmationText: (account: string, count: string) => `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten Expeditionen des aktuell gewählten Accounts (${account}) gelöscht.`,
+            button: (account: string) =>
+                `Alle getrackten Expeditionen des aktuell gewählten Accounts (${account}) entfernen`,
+            confirmationText: (account: string, count: string) =>
+                `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten Expeditionen des aktuell gewählten Accounts (${account}) gelöscht.`,
         },
         deleteCombats: {
             button: (account: string) => `Alle getrackten Kämpfe des aktuell gewählten Accounts (${account}) entfernen`,
-            confirmationText: (account: string, count: string) => `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten Kämpfe des aktuell gewählten Accounts (${account}) gelöscht.`,
+            confirmationText: (account: string, count: string) =>
+                `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten Kämpfe des aktuell gewählten Accounts (${account}) gelöscht.`,
         },
         deleteDebrisFieldReports: {
-            button: (account: string) => `Alle getrackten TF-Abbauberichte des aktuell gewählten Accounts (${account}) entfernen`,
-            confirmationText: (account: string, count: string) => `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten TF-Abbauberichte des aktuell gewählten Accounts (${account}) gelöscht.`,
+            button: (account: string) =>
+                `Alle getrackten TF-Abbauberichte des aktuell gewählten Accounts (${account}) entfernen`,
+            confirmationText: (account: string, count: string) =>
+                `Nach dem Bestätigen dieser Aktion werden alle ${count} getrackten TF-Abbauberichte des aktuell gewählten Accounts (${account}) gelöscht.`,
         },
         deleteAccount: {
             button: (account: string) => `Alle Daten des aktuell gewählten Accounts (${account}) entfernen`,
-            confirmationText: (account: string) => `Nach dem Bestätigen dieser Aktion werden alle gespeicherten Daten des aktuell gewählten Accounts (${account}) gelöscht.\n`
+            confirmationText: (account: string) =>
+                `Nach dem Bestätigen dieser Aktion werden alle gespeicherten Daten des aktuell gewählten Accounts (${account}) gelöscht.\n`
                 + `Dies beinhaltet die getrackte Universumshistorie dieses Servers sofern kein anderer Account für diesen Server getrackt ist.`,
         },
         deleteUniverseHistory: {
             button: (server: string) => `Universumshistorie des aktuell gewählten Universums (${server}) entfernen`,
-            confirmationText: (server: string) => `Nach dem Bestätigen dieser Aktion werden alle getrackten Daten zur Universumshistorie des aktuell gewählten Universums (${server}) gelöscht.`,
+            confirmationText: (server: string) =>
+                `Nach dem Bestätigen dieser Aktion werden alle getrackten Daten zur Universumshistorie des aktuell gewählten Universums (${server}) gelöscht.`,
         },
         deleteEverything: {
             button: 'Alle Daten entfernen',
-            confirmationText1: `Nach dem Bestätigen dieser Aktion werden alle Daten gelöscht.\n`
+            confirmationText1:
+                `Nach dem Bestätigen dieser Aktion werden alle Daten gelöscht.\n`
                 + 'Das heißt, alle Daten inklusive getrackter Expeditionen, Kämpfe, TF-Abbauberichte, Universumshistorie und mehr, werden entfernt.',
             confirmationText2: 'Bitte bestätige erneut, dass du alle Daten löschen möchtest.',
         },
@@ -146,8 +154,10 @@ export const de: SettingsTranslations = {
     importExport: {
         export: {
             header: 'Export',
-            description: 'Hier kannst du deine Daten exportieren. Der Export enthält alle relevanten Daten deiner getrackten Accounts und dazugehörigen Servern.',
-            includeUniverseHistory: 'auch Universumshistorie exportieren (kann die Dateigröße und Importzeit deutlich erhöhen!)',
+            description:
+                'Hier kannst du deine Daten exportieren. Der Export enthält alle relevanten Daten deiner getrackten Accounts und dazugehörigen Servern.',
+            includeUniverseHistory:
+                'auch Universumshistorie exportieren (kann die Dateigröße und Importzeit deutlich erhöhen!)',
             button: 'Export starten',
             wait: 'Bitte warte während deine Daten für den Export vorbereitet werden...',
 
@@ -171,57 +181,66 @@ export const de: SettingsTranslations = {
             importingSettings: 'Einstellungen werden imporiert',
             importingBasicData: 'Grundlegende Account- und Server-Informationen werden importiert',
             importingUniverseHistories: (
-                serverIndex: number, 
-                serverTotal: number, 
-                entryIndex: number, 
+                serverIndex: number,
+                serverTotal: number,
+                entryIndex: number,
                 entryTotal: number,
             ) => {
                 const baseMessage = 'Universumshistorien werden importiert';
 
-                return `${baseMessage} (Server ${serverIndex + 1}/${serverTotal}, Eintrag ${entryIndex + 1}/${entryTotal})`;      
+                return `${baseMessage} (Server ${serverIndex + 1}/${serverTotal}, Eintrag ${entryIndex + 1}/${entryTotal})`;
             },
             importingAccounts: (
-                accountIndex: number, 
-                totalAccounts: number, 
-                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                accountIndex: number,
+                totalAccounts: number,
+                type:
+                    | 'account'
+                    | 'combat-reports'
+                    | 'expeditions'
+                    | 'debris-fields'
+                    | 'lifeform-discoveries'
+                    | 'universe-specific-settings'
+                    | 'empire.data'
+                    | 'empire.planets'
+                    | 'empire.moons',
                 stepIndex: number,
                 stepTotal: number,
             ) => {
                 const baseMessage = `Accounts werden importiert`;
                 const accountProgress = `${accountIndex + 1}/${totalAccounts}`;
 
-                if(type == 'account') {
+                if (type == 'account') {
                     return `${baseMessage} (${accountProgress})`;
                 }
 
-                if(type == 'combat-reports') {
+                if (type == 'combat-reports') {
                     return `${baseMessage} (${accountProgress}, Kampf ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'expeditions') {
+                if (type == 'expeditions') {
                     return `${baseMessage} (${accountProgress}, Expedition ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'debris-fields') {
+                if (type == 'debris-fields') {
                     return `${baseMessage} (${accountProgress}, TF-Berícht ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'lifeform-discoveries') {
+                if (type == 'lifeform-discoveries') {
                     return `${baseMessage} (${accountProgress}, LF-Mission ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'empire.data') {
+                if (type == 'empire.data') {
                     return `${baseMessage} (${accountProgress}, grundlegende Imperiumsdaten)`;
                 }
 
-                if(type == 'empire.planets') {
+                if (type == 'empire.planets') {
                     return `${baseMessage} (${accountProgress}, Planet ${stepIndex + 1}/${stepTotal})`;
                 }
-                if(type == 'empire.moons') {
+                if (type == 'empire.moons') {
                     return `${baseMessage} (${accountProgress}, Mond ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'universe-specific-settings') {
+                if (type == 'universe-specific-settings') {
                     return `${baseMessage} (${accountProgress}, universumsspezifische Einstellungen)`;
                 }
 

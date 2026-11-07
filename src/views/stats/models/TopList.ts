@@ -3,10 +3,7 @@ export class TopList<T> {
     readonly #maxSize: number;
     readonly #elements: T[];
 
-    public constructor(options: {
-        comparator: (a: T, b: T) => number;
-        maxSize: number;
-    }) {
+    public constructor(options: { comparator: (a: T, b: T) => number; maxSize: number }) {
         this.#comparator = options.comparator;
         this.#maxSize = options.maxSize;
 

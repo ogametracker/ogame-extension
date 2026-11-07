@@ -1,4 +1,4 @@
-import { _throw } from "@/shared/utils/_throw";
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
 function getMetalProductionBoost(position: number) {
     switch (position) {
@@ -17,10 +17,7 @@ function getMetalProductionBoost(position: number) {
     return 0;
 }
 
-export function getMetalBaseProduction(dependencies: {
-    planetPosition: number;
-    serverEconomySpeed: number;
-}) {
+export function getMetalBaseProduction(dependencies: { planetPosition: number; serverEconomySpeed: number }) {
     const boost = getMetalProductionBoost(dependencies.planetPosition);
     const baseProduction = 30 * dependencies.serverEconomySpeed * (1 + boost);
 

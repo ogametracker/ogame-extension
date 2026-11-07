@@ -1,414 +1,481 @@
 <template>
     <div>
         <div class="small-tables">
-            <grid-table inline :columns="infoColumns" :items="infoItems" no-header>
+            <GridTable inline :columns="infoColumns" :items="infoItems" no-header>
                 <template #cell-value="{ value, item }">
-                    <o-player-class v-if="item.type == 'playerClass'" :player-class="value" />
+                    <OPlayerClass v-if="item.type == 'playerClass'" :player-class="value" />
+                    <span v-else-if="item.type == 'string'" v-text="value" />
                     <span v-else-if="item.type == 'number'" v-text="value" />
-                    <span v-else v-text="$i18n.$n(value * 100, percentageFormat) + '%'" />
+                    <DecimalNumber
+                        v-else
+                        :value="value * 100"
+                        :digits="3"
+                        :fade-decimals="false"
+                        style="--small-fraction-size: 0.75em"
+                        suffix="%"
+                    />
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <grid-table inline :columns="maxFindsColumns" :items="maxFindsItems">
+            <GridTable inline :columns="maxFindsColumns" :items="maxFindsItems">
                 <template #cell-key="{ value }">
                     <template v-if="value == 'metal'">
-                        <o-resource resource="metal" size="24px" />
-                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].metal)" />
+                        <OResource :resource="ResourceType.metal" size="24px" />
+                        <span v-text="formatNumber(finds.large[finds.large.length - 1].metal)" />
                     </template>
                     <template v-else-if="value == 'crystal'">
-                        <o-resource resource="crystal" size="24px" />
-                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].crystal)" />
+                        <OResource :resource="ResourceType.crystal" size="24px" />
+                        <span v-text="formatNumber(finds.large[finds.large.length - 1].crystal)" />
                     </template>
                     <template v-else-if="value == 'deuterium'">
-                        <o-resource resource="deuterium" size="24px" />
-                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].deuterium)" />
+                        <OResource :resource="ResourceType.deuterium" size="24px" />
+                        <span v-text="formatNumber(finds.large[finds.large.length - 1].deuterium)" />
                     </template>
                     <template v-else-if="value == 'shipUnits'">
-                        <o-ship :ship="ShipType.battleship" size="24px" />
-                        <span v-text="$i18n.$n(finds.large[finds.large.length - 1].shipUnits)" />
+                        <OShip :ship="ShipType.battleship" size="24px" />
+                        <span v-text="formatNumber(finds.large[finds.large.length - 1].shipUnits)" />
                     </template>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <grid-table inline :columns="darkMatterColumns" :items="darkMatterItems">
+            <GridTable inline :columns="darkMatterColumns" :items="darkMatterItems">
                 <template #cell-size="{ value }">
-                    <expedition-size-icon :size="value" class="scaled-icon" />
+                    <ExpeditionSizeIcon :size="value" class="scaled-icon" />
                 </template>
                 <template #cell-amount="{ item }">
-                    <o-resource resource="dark-matter" size="24px" />
-                    <span v-text="`${$i18n.$n(item.amount[0])} - ${$i18n.$n(item.amount[1])}`" />
+                    <OResource resource="dark-matter" size="24px" />
+                    <span v-text="`${formatNumber(item.amount[0])} - ${formatNumber(item.amount[1])}`" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
 
         <hr />
 
-        <h3 v-text="$i18n.$t.extension.expeditions.possibleFinds.listOfPossibleFinds" />
+        <h3 v-text="translations().extension.expeditions.possibleFinds.listOfPossibleFinds" />
         <div class="find-col" v-for="size in sizes" :key="size">
             <h3 class="table-title">
-                <expedition-size-icon :size="size" />
-                <span v-text="$i18n.$t.extension.expeditions.possibleFinds.findSizes($i18n.$t.extension.expeditions.expeditionEventSizes[size])" />
+                <ExpeditionSizeIcon :size="size" />
+                <span
+                    v-text="
+                        translations().extension.expeditions.possibleFinds.findSizes(
+                            translations().extension.expeditions.expeditionEventSizes[size],
+                        )
+                    "
+                />
             </h3>
-            <grid-table inline :items="finds[size]" :columns="columns" :style="`--color: ${sizeColors[size]}`">
+            <GridTable inline :items="finds[size]" :columns="columns" :style="`--color: ${sizeColors[size]}`">
                 <template v-slot:[`cell-.+`]="{ value }">
-                    <span v-text="$i18n.$n(value)" />
+                    <span v-text="formatNumber(value)" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { createMappedRecord, createRecord } from '@/shared/utils/createRecord';
-    import { Component, Vue } from 'vue-property-decorator';
-    import { GridTableColumn } from '../../../components/common/GridTable.vue';
-    import { EmpireDataModule } from '../../../data/EmpireDataModule';
-    import { SettingsDataModule } from '../../../data/SettingsDataModule';
-    import { getRGBString } from '../../../utils/getRGBString';
-    import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { ClassBonusLifeformTechnologies, ExpeditionBonusLifeformTechnologies } from '@/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { getPlanetLifeformTechnologyBoost } from '../../../models/lifeforms';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { getLifeformLevelTechnologyBonus } from '@/shared/models/ogame/lifeforms/experience';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-    import { getExpeditionFindFactor } from '@/shared/models/expeditions/getExpeditionFindFactor';
-    import { findBaseAmounts } from '@/shared/models/expeditions/findBaseAmounts';
-    import { ExpeditionFindableShipTypes } from "@/shared/models/expeditions/ExpeditionEvents";
-    import { ShipByTypes } from "@/shared/models/ogame/ships/ShipTypes";
-    import { getMsuOrDsu } from "@/views/stats/models/settings/getMsuOrDsu";
+<script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import GridTable from '@stats/components/common/GridTable.vue';
+import OPlayerClass from '@stats/components/ogame/OPlayerClass.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import OShip from '@ogame-tracker/view-shared/components/ogame/OShip.vue';
+import { computed } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import {
+    ExpeditionEventSize,
+    ExpeditionEventSizes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import type { GridTableColumn } from '../../../components/common/GridTable.vue';
+import { useEmpireStore } from '../../../data/EmpireDataModule';
+import { useSettingsStore } from '../../../data/SettingsDataModule';
+import { getRGBString } from '../../../utils/getRGBString';
+import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import {
+    ClassBonusLifeformTechnologies,
+    ExpeditionBonusLifeformTechnologies,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+import { getPlanetLifeformTechnologyBoost } from '../../../models/lifeforms';
+import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
+import { getExpeditionFindFactor } from '@ogame-tracker/shared/models/expeditions/getExpeditionFindFactor';
+import { findBaseAmounts } from '@ogame-tracker/shared/models/expeditions/findBaseAmounts';
+import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
+import { getExpeditionItemFindBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { isItemActive } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
+import { Item } from '@ogame-tracker/shared/models/ogame/items/Item.js';
+import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
 
+type FindableUnits = {
+    metal: number;
+    crystal: number;
+    deuterium: number;
+    shipUnits: number;
+    maxShipUnitsConverted: number;
+};
 
-    type FindableUnits = {
-        metal: number;
-        crystal: number;
-        deuterium: number;
-        shipUnits: number;
-        maxShipUnitsConverted: number;
+const settingsStore = useSettingsStore();
+
+const empireStore = useEmpireStore();
+
+const serverSettingsStore = useServerSettingsStore();
+
+const sizes = ExpeditionEventSizes;
+
+const sizeColors = computed<Record<ExpeditionEventSize, string>>(() => {
+    const colors = settingsStore.settings.colors.expeditions.sizes;
+
+    return {
+        [ExpeditionEventSize.small]: getRGBString(colors.small)!,
+        [ExpeditionEventSize.medium]: getRGBString(colors.medium)!,
+        [ExpeditionEventSize.large]: getRGBString(colors.large)!,
     };
+});
 
-    @Component({
-        components: {
-            ExpeditionSizeIcon,
-        }
-    })
-    export default class MaxFinds extends Vue {
+const columns = computed<GridTableColumn<keyof FindableUnits>[]>(() => {
+    return [
+        {
+            key: 'metal',
+            label: translations().ogame.resources.metal,
+        },
+        {
+            key: 'crystal',
+            label: translations().ogame.resources.crystal,
+        },
+        {
+            key: 'deuterium',
+            label: translations().ogame.resources.deuterium,
+        },
+        {
+            key: 'shipUnits',
+            label: translations().extension.expeditions.possibleFinds.shipUnits,
+        },
+    ];
+});
 
-        private readonly ShipType = ShipType;
-        private readonly ExpeditionEventSize = ExpeditionEventSize;
-        private readonly sizes = ExpeditionEventSizes;
+const infoColumns = computed<GridTableColumn<'label' | 'value'>[]>(() => {
+    return [{ key: 'label' }, { key: 'value' }];
+});
 
-        private readonly percentageFormat: Intl.NumberFormatOptions = {
-            maximumFractionDigits: 3,
-            minimumFractionDigits: 3,
+const infoItems = computed<
+    ((
+        | { type: 'playerClass'; value: PlayerClass }
+        | { type: 'percentage' | 'number'; value: number }
+        | { type: 'string'; value: string }
+    ) & { label: string })[]
+>(() => {
+    const localInfo = info.value;
+
+    return [
+        {
+            type: 'playerClass',
+            label: translations().extension.expeditions.possibleFinds.info.playerClass,
+            value: localInfo.playerClass,
+        },
+        {
+            type: 'number',
+            label: translations().extension.expeditions.possibleFinds.info.economySpeed,
+            value: localInfo.ecoSpeed,
+        },
+        {
+            type: 'percentage',
+            label: translations().extension.expeditions.possibleFinds.info.resourceFindBonus,
+            value: localInfo.resourceFindBonus,
+        },
+        {
+            type: 'percentage',
+            label: translations().extension.expeditions.possibleFinds.info.shipFindBonus,
+            value: localInfo.shipFindBonus,
+        },
+        {
+            type: 'percentage',
+            label: translations().extension.expeditions.possibleFinds.info.darkMatterFindBonus,
+            value: localInfo.darkMatterBonus,
+        },
+        {
+            type: 'percentage',
+            label: translations().extension.expeditions.possibleFinds.info.discovererBonus,
+            value: localInfo.discovererBonus,
+        },
+        {
+            type: 'percentage',
+            label: translations().extension.expeditions.possibleFinds.info.resourceFindItemBonus,
+            value: localInfo.resourceFindItemBonus,
+        },
+        {
+            type: 'string',
+            label: translations().extension.expeditions.possibleFinds.info.improvedChancesItemBonus,
+            value: localInfo.improvedChancesItemBonus
+                ? translations().extension.expeditions.possibleFinds.info.active
+                : translations().extension.expeditions.possibleFinds.info.inactive,
+        },
+    ];
+});
+
+const maxFindsColumns = computed<GridTableColumn<'key'>[]>(() => {
+    return [
+        {
+            key: 'key',
+            label: translations().extension.expeditions.possibleFinds.maximumFinds,
+            style: {
+                'justify-content': 'space-between',
+                gap: '4px',
+            },
+        },
+    ];
+});
+
+const maxFindsItems = computed<{ key: keyof FindableUnits }[]>(() => {
+    return [
+        { key: 'metal' },
+        { key: 'crystal' },
+        { key: 'deuterium' },
+        { key: 'shipUnits' },
+        { key: 'maxShipUnitsConverted' },
+    ];
+});
+
+const darkMatterColumns = computed<GridTableColumn<'size' | 'amount'>[]>(() => {
+    return [
+        { key: 'size' },
+        {
+            key: 'amount',
+            label: translations().extension.expeditions.possibleFinds.findsDarkMatter,
+            style: {
+                'justify-content': 'start',
+                gap: '6px',
+            },
+        },
+    ];
+});
+
+const darkMatterItems = computed<{ size: ExpeditionEventSize; amount: [min: number, max: number] }[]>(() => {
+    const factor = 1 + info.value.darkMatterBonus;
+
+    return [
+        {
+            size: ExpeditionEventSize.small,
+            amount: [300, 400].map(x => Math.trunc(x * factor)) as [number, number],
+        },
+        {
+            size: ExpeditionEventSize.medium,
+            amount: [500, 700].map(x => Math.trunc(x * factor)) as [number, number],
+        },
+        {
+            size: ExpeditionEventSize.large,
+            amount: [1000, 1800].map(x => Math.trunc(x * factor)) as [number, number],
+        },
+    ];
+});
+
+const info = computed(() => {
+    const empire = empireStore.empire;
+
+    const planets = Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[];
+    const planetBuildingBoosts = createMappedRecord(
+        planets,
+        planet => planet.id,
+        planet => getPlanetLifeformTechnologyBoost(planet),
+    );
+
+    const resourceFindBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
+        let techBonus = 0;
+        planets.forEach(planet => {
+            const level = planet.activeLifeformTechnologies.includes(tech.type)
+                ? planet.lifeformTechnologies[tech.type]
+                : 0;
+
+            const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.resources, level);
+            const levelBonus =
+                planet.activeLifeform == LifeformType.none
+                    ? 0
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
+
+            const total = baseBonus + levelBonus + buildingBonus;
+            techBonus += total;
+        });
+
+        return total + techBonus;
+    }, 0);
+
+    const shipFindBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
+        let techBonus = 0;
+        planets.forEach(planet => {
+            const level = planet.activeLifeformTechnologies.includes(tech.type)
+                ? planet.lifeformTechnologies[tech.type]
+                : 0;
+
+            const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.fleet, level);
+            const levelBonus =
+                planet.activeLifeform == LifeformType.none
+                    ? 0
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
+
+            const total = baseBonus + levelBonus + buildingBonus;
+            techBonus += total;
+        });
+
+        return total + techBonus;
+    }, 0);
+
+    const darkMatterBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
+        let techBonus = 0;
+        planets.forEach(planet => {
+            const level = planet.activeLifeformTechnologies.includes(tech.type)
+                ? planet.lifeformTechnologies[tech.type]
+                : 0;
+
+            const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.darkMatter, level);
+            const levelBonus =
+                planet.activeLifeform == LifeformType.none
+                    ? 0
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
+
+            const total = baseBonus + levelBonus + buildingBonus;
+            techBonus += total;
+        });
+
+        return total + techBonus;
+    }, 0);
+
+    const discovererBonus = ClassBonusLifeformTechnologies.reduce((total, tech) => {
+        let techBonus = 0;
+        planets.forEach(planet => {
+            const level = planet.activeLifeformTechnologies.includes(tech.type)
+                ? planet.lifeformTechnologies[tech.type]
+                : 0;
+
+            const baseBonus = tech.getClassBonus(PlayerClass.discoverer, level);
+            const levelBonus =
+                planet.activeLifeform == LifeformType.none
+                    ? 0
+                    : baseBonus
+                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
+            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
+
+            const total = baseBonus + levelBonus + buildingBonus;
+            techBonus += total;
+        });
+
+        return total + techBonus;
+    }, 0);
+
+    const resourceFindItemBonus = getExpeditionItemFindBonus(
+        ExpeditionEventType.resources,
+        Object.values(empireStore.empire.planets).flatMap(planet => Object.keys(planet.activeItems) as ItemId[]),
+    );
+
+    const improvedChancesItemBonus = Object.values(empireStore.empire.planets)
+        .flatMap(planet => Object.keys(planet.activeItems) as ItemId[])
+        .map(itemId => Items[itemId])
+        .find(
+            (item): item is Item & { effect: { type: 'expeditionImprovedChances' } } =>
+                item.effect?.type == 'expeditionImprovedChances',
+        )
+        ? true
+        : false;
+
+    return {
+        playerClass: empire.playerClass,
+        ecoSpeed: serverSettingsStore.serverSettings.speed.economy,
+        resourceFindBonus,
+        shipFindBonus,
+        discovererBonus,
+        darkMatterBonus,
+        resourceFindItemBonus,
+        improvedChancesItemBonus,
+    };
+});
+
+const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
+    const pathfinderFactor = 2;
+    const localInfo = info.value;
+
+    const classFactor =
+        localInfo.playerClass == PlayerClass.discoverer
+            ? localInfo.ecoSpeed * (1.5 * (1 + localInfo.discovererBonus))
+            : 1;
+
+    const topPointsFactors = getExpeditionFindFactor(serverSettingsStore.serverSettings.topScore ?? 0);
+
+    const maxConvertedShipCost = ExpeditionFindableShipTypes.map(shipType => {
+        const ship = ShipByTypes[shipType];
+        const cost = ship.cost;
+
+        const converted = getMsuOrDsu(cost);
+        const units = cost.metal + cost.crystal;
+
+        return {
+            converted,
+            units,
+            score: converted / units,
         };
+    }).sort((a, b) => b.score - a.score)[0];
 
-        private get sizeColors(): Record<ExpeditionEventSize, string> {
-            const colors = SettingsDataModule.settings.colors.expeditions.sizes;
+    return createRecord(ExpeditionEventSizes, size =>
+        findBaseAmounts[size].map<FindableUnits>(base => {
+            const metal =
+                topPointsFactors
+                * base
+                * pathfinderFactor
+                * classFactor
+                * (1 + localInfo.resourceFindBonus)
+                * (1 + localInfo.resourceFindItemBonus);
 
-            return {
-                [ExpeditionEventSize.small]: getRGBString(colors.small)!,
-                [ExpeditionEventSize.medium]: getRGBString(colors.medium)!,
-                [ExpeditionEventSize.large]: getRGBString(colors.large)!,
-            };
-        }
+            const shipUnits =
+                (topPointsFactors * base * pathfinderFactor * classFactor * (1 + localInfo.shipFindBonus)) / 2;
 
-        private get columns(): GridTableColumn<keyof FindableUnits>[] {
-            return [
-                {
-                    key: 'metal',
-                    label: this.$i18n.$t.ogame.resources.metal,
-                },
-                {
-                    key: 'crystal',
-                    label: this.$i18n.$t.ogame.resources.crystal,
-                },
-                {
-                    key: 'deuterium',
-                    label: this.$i18n.$t.ogame.resources.deuterium,
-                },
-                {
-                    key: 'shipUnits',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.shipUnits,
-                },
-                {
-                    key: 'maxShipUnitsConverted',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.shipMaxUnitsConverted + ` (${
-                        SettingsDataModule.settings.conversionRates.mode == 'msu'
-                            ? this.$i18n.$t.extension.common.msu
-                            : this.$i18n.$t.extension.common.dsu
-                    })`,
-                },
-            ];
-        }
-
-        private get infoColumns(): GridTableColumn<'label' | 'value'>[] {
-            return [
-                { key: 'label' },
-                { key: 'value' },
-            ];
-        }
-        private get infoItems(): { type: 'playerClass' | 'percentage' | 'number'; label: string; value: number | PlayerClass }[] {
-            const info = this.info;
-
-            return [
-                {
-                    type: 'playerClass',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.playerClass,
-                    value: info.playerClass,
-                },
-                {
-                    type: 'number',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.economySpeed,
-                    value: info.ecoSpeed,
-                },
-                {
-                    type: 'percentage',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.resourceFindBonus,
-                    value: info.resourceFindBonus,
-                },
-                {
-                    type: 'percentage',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.shipFindBonus,
-                    value: info.shipFindBonus,
-                },
-                {
-                    type: 'percentage',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.darkMatterFindBonus,
-                    value: info.darkMatterBonus,
-                },
-                {
-                    type: 'percentage',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.info.discovererBonus,
-                    value: info.discovererBonus,
-                },
-            ];
-        }
-
-        private get maxFindsColumns(): GridTableColumn<'key'>[] {
-            return [
-                {
-                    key: 'key',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.maximumFinds,
-                    style: {
-                        'justify-content': 'space-between',
-                        'gap': '4px',
-                    },
-                },
-            ];
-        }
-        private get maxFindsItems(): { key: keyof FindableUnits }[] {
-            return [
-                { key: 'metal' },
-                { key: 'crystal' },
-                { key: 'deuterium' },
-                { key: 'shipUnits' },
-                { key: 'maxShipUnitsConverted' },
-            ];
-        }
-
-        private get darkMatterColumns(): GridTableColumn<'size' | 'amount'>[] {
-            return [
-                { key: 'size' },
-                {
-                    key: 'amount',
-                    label: this.$i18n.$t.extension.expeditions.possibleFinds.findsDarkMatter,
-                    style: {
-                        'justify-content': 'start',
-                        'gap': '6px',
-                    },
-                },
-            ];
-        }
-        private get darkMatterItems(): { size: ExpeditionEventSize, amount: [min: number, max: number] }[] {
-            const factor = 1 + this.info.darkMatterBonus;
-
-            return [
-                {
-                    size: ExpeditionEventSize.small,
-                    amount: [300, 400].map(x => Math.trunc(x * factor)) as [number, number],
-                },
-                {
-                    size: ExpeditionEventSize.medium,
-                    amount: [500, 700].map(x => Math.trunc(x * factor)) as [number, number],
-                },
-                {
-                    size: ExpeditionEventSize.large,
-                    amount: [1000, 1800].map(x => Math.trunc(x * factor)) as [number, number],
-                },
-            ];
-        }
-
-        private get info() {
-            const empire = EmpireDataModule.empire;
-
-            const planets = Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[];
-            const planetBuildingBoosts = createMappedRecord(
-                planets,
-                planet => planet.id,
-                planet => getPlanetLifeformTechnologyBoost(planet),
-            );
-
-            const resourceFindBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
-                let techBonus = 0;
-                planets.forEach(planet => {
-                    const level = planet.activeLifeformTechnologies.includes(tech.type)
-                        ? planet.lifeformTechnologies[tech.type]
-                        : 0;
-
-                    const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.resources, level);
-                    const levelBonus = planet.activeLifeform == LifeformType.none
-                        ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-                    const total = baseBonus + levelBonus + buildingBonus;
-                    techBonus += total;
-                });
-
-                return total + techBonus;
-            }, 0);
-
-            const shipFindBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
-                let techBonus = 0;
-                planets.forEach(planet => {
-                    const level = planet.activeLifeformTechnologies.includes(tech.type)
-                        ? planet.lifeformTechnologies[tech.type]
-                        : 0;
-
-                    const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.fleet, level);
-                    const levelBonus = planet.activeLifeform == LifeformType.none
-                        ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-                    const total = baseBonus + levelBonus + buildingBonus;
-                    techBonus += total;
-                });
-
-                return total + techBonus;
-            }, 0);
-
-            const darkMatterBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
-                let techBonus = 0;
-                planets.forEach(planet => {
-                    const level = planet.activeLifeformTechnologies.includes(tech.type)
-                        ? planet.lifeformTechnologies[tech.type]
-                        : 0;
-
-                    const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.darkMatter, level);
-                    const levelBonus = planet.activeLifeform == LifeformType.none
-                        ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-                    const total = baseBonus + levelBonus + buildingBonus;
-                    techBonus += total;
-                });
-
-                return total + techBonus;
-            }, 0);
-
-            const discovererBonus = ClassBonusLifeformTechnologies.reduce((total, tech) => {
-                let techBonus = 0;
-                planets.forEach(planet => {
-                    const level = planet.activeLifeformTechnologies.includes(tech.type)
-                        ? planet.lifeformTechnologies[tech.type]
-                        : 0;
-
-                    const baseBonus = tech.getClassBonus(PlayerClass.discoverer, level);
-                    const levelBonus = planet.activeLifeform == LifeformType.none
-                        ? 0
-                        : baseBonus * getLifeformLevelTechnologyBonus(EmpireDataModule.lifeformExperience[planet.activeLifeform]);
-                    const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-                    const total = baseBonus + levelBonus + buildingBonus;
-                    techBonus += total;
-                });
-
-                return total + techBonus;
-            }, 0);
+            const maxShipUnitsConverted =
+                Math.trunc(shipUnits / maxConvertedShipCost.units) * maxConvertedShipCost.converted;
 
             return {
-                playerClass: empire.playerClass,
-                ecoSpeed: ServerSettingsDataModule.serverSettings.speed.economy,
-                resourceFindBonus,
-                shipFindBonus,
-                discovererBonus,
-                darkMatterBonus,
+                metal: Math.trunc(metal),
+                crystal: Math.trunc(metal / 2),
+                deuterium: Math.trunc(metal / 3),
+                shipUnits: Math.trunc(shipUnits),
+                maxShipUnitsConverted,
             };
-        }
-
-        private get finds(): Record<ExpeditionEventSize, FindableUnits[]> {
-            const pathfinderFactor = 2;
-            const info = this.info;
-
-            const classFactor = info.playerClass == PlayerClass.discoverer
-                ? info.ecoSpeed * (1.5 * (1 + info.discovererBonus))
-                : 1;
-            
-            const topPointsFactors = getExpeditionFindFactor(ServerSettingsDataModule.serverSettings.topScore ?? 0);
-
-            const maxConvertedShipCost = ExpeditionFindableShipTypes.map(shipType => {
-                    const ship = ShipByTypes[shipType];
-                    const cost = ship.cost;
-
-                    const converted = getMsuOrDsu(cost);
-                    const units = cost.metal + cost.crystal;
-
-                    return {
-                        converted,
-                        units,
-                        score: converted / units,
-                    };
-                }).sort((a,b) => b.score - a.score)[0];
-
-            return createRecord(
-                ExpeditionEventSizes,
-                size => findBaseAmounts[size].map<FindableUnits>(base => {
-                    const metal = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.resourceFindBonus);
-                    const shipUnits = topPointsFactors * base * pathfinderFactor * classFactor * (1 + info.shipFindBonus) / 2;
-                    const maxShipUnitsConverted = Math.trunc(shipUnits / maxConvertedShipCost.units) * maxConvertedShipCost.converted;
-
-                    return {
-                        metal: Math.trunc(metal),
-                        crystal: Math.trunc(metal / 2),
-                        deuterium: Math.trunc(metal / 3),
-                        shipUnits: Math.trunc(shipUnits),
-                        maxShipUnitsConverted,
-                    };
-                }),
-            );
-        }
-    }
+        }),
+    );
+});
 </script>
+
 <style lang="scss" scoped>
-    .find-col {
-        display: inline-flex;
-        flex-direction: column;
-        margin-right: 16px;
-    }
+.find-col {
+    display: inline-flex;
+    flex-direction: column;
+    margin-right: 16px;
+}
 
-    .table-title {
-        display: flex;
-        align-items: center;
-        gap: 4px;
+.table-title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 
-        .mdi {
-            font-size: 24px;
-        }
+    .mdi {
+        font-size: 24px;
     }
+}
 
-    .small-tables {
-        display: flex;
-        gap: 16px;
-        align-items: start;
-    }
-    .scaled-icon {
-        transform: scale(1.6);
-    }
+.small-tables {
+    display: flex;
+    gap: 16px;
+    align-items: start;
+}
+.scaled-icon {
+    transform: scale(1.6);
+}
 </style>

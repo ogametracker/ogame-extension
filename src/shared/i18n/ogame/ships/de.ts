@@ -1,7 +1,7 @@
-import { ShipType } from "../../../models/ogame/ships/ShipType";
-import { ShipTranslations } from "./types";
+import { ShipType } from '../../../models/ogame/ships/ShipType';
+import { ShipTranslations } from './types';
 
-export const de: ShipTranslations =  {
+export const de: ShipTranslations = {
     [ShipType.lightFighter]: 'Leichter Jäger',
     [ShipType.heavyFighter]: 'Schwerer Jäger',
     [ShipType.cruiser]: 'Kreuzer',

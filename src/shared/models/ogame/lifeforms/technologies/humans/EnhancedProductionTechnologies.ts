@@ -1,10 +1,13 @@
-import { Cost } from "../../../common/Cost";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ResourceProductionBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { Cost } from '../../../common/Cost';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ResourceProductionBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
-class EnhancedProductionTechnologiesClass extends LifeformTechnology implements ResourceProductionBonusLifeformTechnology {
+class EnhancedProductionTechnologiesClass
+    extends LifeformTechnology
+    implements ResourceProductionBonusLifeformTechnology
+{
     public constructor() {
         super({
             metal: {
@@ -29,7 +32,7 @@ class EnhancedProductionTechnologiesClass extends LifeformTechnology implements 
     public get bonuses(): LifeformBonusType[] {
         return [{ type: LifeformBonusTypeId.ResourceProductionBonus }];
     }
-    
+
     public get type(): LifeformTechnologyType {
         return LifeformTechnologyType.enhancedProductionTechnologies;
     }

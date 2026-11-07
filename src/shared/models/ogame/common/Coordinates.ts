@@ -8,12 +8,7 @@ export interface Coordinates {
 }
 
 export function compareCoordinates(a: Coordinates, b: Coordinates): number {
-    const keys: (keyof Coordinates)[] = [
-        'galaxy',
-        'system',
-        'position',
-        'type',
-    ];
+    const keys: (keyof Coordinates)[] = ['galaxy', 'system', 'position', 'type'];
     for (const key of keys) {
         const diff = a[key] - b[key];
         if (diff != 0) {

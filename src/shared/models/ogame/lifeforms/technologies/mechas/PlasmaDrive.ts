@@ -1,9 +1,9 @@
-import { ShipType } from "../../../ships/ShipType";
-import { NonStationaryShipTypes, ShipTypes } from "../../../ships/ShipTypes";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { ShipType } from '../../../ships/ShipType';
+import { NonStationaryShipTypes, ShipTypes } from '../../../ships/ShipTypes';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { StatsBonus, StatsBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformTechnology {
     public constructor() {
@@ -28,17 +28,14 @@ class PlasmaDriveClass extends LifeformTechnology implements StatsBonusLifeformT
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return ShipTypes.filter(ship => this.appliesTo(ship))
-            .map<LifeformBonusType>(ship => ({
-                type: LifeformBonusTypeId.StatsBonus,
-                tech: ship,
-            }));
+        return ShipTypes.filter(ship => this.appliesTo(ship)).map<LifeformBonusType>(ship => ({
+            type: LifeformBonusTypeId.StatsBonus,
+            tech: ship,
+        }));
     }
 
     public appliesTo(ship: ShipType): boolean {
-        return (NonStationaryShipTypes as ShipType[])
-            .filter(s => s != ShipType.deathStar)
-            .includes(ship);
+        return ship !== ShipType.deathStar && NonStationaryShipTypes.some(type => type === ship);
     }
 
     public getStatsBonus(ship: ShipType, level: number): StatsBonus {

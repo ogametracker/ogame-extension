@@ -1,26 +1,52 @@
-import { _log, _logError } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { MessageOgameMeta } from "../../shared/messages/Message";
-import { PlayerOfficers } from "../../shared/models/empire/PlayerOfficers";
-import { AllianceClass } from "../../shared/models/ogame/classes/AllianceClass";
-import { BuildingType, MoonBuildingType, PlanetBuildingType } from "../../shared/models/ogame/buildings/BuildingType";
-import { MoonBuildingTypes, PlanetBuildingTypes } from "../../shared/models/ogame/buildings/BuildingTypes";
-import { BasicPlanetData, PlanetDataWrapper, PlanetDefenseCounts, PlanetMissileCounts } from "../../shared/messages/tracking/empire";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { ShipType } from "../../shared/models/ogame/ships/ShipType";
-import { ShipTypes } from "../../shared/models/ogame/ships/ShipTypes";
-import { PlayerClass } from "../../shared/models/ogame/classes/PlayerClass";
-import { ResearchType } from "../../shared/models/ogame/research/ResearchType";
-import { ResearchTypes } from "../../shared/models/ogame/research/ResearchTypes";
-import { ProductionSettings } from "../../shared/models/empire/ProductionSettings";
-import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
-import { getPlayerDatabase } from "../../shared/db/access";
-import { DbDefenseAmounts, DbFleets, DbMissileAmounts, DbMoonBuildingLevels, DbPlanetBuildingLevels, DbPlanetLifeformBuildingLevels, DbPlanetLifeformTechnologyLevels, DbPlayerLifeformExperience, DbPlayerResearchLevels, DbShipAmounts } from "@/shared/db/schema/player";
-import { LifeformBuildingType, LifeformBuildingTypes } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { createRecord } from "@/shared/utils/createRecord";
-import { Fleets } from "@/shared/models/ogame/fleets/types";
+import { _log, _logError } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { PlayerOfficers } from '@ogame-tracker/shared/models/empire/PlayerOfficers';
+import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import {
+    BuildingType,
+    MoonBuildingType,
+    PlanetBuildingType,
+} from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { MoonBuildingTypes, PlanetBuildingTypes } from '@ogame-tracker/shared/models/ogame/buildings/BuildingTypes';
+import {
+    BasicPlanetData,
+    PlanetDataWrapper,
+    PlanetDefenseCounts,
+    PlanetMissileCounts,
+} from '@ogame-tracker/shared/messages/tracking/empire';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
+import { ProductionSettings } from '@ogame-tracker/shared/models/empire/ProductionSettings';
+import { PlanetActiveItems } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import {
+    DbDefenseAmounts,
+    DbFleets,
+    DbMissileAmounts,
+    DbMoonBuildingLevels,
+    DbPlanetBuildingLevels,
+    DbPlanetLifeformBuildingLevels,
+    DbPlanetLifeformTechnologyLevels,
+    DbPlayerLifeformExperience,
+    DbPlayerResearchLevels,
+    DbShipAmounts,
+} from '@ogame-tracker/shared/db/schema/player';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypes,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformTechnologyType,
+    LifeformTechnologyTypes,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { Fleets } from '@ogame-tracker/shared/models/ogame/fleets/types';
 
 export class EmpireModule {
     public async updateOfficers(meta: MessageOgameMeta, data: PlayerOfficers): Promise<void> {
@@ -35,11 +61,15 @@ export class EmpireModule {
 
     public async updateActiveItems(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetActiveItems>) {
         const db = await getPlayerDatabase(meta);
-        const key: (`moon.${number}.activeItems` | `planet.${number}.activeItems`) = `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.activeItems`;
+        const key: `moon.${number}.activeItems` | `planet.${number}.activeItems` =
+            `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.activeItems`;
         await db.put('empire', data.data, key);
     }
 
-    public async updateBuildingLevels(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<BuildingType, number>>>) {
+    public async updateBuildingLevels(
+        meta: MessageOgameMeta,
+        data: PlanetDataWrapper<Partial<Record<BuildingType, number>>>,
+    ) {
         const db = await getPlayerDatabase(meta);
         const tx = db.transaction('empire', 'readwrite');
         const store = tx.objectStore('empire');
@@ -53,11 +83,10 @@ export class EmpireModule {
             };
             Object.keys(data.data)
                 .map(key => parseIntSafe(key, 10) as MoonBuildingType)
-                .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
+                .forEach(key => (newLevels[key] = data.data[key] ?? newLevels[key] ?? 0));
 
             await store.put(newLevels, key);
-        }
-        else {
+        } else {
             const key: `planet.${number}.buildings` = `planet.${data.planetId}.buildings`;
             const storedLevels = (await store.get(key)) as DbPlanetBuildingLevels | undefined;
             const newLevels: DbPlanetBuildingLevels = {
@@ -66,7 +95,7 @@ export class EmpireModule {
             };
             Object.keys(data.data)
                 .map(key => parseIntSafe(key, 10) as PlanetBuildingType)
-                .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
+                .forEach(key => (newLevels[key] = data.data[key] ?? newLevels[key] ?? 0));
 
             await store.put(newLevels, key);
         }
@@ -87,8 +116,7 @@ export class EmpireModule {
         for (const planetOrMoon of data) {
             if (planetOrMoon.isMoon) {
                 await store.put(planetOrMoon, `moon.${planetOrMoon.id}`);
-            }
-            else {
+            } else {
                 await store.put(planetOrMoon, `planet.${planetOrMoon.id}`);
             }
         }
@@ -108,24 +136,24 @@ export class EmpireModule {
             await store.delete(removeKey);
         }
 
-
         await tx.done;
     }
 
     public async updatePlanetDefenses(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetDefenseCounts>) {
         const db = await getPlayerDatabase(meta);
-        const key: (`planet.${number}.defenses` | `moon.${number}.defenses`) = `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.defenses`;
+        const key: `planet.${number}.defenses` | `moon.${number}.defenses` =
+            `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.defenses`;
         const amounts: DbDefenseAmounts = data.data;
         await db.put('empire', amounts, key);
     }
 
     public async updatePlanetMissiles(meta: MessageOgameMeta, data: PlanetDataWrapper<PlanetMissileCounts>) {
-        if(data.isMoon) {
+        if (data.isMoon) {
             return;
         }
 
         const db = await getPlayerDatabase(meta);
-        const key: `planet.${number}.missiles`= `planet.${data.planetId}.missiles`;
+        const key: `planet.${number}.missiles` = `planet.${data.planetId}.missiles`;
         const amounts: DbMissileAmounts = data.data;
         await db.put('empire', amounts, key);
     }
@@ -135,7 +163,8 @@ export class EmpireModule {
         const tx = db.transaction('empire', 'readwrite');
         const store = tx.objectStore('empire');
 
-        const key: (`planet.${number}.ships` | `moon.${number}.ships`) = `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.ships`;
+        const key: `planet.${number}.ships` | `moon.${number}.ships` =
+            `${data.isMoon ? 'moon' : 'planet'}.${data.planetId}.ships`;
 
         const storedAmounts = (await store.get(key)) as DbShipAmounts | undefined;
         const newAmounts: DbShipAmounts = {
@@ -144,7 +173,7 @@ export class EmpireModule {
         };
         Object.keys(data.data)
             .map(key => parseIntSafe(key, 10) as ShipType)
-            .forEach(key => newAmounts[key] = data.data[key] ?? newAmounts[key] ?? 0);
+            .forEach(key => (newAmounts[key] = data.data[key] ?? newAmounts[key] ?? 0));
 
         await store.put(newAmounts, key);
         await tx.done;
@@ -167,7 +196,7 @@ export class EmpireModule {
         };
         Object.keys(researchLevels)
             .map(key => parseIntSafe(key, 10) as ResearchType)
-            .forEach(key => newLevels[key] = researchLevels[key] ?? newLevels[key] ?? 0);
+            .forEach(key => (newLevels[key] = researchLevels[key] ?? newLevels[key] ?? 0));
 
         await store.put(newLevels, 'research');
         await tx.done;
@@ -183,9 +212,8 @@ export class EmpireModule {
         await db.put('empire', data.data, key);
     }
 
-    
     public async updateSelectedLifeform(meta: MessageOgameMeta, data: PlanetDataWrapper<LifeformType>) {
-        if(data.isMoon) {
+        if (data.isMoon) {
             return;
         }
 
@@ -209,8 +237,11 @@ export class EmpireModule {
         await tx.done;
     }
 
-    public async updatePlanetLifeformBuildings(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<LifeformBuildingType, number>>>) {
-        if(data.isMoon) {
+    public async updatePlanetLifeformBuildings(
+        meta: MessageOgameMeta,
+        data: PlanetDataWrapper<Partial<Record<LifeformBuildingType, number>>>,
+    ) {
+        if (data.isMoon) {
             return;
         }
 
@@ -220,33 +251,41 @@ export class EmpireModule {
 
         const key: `planet.${number}.lifeformBuildings` = `planet.${data.planetId}.lifeformBuildings`;
         const storedLevels = (await store.get(key)) as DbPlanetLifeformBuildingLevels | undefined;
-        const newLevels: DbPlanetLifeformBuildingLevels = { 
+        const newLevels: DbPlanetLifeformBuildingLevels = {
             ...createRecord(LifeformBuildingTypes, 0),
             ...storedLevels,
-         };
+        };
         Object.keys(data.data)
             .map(key => parseIntSafe(key, 10) as LifeformBuildingType)
-            .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
+            .forEach(key => (newLevels[key] = data.data[key] ?? newLevels[key] ?? 0));
 
         await store.put(newLevels, key);
-        
+
         await tx.done;
     }
 
-    public async updatePlanetActiveLifeformTechnologies(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<LifeformTechnologyType, number>>>) {
-        if(data.isMoon) {
+    public async updatePlanetActiveLifeformTechnologies(
+        meta: MessageOgameMeta,
+        data: PlanetDataWrapper<Partial<Record<LifeformTechnologyType, number>>>,
+    ) {
+        if (data.isMoon) {
             return;
         }
 
         await this.updatePlanetLifeformTechnologies(meta, data);
-        
+
         const db = await getPlayerDatabase(meta);
-        const activeTechs: LifeformTechnologyType[] = Object.keys(data.data).map(tech => parseIntSafe(tech, 10) as LifeformTechnologyType);
+        const activeTechs: LifeformTechnologyType[] = Object.keys(data.data).map(
+            tech => parseIntSafe(tech, 10) as LifeformTechnologyType,
+        );
         await db.put('empire', activeTechs, `planet.${data.planetId}.activeLifeformTechnologies`);
     }
 
-    public async updatePlanetLifeformTechnologies(meta: MessageOgameMeta, data: PlanetDataWrapper<Partial<Record<LifeformTechnologyType, number>>>) {
-        if(data.isMoon) {
+    public async updatePlanetLifeformTechnologies(
+        meta: MessageOgameMeta,
+        data: PlanetDataWrapper<Partial<Record<LifeformTechnologyType, number>>>,
+    ) {
+        if (data.isMoon) {
             return;
         }
 
@@ -256,16 +295,16 @@ export class EmpireModule {
 
         const key: `planet.${number}.lifeformTechnologies` = `planet.${data.planetId}.lifeformTechnologies`;
         const storedLevels = (await store.get(key)) as DbPlanetLifeformTechnologyLevels | undefined;
-        const newLevels: DbPlanetLifeformTechnologyLevels = { 
+        const newLevels: DbPlanetLifeformTechnologyLevels = {
             ...createRecord(LifeformTechnologyTypes, 0),
             ...storedLevels,
-         };
+        };
         Object.keys(data.data)
             .map(key => parseIntSafe(key, 10) as LifeformTechnologyType)
-            .forEach(key => newLevels[key] = data.data[key] ?? newLevels[key] ?? 0);
+            .forEach(key => (newLevels[key] = data.data[key] ?? newLevels[key] ?? 0));
 
         await store.put(newLevels, key);
-        
+
         await tx.done;
     }
 
@@ -275,8 +314,7 @@ export class EmpireModule {
         const store = tx.objectStore('empire');
 
         await store.put(data, 'fleets');
-        
+
         await tx.done;
     }
 }
-

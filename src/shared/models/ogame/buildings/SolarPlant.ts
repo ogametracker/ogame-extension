@@ -1,9 +1,8 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
-import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
+import { ProductionBuilding, ProductionBuildingDependencies } from './ProductionBuilding';
 
 class SolarPlantClass extends ProductionBuilding {
-    
     public get type() {
         return BuildingType.solarPlant;
     }

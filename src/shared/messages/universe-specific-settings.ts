@@ -1,4 +1,5 @@
-import { NoDataMessage } from "./Message";
-import { MessageType } from "./MessageType";
+import { NoDataMessage } from './Message';
+import { MessageType } from './MessageType';
 
-export type NotifyUniverseSpecificSettingsUpdateMessage = NoDataMessage<MessageType.NotifyUniverseSpecificSettingsUpdate>;
+export type NotifyUniverseSpecificSettingsUpdateMessage =
+    NoDataMessage<MessageType.NotifyUniverseSpecificSettingsUpdate>;

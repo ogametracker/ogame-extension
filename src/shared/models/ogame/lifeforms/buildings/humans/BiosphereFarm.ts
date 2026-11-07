@@ -1,6 +1,6 @@
-import { LifeformBonusType } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { LifeformBonusType } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class BiosphereFarmClass extends LifeformBuilding {
     public constructor() {

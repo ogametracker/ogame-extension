@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { PlayerClassTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { PlayerClassTranslations } from './type';
 
 export const pt_pt: RecursivePartial<PlayerClassTranslations> = {
     collector: 'Colecionador',

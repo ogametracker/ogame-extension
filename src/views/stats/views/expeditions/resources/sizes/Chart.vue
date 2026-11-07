@@ -1,115 +1,98 @@
 <template>
     <div class="chart-container">
-        <stats-chart
-            :firstDay="firstDay"
-            :itemsPerDay="exposPerDay"
-            :datasets="datasets"
-            stacked
-            show-average
-        >
+        <StatsChart :firstDay="firstDay" :itemsPerDay="exposPerDay" :datasets="datasets" stacked show-average>
             <template #tooltip-footer="{ datasets }">
-                <template
-                    v-if="getVisibleDatasets(datasets).length < datasets.length"
-                >
+                <template v-if="getVisibleDatasets(datasets).length < datasets.length">
                     <div class="footer-item">
-                        <div
-                            class="number"
-                            v-text="
-                                $i18n.$n(getSum(getVisibleDatasets(datasets)))
-                            "
-                        />
-                        <div v-text="$i18n.$t.extension.expeditions.finds" />
+                        <div class="number" v-text="formatNumber(getSum(getVisibleDatasets(datasets)))" />
+                        <div v-text="translations().extension.expeditions.finds" />
                     </div>
                     <hr />
                 </template>
 
                 <div class="footer-item">
-                    <div class="number" v-text="$i18n.$n(getSum(datasets))" />
-                    <div v-text="`${$i18n.$t.extension.expeditions.finds} (${$i18n.$t.extension.common.total})`" />
+                    <div class="number" v-text="formatNumber(getSum(datasets))" />
+                    <div
+                        v-text="
+                            `${translations().extension.expeditions.finds} (${translations().extension.common.total})`
+                        "
+                    />
                 </div>
             </template>
-        </stats-chart>
+        </StatsChart>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <expedition-event-size-color-settings />
-        </floating-menu>
+            <ExpeditionEventSizeColorSettings />
+        </FloatingMenu>
     </div>
 </template>
 
-<script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventResources } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { ExpeditionEventSize, ExpeditionEventSizes } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { ScollableChartFooterDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
+<script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import { computed, ref } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import { ExpeditionEventSizes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import type { ScollableChartFooterDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ExpeditionEventSizeColorSettings from '@stats/components/settings/colors/ExpeditionEventSizeColorSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            ExpeditionEventSizeColorSettings,
-        },
-    })
-    export default class Charts extends Vue {
+const settingsStore = useSettingsStore();
 
-        private showSettings = false;
+const expeditionStore = useExpeditionStore();
 
-        private get colors() {
-            return SettingsDataModule.settings.colors.expeditions.sizes;
-        }
+const showSettings = ref(false);
 
-        private get firstDay() {
-            return ExpeditionDataModule.firstDay;
-        }
+const colors = computed(() => settingsStore.settings.colors.expeditions.sizes);
 
-        private get exposPerDay() {
-            return ExpeditionDataModule.dailyResults;
-        }
+const firstDay = computed(() => expeditionStore.firstDay);
 
-        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return ExpeditionEventSizes.map(size => ({
-                key: size,
-                label: this.$i18n.$t.extension.expeditions.expeditionEventSizes[size],
-                color: this.colors[size],
-                filled: true,
-                getValue: item => item.eventSizes.resources[size],
-                showAverage: true,
-            }));
-        }
+const exposPerDay = computed(() => expeditionStore.dailyResults);
 
-        private getVisibleDatasets(datasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
-            return datasets.filter(d => d.visible);
-        }
+const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
+    return ExpeditionEventSizes.map(size => ({
+        key: size,
+        label: translations().extension.expeditions.expeditionEventSizes[size],
+        color: colors.value[size],
+        filled: true,
+        getValue: item => item.eventSizes.resources[size],
+        showAverage: true,
+    }));
+});
 
-        private getSum(datasets: ScollableChartFooterDataset[]): number {
-            return datasets.reduce((acc, cur) => acc + cur.value, 0);
-        }
-    }
+function getVisibleDatasets(nextDatasets: ScollableChartFooterDataset[]): ScollableChartFooterDataset[] {
+    return nextDatasets.filter(d => d.visible);
+}
+
+function getSum(nextDatasets: ScollableChartFooterDataset[]): number {
+    return nextDatasets.reduce((acc, cur) => acc + cur.value, 0);
+}
 </script>
+
 <style lang="scss" scoped>
-    .footer-item {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        column-gap: 4px;
+.footer-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 4px;
 
-        .number {
-            text-align: right;
-        }
+    .number {
+        text-align: right;
     }
+}
 
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

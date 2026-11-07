@@ -2,7 +2,7 @@ export enum LifeformDiscoveryEventArtifactFindingSize {
     storageFull = 'full',
     small = 'normal',
     medium = 'big',
-    large = 'huge', 
+    large = 'huge',
 }
 
 export const LifeformDiscoveryEventArtifactFindingSizes: LifeformDiscoveryEventArtifactFindingSize[] = [

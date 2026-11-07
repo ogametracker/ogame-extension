@@ -1,9 +1,9 @@
-import { LocalPlayerData } from "@/shared/models/empire/LocalPlayerData";
-import { PlanetData } from "@/shared/models/empire/PlanetData";
-import { addCost, Cost, multiplyCost } from "../../common/Cost";
-import { LifeformType } from "../LifeformType";
-import { ResourceProductionBonusLifeformTechnologies } from "../technologies/LifeformTechnologies";
-import { getLifeformTechnologyBonus } from "./getLifeformTechnologyBonus";
+import { LocalPlayerData } from '@ogame-tracker/shared/models/empire/LocalPlayerData';
+import { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import { addCost, Cost, multiplyCost } from '../../common/Cost';
+import { LifeformType } from '../LifeformType';
+import { ResourceProductionBonusLifeformTechnologies } from '../technologies/LifeformTechnologies';
+import { getLifeformTechnologyBonus } from './getLifeformTechnologyBonus';
 
 export function getLifeformTechnologyProductionBonus(player: LocalPlayerData): Cost {
     const planets = Object.values(player.planets).filter(p => !p.isMoon) as PlanetData[];
@@ -19,8 +19,8 @@ export function getLifeformTechnologyProductionBonus(player: LocalPlayerData): C
             continue;
         }
 
-        const productionBonusTechnologies = ResourceProductionBonusLifeformTechnologies.filter(
-            tech => planet.activeLifeformTechnologies.includes(tech.type)
+        const productionBonusTechnologies = ResourceProductionBonusLifeformTechnologies.filter(tech =>
+            planet.activeLifeformTechnologies.includes(tech.type),
         );
 
         for (const tech of productionBonusTechnologies) {
@@ -35,8 +35,10 @@ export function getLifeformTechnologyProductionBonus(player: LocalPlayerData): C
         }
     }
 
-    return techProductionBonuses.reduce(
-        (acc, cur) => addCost(acc, cur),
-        { metal: 0, crystal: 0, deuterium: 0, energy: 0 },
-    );;
+    return techProductionBonuses.reduce((acc, cur) => addCost(acc, cur), {
+        metal: 0,
+        crystal: 0,
+        deuterium: 0,
+        energy: 0,
+    });
 }

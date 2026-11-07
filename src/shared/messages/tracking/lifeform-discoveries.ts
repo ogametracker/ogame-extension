@@ -1,9 +1,9 @@
-import { LifeformDiscoveryEvent } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import { LifeformDiscoveryEvent } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
 import { Message } from '../Message';
 import { MessageType } from '../MessageType';
-import { OgameRawArtifactFindSize } from '@/shared/models/ogame/messages/OgameRawArtifactFindSize';
-import { OgameRawLifeformDiscoveryType } from '@/shared/models/ogame/messages/OgameRawLifeformDiscoveryType';
-import { OgameRawLifeformType } from '@/shared/models/ogame/messages/OgameRawLifeformType';
+import { OgameRawArtifactFindSize } from '@ogame-tracker/shared/models/ogame/messages/OgameRawArtifactFindSize';
+import { OgameRawLifeformDiscoveryType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformDiscoveryType';
+import { OgameRawLifeformType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawLifeformType';
 
 export interface RawLifeformDiscoveryMessageData {
     id: number;
@@ -15,6 +15,9 @@ export interface RawLifeformDiscoveryMessageData {
     lifeformExperience?: number;
 }
 
-export type TrackLifeformDiscoveryMessage = Message<MessageType.TrackLifeformDiscovery, RawLifeformDiscoveryMessageData>;
+export type TrackLifeformDiscoveryMessage = Message<
+    MessageType.TrackLifeformDiscovery,
+    RawLifeformDiscoveryMessageData
+>;
 export type LifeformDiscoveryMessage = Message<MessageType.LifeformDiscovery, LifeformDiscoveryEvent>;
 export type NewLifeformDiscoveryMessage = Message<MessageType.NewLifeformDiscovery, LifeformDiscoveryEvent>;

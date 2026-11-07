@@ -1,7 +1,7 @@
 import { Message } from '../Message';
 import { MessageType } from '../MessageType';
 import { DebrisFieldReport } from '../../models/debris-field-reports/DebrisFieldReport';
-import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
+import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 
 export interface RawDebrisFieldMessageData {
     id: number;

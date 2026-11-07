@@ -1,19 +1,23 @@
-import { getGlobalDatabase } from "@/shared/db/access";
-import { Message } from "@/shared/messages/Message";
-import { MessageType } from "@/shared/messages/MessageType";
-import { UpdatePlayerNameMessage, UpdateUniverseNameMessage } from "@/shared/messages/tracking/empire";
-import { MessageService } from "../MessageService";
+import { getGlobalDatabase } from '@ogame-tracker/shared/db/access';
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { UpdatePlayerNameMessage, UpdateUniverseNameMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import { MessageService } from '../MessageService';
 
 export class UniversesAndAccountsService implements MessageService {
     public async onMessage(message: Message<MessageType, any>): Promise<void> {
-        switch(message.type) {
+        switch (message.type) {
             case MessageType.UpdatePlayerName: {
                 const msg = message as UpdatePlayerNameMessage;
                 const db = await getGlobalDatabase();
                 const tx = db.transaction('accounts', 'readwrite');
                 const store = tx.objectStore('accounts');
 
-                const acc = await store.get([message.ogameMeta.serverId, message.ogameMeta.language, message.ogameMeta.playerId]);
+                const acc = await store.get([
+                    message.ogameMeta.serverId,
+                    message.ogameMeta.language,
+                    message.ogameMeta.playerId,
+                ]);
                 await store.put({
                     id: message.ogameMeta.playerId,
                     serverId: message.ogameMeta.serverId,
@@ -37,5 +41,3 @@ export class UniversesAndAccountsService implements MessageService {
         }
     }
 }
-
-            

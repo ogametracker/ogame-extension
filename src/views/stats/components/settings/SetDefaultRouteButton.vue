@@ -5,47 +5,40 @@
     </button>
 </template>
 
-<script lang="ts">
-    import { _throw } from '@/shared/utils/_throw';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+<script setup lang="ts">
+import { useSettingsStore } from '../../data/SettingsDataModule';
 
-    @Component({})
-    export default class SetDefaultRouteButton extends Vue {
-        @Prop({ required: true, type: String })
-        private label!: string;
+const props = defineProps({
+    label: { required: true, type: String },
+    routeName: { required: true, type: String },
+    rootRouteName: { required: true, type: String },
+});
 
-        @Prop({ required: true, type: String })
-        private routeName!: string;
+const emit = defineEmits<{ click: [event: MouseEvent] }>();
 
-        @Prop({ required: true, type: String })
-        private rootRouteName!: string;
+const settingsStore = useSettingsStore();
 
+function setDefaultRoute(ev: MouseEvent) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        defaultRoutes: {
+            ...settingsStore.settings.defaultRoutes,
+            [props.rootRouteName]: props.routeName,
+        },
+    });
 
-        private setDefaultRoute(ev: Event) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                defaultRoutes: {
-                    ...SettingsDataModule.settings.defaultRoutes,
-                    [this.rootRouteName]: this.routeName,
-                },
-            });
-
-            const rootRoute = this.$router.getRoutes().find(route => route.name == this.rootRouteName) ?? _throw(`could not find route with name '${this.rootRouteName}'`);
-            rootRoute.redirect = { name: this.routeName };
-
-            this.$emit('click', ev);
-        }
-    }
+    emit('click', ev);
+}
 </script>
-<style lang="scss" scoped>
-    .default-route-button {
-        display: flex;
-        gap: 4px;
-        align-items: center;
 
-        .mdi {
-            font-size: 20px;
-        }
+<style lang="scss" scoped>
+.default-route-button {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .mdi {
+        font-size: 20px;
     }
+}
 </style>

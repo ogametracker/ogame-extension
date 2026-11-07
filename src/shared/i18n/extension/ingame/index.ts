@@ -1,4 +1,4 @@
-import { I18nMessageMap } from '../$i18n';
+import type { I18nMessageMap } from '../createTranslationTree';
 import { de } from './de';
 import { en } from './en';
 import { ExtensionIngameTranslations } from './type';

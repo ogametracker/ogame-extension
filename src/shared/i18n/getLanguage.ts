@@ -1,5 +1,5 @@
-import { _throw } from "../utils/_throw";
-import { LanguageKey } from "./LanguageKey";
+import { _throw } from '../utils/_throw';
+import { LanguageKey } from './LanguageKey';
 
 /** map OGame server language to internal language key */
 const languageMap: Partial<Record<string, LanguageKey>> = {
@@ -38,7 +38,7 @@ export function getLanguage(serverLanguage: string): LanguageKey | undefined;
 export function getLanguage(serverLanguage: string, throwIfUnsupported = false): LanguageKey | undefined {
     const lang = languageMap[serverLanguage];
     if (lang == null && throwIfUnsupported) {
-        _throw(`unsupported language '${serverLanguage}'`)
+        _throw(`unsupported language '${serverLanguage}'`);
     }
 
     return lang;

@@ -1,105 +1,93 @@
 <template>
-    <notification type="info" :title="title" @remove="$emit('remove')" :timeout="10000">
+    <Notification type="info" :title="title" @remove="emit('remove')" :timeout="10000">
         <template #message>
             <div v-text="message" />
 
             <template v-if="hasResources">
                 <hr />
                 <div class="resources-grid" v-if="showSimplified">
-                    <template v-for="resource in ResourceTypes">
+                    <template v-for="resource in ResourceTypes" :key="resource">
                         <template v-if="notification.resources[resource] > 0">
-                            <o-resource :resource="resource" />
-                            <span v-text="$i18n.$n(notification.resources[resource])"/>
+                            <OResource :resource="resource" />
+                            <span v-text="formatNumber(notification.resources[resource])" />
                         </template>
                     </template>
 
                     <span class="mdi mdi-sigma" />
-                    <span v-text="$i18n.$n(sum)" />
+                    <span v-text="formatNumber(sum)" />
                 </div>
                 <div v-else class="text-grid">
-                    <template v-for="resource in ResourceTypes">
+                    <template v-for="resource in ResourceTypes" :key="resource">
                         <template v-if="notification.resources[resource] > 0">
-                            <span v-text="$i18n.$t.extension.resources[resource]" />
-                            <span v-text="$i18n.$n(notification.resources[resource])" />
+                            <span v-text="translate(t => t.extension.resources[resource])" />
+                            <span v-text="formatNumber(notification.resources[resource])" />
                         </template>
                     </template>
 
-                    <span v-text="$i18n.$t.extension.common.sum" />
-                    <span v-text="$i18n.$n(sum)" />
+                    <span v-text="translate(t => t.extension.common.sum)" />
+                    <span v-text="formatNumber(sum)" />
                 </div>
             </template>
         </template>
-    </notification>
+    </Notification>
 </template>
 
-<script lang="ts">
-    import { DebrisFieldReportTrackingNotificationMessageData } from '@/shared/messages/notifications';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import Notification from '../Notification.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { DebrisFieldReportTrackingNotificationMessageData } from '@ogame-tracker/shared/messages/notifications';
+import { ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import Notification from '../Notification.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import { formatNumber, translate } from '../../i18n';
+import { useSettingsStore } from '../../stores/settings';
 
-    @Component({
-        components: {
-            Notification,
-        }
-    })
-    export default class DebrisFieldReportTrackingNotification extends Vue {
-        @Prop({ required: true, type: Object })
-        private notification!: DebrisFieldReportTrackingNotificationMessageData;
+const { notification } = defineProps<{ notification: DebrisFieldReportTrackingNotificationMessageData }>();
+const emit = defineEmits<{ remove: [] }>();
+const settingsStore = useSettingsStore();
 
-        private readonly ResourceType = ResourceType;
-        private readonly ResourceTypes = ResourceTypes;
+const showSimplified = computed(() => settingsStore.settings?.messageTracking.showSimplifiedResults ?? false);
 
-        private get showSimplified() {
-            return SettingsDataModule.settings.messageTracking.showSimplifiedResults;
-        }
+const title = computed(() =>
+    translate(t => t.extension.notifications.debrisFieldReportTracking.title(formatNumber(notification.count))),
+);
 
-        private get title() {
-            return this.$i18n.$t.extension.notifications.debrisFieldReportTracking.title(this.$i18n.$n(this.notification.count));
-        }
+const message = computed(() =>
+    translate(t => t.extension.notifications.debrisFieldReportTracking.message(formatNumber(notification.count))),
+);
 
-        private get message() {
-            return this.$i18n.$t.extension.notifications.debrisFieldReportTracking.message(this.$i18n.$n(this.notification.count));
-        }
+const sum = computed(() => notification.resources.metal + notification.resources.crystal);
 
-        private get sum() {
-            return this.notification.resources.metal + this.notification.resources.crystal;
-        }
-
-        private get hasResources() {
-            return this.notification.resources.metal > 0 
-                || this.notification.resources.crystal > 0
-                || this.notification.resources.deuterium > 0;
-        }
-    }
+const hasResources = computed(
+    () =>
+        notification.resources.metal > 0 || notification.resources.crystal > 0 || notification.resources.deuterium > 0,
+);
 </script>
 <style lang="scss" scoped>
-    .resources-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 32px 1fr);
-        row-gap: 4px;
-        column-gap: 8px;
-        align-items: center;
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 32px 1fr);
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
 
-        .mdi {
-            transform: scale(1.5);
-            width: 24px;
-            text-align: center;
-            height: 20px;
-        }
-
-        .mdi,
-        .o-resource {
-            justify-self: center;
-        }
+    .mdi {
+        transform: scale(1.5);
+        width: 24px;
+        text-align: center;
+        height: 20px;
     }
 
-    .text-grid {
-        display: grid;
-        grid-template-columns: auto fr;
-        row-gap: 4px;
-        column-gap: 8px;
-        align-items: center;
+    .mdi,
+    .o-resource {
+        justify-self: center;
     }
+}
+
+.text-grid {
+    display: grid;
+    grid-template-columns: auto fr;
+    row-gap: 4px;
+    column-gap: 8px;
+    align-items: center;
+}
 </style>

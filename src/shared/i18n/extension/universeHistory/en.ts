@@ -1,8 +1,8 @@
-import { UniverseHistoryTranslations } from "./type";
+import { UniverseHistoryTranslations } from './type';
 
 export const en: UniverseHistoryTranslations = {
     header: 'Universe History',
-    settings: {  
+    settings: {
         messages: {
             notEnabledHtml: `
             <b>Universe highscore tracking is not enabled.</b><br/>
@@ -22,7 +22,7 @@ export const en: UniverseHistoryTranslations = {
             At least once every day the highscores and universe data (if enabled) will be updated.<br/>
             You can set the update times below.
             If an update was missed then it will update as soon as possible afterwards.
-            `
+            `,
         },
         enableHighscoreTrackingOnly: 'Enable universe highscore tracking',
         enableHistoryTracking: 'Enable universe history tracking',
@@ -93,5 +93,6 @@ export const en: UniverseHistoryTranslations = {
         admin: 'Admin',
     },
 
-    loadingTakingLong: 'Loading the data is taking longer than expected. The database is probably updating right now, so please be patient or try again later.',
+    loadingTakingLong:
+        'Loading the data is taking longer than expected. The database is probably updating right now, so please be patient or try again later.',
 };

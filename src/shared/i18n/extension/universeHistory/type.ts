@@ -1,8 +1,8 @@
-import { DbUniverseHistoryScoreType } from "@/shared/db/schema/universe-history";
+import { DbUniverseHistoryScoreType } from '@ogame-tracker/shared/db/schema/universe-history';
 
 export interface UniverseHistoryTranslations {
     header: string;
-    settings: {  
+    settings: {
         messages: {
             notEnabledHtml: string;
             historyTrackingNotEnabledHtml: string;

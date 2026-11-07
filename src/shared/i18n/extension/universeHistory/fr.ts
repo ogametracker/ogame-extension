@@ -1,8 +1,8 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { UniverseHistoryTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { UniverseHistoryTranslations } from './type';
 
 export const fr: RecursivePartial<UniverseHistoryTranslations> = {
-    header: 'Historique de l`\'univers',
+    header: "Historique de l`'univers",
     settings: {
         messages: {
             notEnabledHtml: `
@@ -23,10 +23,10 @@ export const fr: RecursivePartial<UniverseHistoryTranslations> = {
                 Au moins une fois par jour, les classements et les données de l'univers (si activés) seront mis à jour.<br/>
                 Vous pouvez définir les heures de mise à jour ci-dessous.
                 Si une mise à jour est manquée, elle sera effectuée dès que possible par la suite.
-            `
+            `,
         },
-        enableHighscoreTrackingOnly: 'Activer uniquement le suivi du classement de l\'univers',
-        enableHistoryTracking: 'Activer le suivi de l\'historique de l\'univers',
+        enableHighscoreTrackingOnly: "Activer uniquement le suivi du classement de l'univers",
+        enableHistoryTracking: "Activer le suivi de l'historique de l'univers",
     },
 
     tabs: {
@@ -44,7 +44,7 @@ export const fr: RecursivePartial<UniverseHistoryTranslations> = {
         search: 'Rechercher un joueur',
     },
     allianceSelection: {
-        header: 'Sélection de l\'alliance',
+        header: "Sélection de l'alliance",
         search: 'Rechercher une alliance',
     },
 
@@ -74,14 +74,14 @@ export const fr: RecursivePartial<UniverseHistoryTranslations> = {
         members: 'Membres',
     },
 
-    noAlliance: 'pas d\'alliance',
-    today: 'aujourd\'hui',
+    noAlliance: "pas d'alliance",
+    today: "aujourd'hui",
     name: 'Nom',
     tag: 'Balise',
     members: 'Membres',
     alliance: 'Alliance',
     from: 'De',
-    until: 'Jusqu\'à',
+    until: "Jusqu'à",
 
     status: {
         active: 'Actif',
@@ -94,5 +94,6 @@ export const fr: RecursivePartial<UniverseHistoryTranslations> = {
         admin: 'Admin',
     },
 
-    loadingTakingLong: 'Le chargement des données prend plus de temps que prévu. La base de données est probablement en train de se mettre à jour, veuillez patienter ou réessayer plus tard.',
+    loadingTakingLong:
+        'Le chargement des données prend plus de temps que prévu. La base de données est probablement en train de se mettre à jour, veuillez patienter ou réessayer plus tard.',
 };

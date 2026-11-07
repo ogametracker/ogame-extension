@@ -3,14 +3,18 @@
 
     .menubutton {
         /* START: taken from ogame styles */
-        background: url("https://gf3.geo.gfsrv.net/cdneb/f5f81e8302aaad56c958c033677fb8.png") -374px -258px no-repeat;
+        background: url('https://gf3.geo.gfsrv.net/cdneb/f5f81e8302aaad56c958c033677fb8.png') -374px -258px no-repeat;
         height: 29px;
         text-align: center;
         line-height: 25px;
         width: 136px;
         color: #767f88;
         display: block;
-        font: bold 11px/25px verdana, arial, helvetica, sans-serif;
+        font:
+            bold 11px/25px verdana,
+            arial,
+            helvetica,
+            sans-serif;
         text-decoration: none;
         cursor: pointer;
 
@@ -21,13 +25,13 @@
         /* END: taken from ogame styles */
 
         &::before {
-            content: "OGame Tracker";
+            content: 'OGame Tracker';
         }
     }
 
     .icon {
         cursor: pointer;
-        background: url(#{$base-url}/img/menu-icon-background.png);
+        background: url(/img/menu-icon-background.png);
 
         display: flex;
         align-items: center;

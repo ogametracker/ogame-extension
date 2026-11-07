@@ -1,4 +1,4 @@
-import { _throw } from "../../shared/utils/_throw";
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
 const cssBase = 'ogame-tracker';
 
@@ -10,11 +10,11 @@ export const cssClasses = {
         error: `${cssBase}-msg--error`,
         ignored: `${cssBase}-msg--ignored`,
         hideContent: `${cssBase}-msg--hide-content`,
-    
+
         expedition: `${cssBase}-msg--expedition`,
         lifeformDiscovery: `${cssBase}-msg--lifeform-discovery`,
         debrisFieldReport: `${cssBase}-msg--debris-field-report`,
-        combatReport:  `${cssBase}-msg--combat-report`,
+        combatReport: `${cssBase}-msg--combat-report`,
 
         customMessageContent: `${cssBase}-msg__content`,
     },
@@ -31,7 +31,7 @@ export function addOrSetCustomMessageContent(msgElem: Element, htmlContent: stri
         msgElem.insertBefore(newContent, msgContent.nextElementSibling);
     }
 
-    if(htmlContent == false) {
+    if (htmlContent == false) {
         newContent.remove();
     } else {
         newContent.innerHTML = htmlContent;

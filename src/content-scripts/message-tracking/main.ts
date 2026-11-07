@@ -1,12 +1,12 @@
-import { getQueryParameters } from "../../shared/utils/getQueryParameters";
-import { Settings } from "@/shared/models/settings/Settings";
-import { RequestSettingsMessage, SettingsMessage } from "@/shared/messages/settings";
-import { MessageType } from "@/shared/messages/MessageType";
-import { messageTrackingUuid } from "@/shared/uuid";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { Message } from "@/shared/messages/Message";
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
-import { initMessageTracking } from "./base-message-tracking";
+import { getQueryParameters } from '@ogame-tracker/shared/utils/getQueryParameters';
+import { Settings } from '@ogame-tracker/shared/models/settings/Settings';
+import { RequestSettingsMessage, SettingsMessage } from '@ogame-tracker/shared/messages/settings';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { messageTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { initMessageTracking } from './base-message-tracking';
 
 import './styles.scss';
 
@@ -30,7 +30,7 @@ function getSettings(): Promise<Settings> {
     return new Promise<Settings>(resolve => {
         chrome.runtime.onMessage.addListener(msg => {
             const message = msg as Message;
-            if(message.type != MessageType.Settings) {
+            if (message.type != MessageType.Settings) {
                 return;
             }
 

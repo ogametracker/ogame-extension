@@ -1,8 +1,8 @@
-import { FleetMissionType, FleetMissionTypes } from "../../../fleets/FleetMissionType";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { LifeformTechnology } from "../LifeformTechnology";
-import { FleetSpeedBonusLifeformTechnology } from "../interfaces";
+import { FleetMissionType, FleetMissionTypes } from '../../../fleets/FleetMissionType';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { LifeformTechnology } from '../LifeformTechnology';
+import { FleetSpeedBonusLifeformTechnology } from '../interfaces';
 
 class TelekineticDriveClass extends LifeformTechnology implements FleetSpeedBonusLifeformTechnology {
     public constructor() {
@@ -27,23 +27,22 @@ class TelekineticDriveClass extends LifeformTechnology implements FleetSpeedBonu
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return FleetMissionTypes.filter(m => this.appliesTo(m))
-            .map<LifeformBonusType>(missionType => ({
-                type: LifeformBonusTypeId.FleetSpeedBonus,
-                missionType,
-            }));
+        return FleetMissionTypes.filter(m => this.appliesTo(m)).map<LifeformBonusType>(missionType => ({
+            type: LifeformBonusTypeId.FleetSpeedBonus,
+            missionType,
+        }));
     }
-    
+
     appliesTo(type: FleetMissionType): boolean {
         return type == FleetMissionType.expedition;
     }
 
     getFleetSpeedBonus(mission: FleetMissionType, level: number): number {
-        if(!this.appliesTo(mission)) {
+        if (!this.appliesTo(mission)) {
             return 0;
         }
 
-        if(level == 1) {
+        if (level == 1) {
             return 0;
         }
 

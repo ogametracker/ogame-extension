@@ -1,29 +1,27 @@
 <template>
-    <page :nav-items="navItems" root-route-name="expeditions/resources/size-breakdown" />
+    <Page :nav-items="navItems" root-route-name="expeditions/resources/size-breakdown" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@stats/components/common/ListNav.vue';
+<script setup lang="ts">
+import Page from '@stats/components/common/Page.vue';
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { ListNavItem } from '@stats/components/common/ListNav.vue';
 
-    @Component({})
-    export default class Index extends Vue {
-
-        private get navItems(): ListNavItem[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.resources.metal,
-                    to: { name: 'expeditions/resources/size-breakdown/metal' },
-                },
-                {
-                    label: this.$i18n.$t.extension.resources.crystal,
-                    to: { name: 'expeditions/resources/size-breakdown/crystal' },
-                },
-                {
-                    label: this.$i18n.$t.extension.resources.deuterium,
-                    to: { name: 'expeditions/resources/size-breakdown/deuterium' },
-                },
-            ];
-        }
-    }
+const navItems = computed<ListNavItem[]>(() => {
+    return [
+        {
+            label: translations().extension.resources.metal,
+            to: { name: 'expeditions/resources/size-breakdown/metal' },
+        },
+        {
+            label: translations().extension.resources.crystal,
+            to: { name: 'expeditions/resources/size-breakdown/crystal' },
+        },
+        {
+            label: translations().extension.resources.deuterium,
+            to: { name: 'expeditions/resources/size-breakdown/deuterium' },
+        },
+    ];
+});
 </script>

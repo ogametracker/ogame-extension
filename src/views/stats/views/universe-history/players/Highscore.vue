@@ -1,16 +1,16 @@
 <template>
     <div class="highscores">
-        <loading-spinner v-if="dataModuleLoading" />
+        <LoadingSpinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table :columns="tableColumns" :items="tableItems" class="player-selection-table">
+            <GridTable :columns="tableColumns" :items="tableItems" class="player-selection-table">
                 <template #cell-player="{ value: player }">
                     <template v-if="player == null">
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            :placeholder="$i18n.$t.extension.universeHistory.playerSelection.search"
+                            :placeholder="translations().extension.universeHistory.playerSelection.search"
                             list="player-list"
-                            @change="onPlayerSelected($event.target.value)"
+                            @change="onPlayerSelected(($event.target as HTMLInputElement).value)"
                             style="width: 100%"
                         />
                         <datalist id="player-list">
@@ -25,395 +25,402 @@
                         <span v-text="player.name" />
                     </div>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <tabs :tabs="tabs">
-                <template v-for="key in keys">
-                    <template :slot="`tab-content-${key}`">
-                        <span v-if="playerScoresLoading" :key="`score-${key}-loading`" class="loading" />
-                        <scrollable-chart
-                            v-else-if="playerIds.length > 0"
-                            :key="`score-${key}`"
-                            :datasets="scoreDatasets[key]"
-                            continue-last-value
-                            show-x-values-in-grid
-                            :tick-interval="1000 * 60 * 60 * 24"
-                            :ticks="30"
-                            :tick-list="days"
-                            :min-tick="firstDay"
-                            :max-tick="nextDay"
-                            :x-label-formatter="(x) => $i18n.$d(x, 'date')"
-                            :x-label-tooltip-formatter="(x) => $i18n.$d(x, 'datetime')"
-                        />
-                    </template>
+            <Tabs :tabs="tabs">
+                <template v-for="key in keys" #[`tab-content-${key}`]>
+                    <span v-if="playerScoresLoading" :key="`score-${key}-loading`" class="loading" />
+                    <ScrollableChart
+                        v-else-if="playerIds.length > 0"
+                        :key="`score-${key}`"
+                        :datasets="scoreDatasets[key]"
+                        continue-last-value
+                        show-x-values-in-grid
+                        :tick-interval="1000 * 60 * 60 * 24"
+                        :ticks="30"
+                        :tick-list="days"
+                        :min-tick="firstDay"
+                        :max-tick="nextDay"
+                        :x-label-formatter="(x: number) => formatDate(x, 'date')"
+                        :x-label-tooltip-formatter="(x: number) => formatDate(x, 'datetime')"
+                    />
                 </template>
-            </tabs>
+            </Tabs>
         </template>
     </div>
 </template>
 
-<script lang="ts">
-    import { ServerSettingsModule } from '@/service-worker/server-settings/ServerSettingsModule';
-    import { DbUniverseHistoryScoreType } from '@/shared/db/schema/universe-history';
-    import { HighscoreTypeNames } from '@/shared/models/ogame/highscore';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { mergeDeep } from '@/shared/utils/mergeDeep';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { _throw } from '@/shared/utils/_throw';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { ScrollableChartDataset } from '@/views/stats/components/common/scrollable-chart/ScrollableChart.vue';
-    import { Tab } from '@/views/stats/components/common/Tabs.vue';
-    import { GlobalOgameMetaData } from '@/views/stats/data/global';
-    import { ServerSettingsDataModule } from '@/views/stats/data/ServerSettingsDataModule';
-    import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
-    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
-    import { addDays } from 'date-fns';
-    import startOfDay from 'date-fns/startOfDay';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import ScrollableChart from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import Tabs from '@stats/components/common/Tabs.vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { translations, formatDate } from '@stats/i18n';
+import type { DbUniverseHistoryScoreType } from '@ogame-tracker/shared/db/schema/universe-history';
+import { HighscoreTypeNames } from '@ogame-tracker/shared/models/ogame/highscore';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
+import type { ScrollableChartDataset } from '@stats/components/common/scrollable-chart/ScrollableChart.vue';
+import type { Tab } from '@stats/components/common/Tabs.vue';
+import { GlobalOgameMetaData } from '@stats/data/global';
+import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
+import { useUniverseHistoryStore } from '@stats/data/UniverseHistoryDataModule';
+import type { UniverseHistoryPlayer } from '@stats/data/UniverseHistoryDataModule';
+import { useUniverseSpecificSettingsStore } from '@stats/data/UniverseSpecificSettingsDataModule';
+import { addDays } from 'date-fns';
+import startOfDay from 'date-fns/startOfDay';
 
-    @Component({})
-    export default class Highscore extends Vue {
-        private readonly colors = [
-            '#F48FB1', // pink lighten-3
-            '#673AB7', // deep-purple
-            '#E53935', // red darken-1
-            '#3F51B5', // indigo
-            '#006064', // cyan darken-4
-            '#546E7A', // blue-grey darken-1
-            '#EF9A9A', // red lighten-3
-            '#64B5F6', // blue lighten-2
-            '#FFE082', // amber lighten-3
-            '#E91E63', // pink
-            '#BA68C8', // purple lighten-2
-            '#BF360C', // deep-orange darken-4
-            '#039BE5', // light-blue darken-1
-            '#8E24AA', // purple darken-1
-            '#9CCC65', // light-green lighten-1
-            '#A1887F', // brown lighten-2
-            '#0097A7', // cyan darken-2
-            '#FFAB91', // deep-orange lighten-3
-            '#009688', // teal
-            '#43A047', // green darken-1
-            '#1A237E', // indigo darken-4
-            '#558B2F', // light-green darken-3
-            '#311B92', // deep-purple darken-4
-            '#880E4F', // pink darken-4
-            '#01579B', // light-blue darken-4
-            '#AFB42B', // lime darken-2
-            '#1E88E5', // blue darken-1
-            '#827717', // lime darken-4
-            '#FFF176', // yellow lighten-2
-            '#BDBDBD', // grey lighten-1
-            '#FFC107', // amber
-            '#FFA726', // orange lighten-1
-            '#FF5722', // deep-orange
-            '#795548', // brown
-            '#004D40', // teal darken-4
-            '#81C784', // green lighten-2
-            '#90A4AE', // blue-grey lighten-2
-            '#757575', // grey darken-1
-            '#FDD835', // yellow darken-1
-        ];
+const router = useRouter();
 
-        private leftX = 0;
-        private rightX = 1;
-        private dataModuleLoading = true;
-        private playerScoresLoading = true;
+const route = useRoute();
 
-        private selectedPlayerName = '';
-        private scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
-        private firstDay = 0;
+const serverSettingsStore = useServerSettingsStore();
 
-        private readonly keys = HighscoreTypeNames;
-        private get tabs(): (Tab & { key: DbUniverseHistoryScoreType })[] {
-            const tabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
-                {
-                    key: 'total',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.total,
-                },
-                {
-                    key: 'economy',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.economy,
-                },
-                {
-                    key: 'research',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.research,
-                },
-                {
-                    key: 'military',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.military,
-                },
-                {
-                    key: 'militaryBuilt',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryBuilt,
-                },
-                {
-                    key: 'militaryDestroyed',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryDestroyed,
-                },
-                {
-                    key: 'militaryLost',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.militaryLost,
-                },
-                {
-                    key: 'honor',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.honor,
-                },
-                {
-                    key: 'numberOfShips',
-                    label: this.$i18n.$t.extension.universeHistory.highscoreTabs.numberOfShips,
-                },
-            ];
+const universeSpecificSettingsStore = useUniverseSpecificSettingsStore();
 
-            if (ServerSettingsDataModule.serverSettings.lifeforms.enabled) {
-                tabs.push(
-                    {
-                        key: 'lifeform',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeform,
-                    },
-                    {
-                        key: 'lifeformEconomy',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformEconomy,
-                    },
-                    {
-                        key: 'lifeformTechnology',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformTechnology,
-                    },
-                    {
-                        key: 'lifeformDiscoveries',
-                        label: this.$i18n.$t.extension.universeHistory.highscoreTabs.lifeformDiscoveries,
-                    }
-                );
-            }
+const universeHistoryStore = useUniverseHistoryStore();
 
-            return tabs;
-        }
+const colors = [
+    '#F48FB1', // pink lighten-3
+    '#673AB7', // deep-purple
+    '#E53935', // red darken-1
+    '#3F51B5', // indigo
+    '#006064', // cyan darken-4
+    '#546E7A', // blue-grey darken-1
+    '#EF9A9A', // red lighten-3
+    '#64B5F6', // blue lighten-2
+    '#FFE082', // amber lighten-3
+    '#E91E63', // pink
+    '#BA68C8', // purple lighten-2
+    '#BF360C', // deep-orange darken-4
+    '#039BE5', // light-blue darken-1
+    '#8E24AA', // purple darken-1
+    '#9CCC65', // light-green lighten-1
+    '#A1887F', // brown lighten-2
+    '#0097A7', // cyan darken-2
+    '#FFAB91', // deep-orange lighten-3
+    '#009688', // teal
+    '#43A047', // green darken-1
+    '#1A237E', // indigo darken-4
+    '#558B2F', // light-green darken-3
+    '#311B92', // deep-purple darken-4
+    '#880E4F', // pink darken-4
+    '#01579B', // light-blue darken-4
+    '#AFB42B', // lime darken-2
+    '#1E88E5', // blue darken-1
+    '#827717', // lime darken-4
+    '#FFF176', // yellow lighten-2
+    '#BDBDBD', // grey lighten-1
+    '#FFC107', // amber
+    '#FFA726', // orange lighten-1
+    '#FF5722', // deep-orange
+    '#795548', // brown
+    '#004D40', // teal darken-4
+    '#81C784', // green lighten-2
+    '#90A4AE', // blue-grey lighten-2
+    '#757575', // grey darken-1
+    '#FDD835', // yellow darken-1
+];
 
-        private get tableColumns(): GridTableColumn<'player'>[] {
-            return [{
-                key: 'player',
-                label: this.$i18n.$t.extension.universeHistory.playerSelection.header,
-                headerClass: 'player-selection-table-cell',
-                class: 'player-selection-table-cell',
-            }];
-        }
+const leftX = ref(0);
 
-        private get tableItems(): { player: UniverseHistoryPlayer | null }[] {
-            return [
-                { player: null },
-                ...this.selectedPlayers.map(player => ({ player })),
-            ];
-        }
+const rightX = ref(1);
 
+const dataModuleLoading = ref(true);
 
-        private get playerIds(): number[] {
-            return (this.$route.query.players as string | null ?? '')
-                .split(',')
-                .filter(id => id.length > 0)
-                .map(playerId => parseIntSafe(playerId, 10))
-                .filter(playerId => this.players.some(p => p.id == playerId));
-        }
+const playerScoresLoading = ref(true);
 
-        private async mounted() {
-            await UniverseSpecificSettingsDataModule.ready;
-            await this.redirectToDefault();
+const selectedPlayerName = ref('');
 
-            this.dataModuleLoading = true;
-            await UniverseHistoryDataModule.ready;
-            this.dataModuleLoading = false;
+const scoreDatasets = ref({} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>);
 
-            await this.loadPlayerScores();
-        }
+const firstDay = ref(0);
 
-        private async redirectToDefault() {
-            if (this.playerIds.length != 0) {
-                return;
-            }
+const keys = HighscoreTypeNames;
 
-            let defaultPlayerIds = UniverseSpecificSettingsDataModule.settings.universeHistory.players.highscore;
-            if (defaultPlayerIds.length == 0) {
-                defaultPlayerIds = [GlobalOgameMetaData.playerId];
-            }
+const tabs = computed<(Tab & { key: DbUniverseHistoryScoreType })[]>(() => {
+    const localTabs: (Tab & { key: DbUniverseHistoryScoreType })[] = [
+        {
+            key: 'total',
+            label: translations().extension.universeHistory.highscoreTabs.total,
+        },
+        {
+            key: 'economy',
+            label: translations().extension.universeHistory.highscoreTabs.economy,
+        },
+        {
+            key: 'research',
+            label: translations().extension.universeHistory.highscoreTabs.research,
+        },
+        {
+            key: 'military',
+            label: translations().extension.universeHistory.highscoreTabs.military,
+        },
+        {
+            key: 'militaryBuilt',
+            label: translations().extension.universeHistory.highscoreTabs.militaryBuilt,
+        },
+        {
+            key: 'militaryDestroyed',
+            label: translations().extension.universeHistory.highscoreTabs.militaryDestroyed,
+        },
+        {
+            key: 'militaryLost',
+            label: translations().extension.universeHistory.highscoreTabs.militaryLost,
+        },
+        {
+            key: 'honor',
+            label: translations().extension.universeHistory.highscoreTabs.honor,
+        },
+        {
+            key: 'numberOfShips',
+            label: translations().extension.universeHistory.highscoreTabs.numberOfShips,
+        },
+    ];
 
-            await this.updatePlayerIdRoute(defaultPlayerIds);
-        }
+    if (serverSettingsStore.serverSettings.lifeforms.enabled) {
+        localTabs.push(
+            {
+                key: 'lifeform',
+                label: translations().extension.universeHistory.highscoreTabs.lifeform,
+            },
+            {
+                key: 'lifeformEconomy',
+                label: translations().extension.universeHistory.highscoreTabs.lifeformEconomy,
+            },
+            {
+                key: 'lifeformTechnology',
+                label: translations().extension.universeHistory.highscoreTabs.lifeformTechnology,
+            },
+            {
+                key: 'lifeformDiscoveries',
+                label: translations().extension.universeHistory.highscoreTabs.lifeformDiscoveries,
+            },
+        );
+    }
 
+    return localTabs;
+});
 
-        private async loadPlayerScores() {
-            this.playerScoresLoading = true;
+const tableColumns = computed<GridTableColumn<'player'>[]>(() => {
+    return [
+        {
+            key: 'player',
+            label: translations().extension.universeHistory.playerSelection.header,
+            headerClass: 'player-selection-table-cell',
+            class: 'player-selection-table-cell',
+        },
+    ];
+});
 
+const tableItems = computed<{ player: UniverseHistoryPlayer | null }[]>(() => {
+    return [{ player: null }, ...selectedPlayers.value.map(player => ({ player }))];
+});
 
-            this.scoreDatasets = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
+const playerIds = computed<number[]>(() => {
+    return ((route.query.players as string | null) ?? '')
+        .split(',')
+        .filter(id => id.length > 0)
+        .map(playerId => parseIntSafe(playerId, 10))
+        .filter(playerId => players.value.some(p => p.id == playerId));
+});
 
-            const datasetsByPlayer: Record<number, Record<DbUniverseHistoryScoreType, ScrollableChartDataset>> = {};
-            this.playerIds.forEach(p => datasetsByPlayer[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>);
+async function redirectToDefault() {
+    if (playerIds.value.length != 0) {
+        return;
+    }
 
-            this.keys.forEach(key => {
-                this.scoreDatasets[key] = [];
+    let defaultPlayerIds = universeSpecificSettingsStore.settings.universeHistory.players.highscore;
+    if (defaultPlayerIds.length == 0) {
+        defaultPlayerIds = [GlobalOgameMetaData.playerId];
+    }
 
-                this.playerIds.forEach((pid, i) => datasetsByPlayer[pid][key] = {
+    await updatePlayerIdRoute(defaultPlayerIds);
+}
+
+async function loadPlayerScores() {
+    playerScoresLoading.value = true;
+
+    scoreDatasets.value = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset[]>;
+
+    const datasetsByPlayer: Record<number, Record<DbUniverseHistoryScoreType, ScrollableChartDataset>> = {};
+    playerIds.value.forEach(
+        p => (datasetsByPlayer[p] = {} as Record<DbUniverseHistoryScoreType, ScrollableChartDataset>),
+    );
+
+    keys.forEach(key => {
+        scoreDatasets.value[key] = [];
+
+        playerIds.value.forEach(
+            (pid, i) =>
+                (datasetsByPlayer[pid][key] = {
                     key: `${pid}-${key}`,
                     values: [],
-                    color: this.colors[i % this.colors.length],
-                    label: this.players.find(p => p.id == pid)?.name ?? _throw(`no player with id '${pid}' found`),
+                    color: colors[i % colors.length],
+                    label: players.value.find(p => p.id == pid)?.name ?? _throw(`no player with id '${pid}' found`),
                     filled: false,
                     stack: false,
                     hidePoints: false,
-                });
-            });
+                }),
+        );
+    });
 
-            let minDate = Number.MAX_SAFE_INTEGER;
+    let minDate = Number.MAX_SAFE_INTEGER;
 
-            const scores = await UniverseHistoryDataModule.getPlayerScoreHistory(this.playerIds);
-            const types = HighscoreTypeNames;
-            const lastScores = createRecord(this.playerIds, () => createRecord(types, null)) as Record<number, Record<DbUniverseHistoryScoreType, number | null>>;
+    const scores = await universeHistoryStore.getPlayerScoreHistory(playerIds.value);
+    const types = HighscoreTypeNames;
+    const lastScores = createRecord(playerIds.value, () => createRecord(types, null)) as Record<
+        number,
+        Record<DbUniverseHistoryScoreType, number | null>
+    >;
 
-            scores.forEach((score, i) => {
-                minDate = Math.min(minDate, score.date);
+    scores.forEach((score, i) => {
+        minDate = Math.min(minDate, score.date);
 
-                if (lastScores[score.playerId][score.type] == score.score) { //no duplicates if only position changed
-                    return;
-                }
-                if (!types.includes(score.type)) {
-                    return; // happens if beta data available
-                }
-
-                datasetsByPlayer[score.playerId][score.type].values.push({
-                    x: score.date,
-                    y: score.score,
-                });
-                lastScores[score.playerId][score.type] = score.score;
-            });
-
-            this.keys.forEach(key => {
-                this.playerIds.forEach(pid => {
-                    this.scoreDatasets[key].push(datasetsByPlayer[pid][key]);
-                });
-            });
-
-            this.firstDay = startOfDay(minDate).getTime();
-
-            this.playerScoresLoading = false;
+        if (lastScores[score.playerId][score.type] == score.score) {
+            //no duplicates if only position changed
+            return;
+        }
+        if (!types.includes(score.type)) {
+            return; // happens if beta data available
         }
 
-        private get nextDay() {
-            return addDays(startOfDay(Date.now()), 1).getTime();
-        }
+        datasetsByPlayer[score.playerId][score.type].values.push({
+            x: score.date,
+            y: score.score,
+        });
+        lastScores[score.playerId][score.type] = score.score;
+    });
 
-        private get days() {
-            const days: number[] = [];
+    keys.forEach(key => {
+        playerIds.value.forEach(pid => {
+            scoreDatasets.value[key].push(datasetsByPlayer[pid][key]);
+        });
+    });
 
-            const maxDay = this.nextDay;
-            for (let day = this.firstDay; day <= maxDay; day = addDays(day, 1).getTime()) {
-                days.push(day);
-            }
+    firstDay.value = startOfDay(minDate).getTime();
 
-            return days;
-        }
+    playerScoresLoading.value = false;
+}
 
+const nextDay = computed(() => addDays(startOfDay(Date.now()), 1).getTime());
 
+const days = computed(() => {
+    const localDays: number[] = [];
 
-        private get players() {
-            return UniverseHistoryDataModule.players;
-        }
-
-        private get playerNames() {
-            return this.players
-                .map(player => player.name)
-                .sort();
-        }
-
-        private get selectedPlayers() {
-            return this.playerIds.map(pid => this.players.find(p => p.id == pid)!);
-        }
-
-        private async onPlayerSelected(name: string) {
-            const player = this.players.find(p => p.name.toLowerCase() == name.toLowerCase());
-            if (player == null) {
-                return;
-            }
-
-            await this.$nextTick();
-            this.selectedPlayerName = '';
-
-            const playerIds = (this.$route.query.players as string | null)?.split(',') ?? [];
-            await this.updatePlayerIdRoute([
-                ...playerIds.filter(pid => pid != player.id.toString()),
-                player.id,
-            ]);
-            await this.loadPlayerScores();
-        }
-
-        private async removePlayer(id: number) {
-            await this.updatePlayerIdRoute(this.playerIds.filter(pid => pid != id));
-
-            await this.loadPlayerScores();
-        }
-
-        private updateSettings(playerIds: number[]) {
-            const settings = UniverseSpecificSettingsDataModule.settings;
-            UniverseSpecificSettingsDataModule.updateSettings({
-                ...settings,
-                universeHistory: {
-                    ...settings.universeHistory,
-                    players: {
-                        ...settings.universeHistory.players,
-                        highscore: playerIds,
-                    },
-                },
-            });
-        }
-
-        private async updatePlayerIdRoute(ids: (string | number)[]) {
-            this.updateSettings(ids.map(id => typeof id === 'string' ? parseIntSafe(id, 10) : id));
-
-            await this.$router.replace({
-                query: {
-                    players: ids.join(','),
-                },
-            });
-            await this.redirectToDefault();
-        }
+    const maxDay = nextDay.value;
+    for (let day = firstDay.value; day <= maxDay; day = addDays(day, 1).getTime()) {
+        localDays.push(day);
     }
+
+    return localDays;
+});
+
+const players = computed(() => universeHistoryStore.players);
+
+const playerNames = computed(() => {
+    return players.value.map(player => player.name).sort();
+});
+
+const selectedPlayers = computed(() => playerIds.value.map(pid => players.value.find(p => p.id == pid)!));
+
+async function onPlayerSelected(name: string) {
+    const player = players.value.find(p => p.name.toLowerCase() == name.toLowerCase());
+    if (player == null) {
+        return;
+    }
+
+    await nextTick();
+    selectedPlayerName.value = '';
+
+    const localPlayerIds = (route.query.players as string | null)?.split(',') ?? [];
+    await updatePlayerIdRoute([...localPlayerIds.filter(pid => pid != player.id.toString()), player.id]);
+    await loadPlayerScores();
+}
+
+async function removePlayer(id: number) {
+    await updatePlayerIdRoute(playerIds.value.filter(pid => pid != id));
+
+    await loadPlayerScores();
+}
+
+function updateSettings(nextPlayerIds: number[]) {
+    const settings = universeSpecificSettingsStore.settings;
+    universeSpecificSettingsStore.updateSettings({
+        ...settings,
+        universeHistory: {
+            ...settings.universeHistory,
+            players: {
+                ...settings.universeHistory.players,
+                highscore: nextPlayerIds,
+            },
+        },
+    });
+}
+
+async function updatePlayerIdRoute(ids: (string | number)[]) {
+    updateSettings(ids.map(id => (typeof id === 'string' ? parseIntSafe(id, 10) : id)));
+
+    await router.replace({
+        query: {
+            players: ids.join(','),
+        },
+    });
+    await redirectToDefault();
+}
+
+onMounted(async () => {
+    await universeSpecificSettingsStore.ready;
+    await redirectToDefault();
+
+    dataModuleLoading.value = true;
+    await universeHistoryStore.ready;
+    dataModuleLoading.value = false;
+
+    await loadPlayerScores();
+});
 </script>
-<style lang="scss" scoped>
-    .highscores {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        height: 100%;
-    }
 
-    .player-selection {
+<style lang="scss" scoped>
+.highscores {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+}
+
+.player-selection {
+    margin-right: 16px;
+
+    &-table {
+        height: fit-content;
         margin-right: 16px;
 
-        &-table {
-            height: fit-content;
-            margin-right: 16px;
-
-            &::v-deep {
-                .player-selection-table-cell {
-                    text-align: left;
-                    justify-content: start;
-                    border-bottom: 1px solid rgba(var(--color), 0.5);
-                }
-            }
+        :deep(.player-selection-table-cell) {
+            text-align: left;
+            justify-content: start;
+            border-bottom: 1px solid rgba(var(--color), 0.5);
         }
     }
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
+.list {
+    display: flex;
+    flex-direction: column;
 
-        &-item {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 12px;
-            align-items: center;
+    &-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+        align-items: center;
 
-            .mdi {
-                transform: scale(1.5);
-                cursor: pointer;
-            }
+        .mdi {
+            transform: scale(1.5);
+            cursor: pointer;
         }
     }
+}
 </style>

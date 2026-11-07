@@ -1,5 +1,5 @@
 <template>
-    <floating-menu v-model="show" left>
+    <FloatingMenu v-model="show" left>
         <template #activator>
             <button @click="show = !show">
                 <span class="mdi mdi-plus" />
@@ -8,158 +8,144 @@
 
         <div class="fake-table">
             <div class="fake-table-header">
-                <span v-text="$i18n.$t.extension.debrisFields.addDebrisFieldManually.title" />
+                <span v-text="translations().extension.debrisFields.addDebrisFieldManually.title" />
             </div>
             <div class="fake-table-body">
                 <span>
-                    <o-resource resource="metal" />
-                    <input
-                        type="number"
-                        value="1"
-                        v-model.number.lazy="metal"
-                        min="0"
-                        step="1"
-                    />
+                    <OResource :resource="ResourceType.metal" />
+                    <input type="number" value="1" v-model.number.lazy="metal" min="0" step="1" />
                 </span>
 
                 <span>
-                    <o-resource resource="crystal" />
-                    <input
-                        type="number"
-                        v-model.number.lazy="crystal"
-                        min="0"
-                        step="1"
-                    />
+                    <OResource :resource="ResourceType.crystal" />
+                    <input type="number" v-model.number.lazy="crystal" min="0" step="1" />
                 </span>
                 <span>
                     <span class="mdi mdi-calendar calendar-icon" />
-                    <input
-                        type="datetime-local"
-                        v-model.lazy="datetimeString"
-                    />
+                    <input type="datetime-local" v-model.lazy="datetimeString" />
                 </span>
                 <button
                     class="add"
-                    v-text="$i18n.$t.extension.debrisFields.addDebrisFieldManually.buttonText"
+                    v-text="translations().extension.debrisFields.addDebrisFieldManually.buttonText"
                     @click="addManualDebrisFieldReport()"
                     :disabled="(metal == 0 && crystal == 0) || datetime == null"
                 />
             </div>
         </div>
-    </floating-menu>
+    </FloatingMenu>
 </template>
 
-<script lang="ts">
-    import { sendMessage } from '@/shared/communication/sendMessage';
-    import { MessageType } from '@/shared/messages/MessageType';
-    import { TrackManualDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
-    import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
+<script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { TrackManualDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
+import { GlobalOgameMetaData, statsViewUuid } from '../../data/global';
 
-    @Component({})
-    export default class ManuallyAddDebrisFieldMenu extends Vue {
-        private show = false;
+const debrisFieldReportStore = useDebrisFieldReportStore();
 
-        private datetimeString = "";
-        private metal = 0;
-        private crystal = 0;
+const show = ref(false);
 
+const datetimeString = ref('');
 
-        private get nextId() {
-            const minId = Math.min(0, DebrisFieldReportDataModule.minId);
-            return minId - 1;
-        }
+const metal = ref(0);
 
-        private get datetime(): number | null {
-            if (this.datetimeString == "") {
-                return null;
-            }
+const crystal = ref(0);
 
-            const datetime = new Date(this.datetimeString).getTime();
-            if (isNaN(datetime)) {
-                return null;
-            }
+const nextId = computed(() => {
+    const minId = Math.min(0, debrisFieldReportStore.minId);
+    return minId - 1;
+});
 
-            return datetime;
-        }
-
-        private addManualDebrisFieldReport() {
-            const date = this.datetime;
-            if (date == null) {
-                return;
-            }
-
-            const message: TrackManualDebrisFieldReportMessage = {
-                ogameMeta: GlobalOgameMetaData,
-                type: MessageType.TrackManualDebrisFieldReport,
-                data: {
-                    id: this.nextId,
-                    date: date,
-                    metal: this.metal,
-                    crystal: this.crystal,
-                },
-                senderUuid: statsViewUuid,
-            };
-            sendMessage(message);
-
-            this.datetimeString = "";
-            this.metal = 0;
-            this.crystal = 0;
-        }
+const datetime = computed<number | null>(() => {
+    if (datetimeString.value == '') {
+        return null;
     }
+
+    const localDatetime = new Date(datetimeString.value).getTime();
+    if (isNaN(localDatetime)) {
+        return null;
+    }
+
+    return localDatetime;
+});
+
+function addManualDebrisFieldReport() {
+    const date = datetime.value;
+    if (date == null) {
+        return;
+    }
+
+    const message: TrackManualDebrisFieldReportMessage = {
+        ogameMeta: GlobalOgameMetaData,
+        type: MessageType.TrackManualDebrisFieldReport,
+        data: {
+            id: nextId.value,
+            date: date,
+            metal: metal.value,
+            crystal: crystal.value,
+        },
+        senderUuid: statsViewUuid,
+    };
+    sendMessage(message);
+
+    datetimeString.value = '';
+    metal.value = 0;
+    crystal.value = 0;
+}
 </script>
+
 <style lang="scss" scoped>
-    .fake-table {
-        border: 1px solid rgba(var(--color), 0.5);
-        border-radius: 4px;
-        display: grid;
-        width: fit-content;
+.fake-table {
+    border: 1px solid rgba(var(--color), 0.5);
+    border-radius: 4px;
+    display: grid;
+    width: fit-content;
 
-        &-header {
-            background: black
-                linear-gradient(
-                    0deg,
-                    rgba(var(--color), 0.5),
-                    rgba(var(--color), 0.7)
-                );
-            justify-content: center;
-            align-items: center;
-        }
+    &-header {
+        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+        justify-content: center;
+        align-items: center;
+    }
 
-        &-header,
-        &-body {
-            padding: 8px;
+    &-header,
+    &-body {
+        padding: 8px;
+        display: flex;
+    }
+
+    &-body {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        > * {
             display: flex;
         }
-
-        &-body {
-            flex-direction: column;
-            gap: 4px;
-            align-items: flex-start;
-            justify-content: flex-start;
-
-            > * {
-                display: flex;
-            }
-        }
     }
+}
 
-    input {
-        width: 180px;
-    }
+input {
+    width: 180px;
+}
 
-    .mdi.calendar-icon {
-        transform: scale(2);
-        width: 32px;
-        align-self: center;
-        justify-self: center;
-        display: flex;
-        justify-content: center;
-    }
+.mdi.calendar-icon {
+    transform: scale(2);
+    width: 32px;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    justify-content: center;
+}
 
-    button.add {
-        align-self: stretch;
-        justify-content: center;
-    }
+button.add {
+    align-self: stretch;
+    justify-content: center;
+}
 </style>

@@ -50,7 +50,7 @@ interface ServerPlayerClassSettings {
         productionFactorBonus: number;
         tradingShips: {
             speedFactorBonus: number;
-            cargoCapacityFactorBonus: number;  
+            cargoCapacityFactorBonus: number;
         };
         bonusFleetSlots: number;
         bonusMarketplaceSlots: number;

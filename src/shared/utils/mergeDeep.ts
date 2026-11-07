@@ -4,13 +4,13 @@ export function mergeDeep<T extends Record<string, any>>(a: T, b: T): T {
 
     Object.keys(b).forEach(bKey => {
         const target = b[bKey];
-        if(bKey in result) {
+        if (bKey in result) {
             const cur = result[bKey];
 
-            if(typeof cur === 'object' && !(cur instanceof Array)) {
+            if (typeof cur === 'object' && !(cur instanceof Array)) {
                 result[bKey] = mergeDeep(cur, target);
                 return;
-            } 
+            }
         }
 
         result[bKey] = target;

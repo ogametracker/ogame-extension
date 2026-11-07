@@ -1,21 +1,21 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
-import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
+import { ProductionBuilding, ProductionBuildingDependencies } from './ProductionBuilding';
 
 class DeuteriumSynthesizerClass extends ProductionBuilding {
-
     public get type() {
         return BuildingType.deuteriumSynthesizer;
     }
 
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const mineProduction = Math.trunc(
-            10 
-            * level 
-            * 1.1 ** level
-            * dependencies.serverSettings.economySpeed
-            * (1.44 - 0.004 * dependencies.planet.temperature)
-            * dependencies.productionSettings.deuteriumSynthesizer / 100
+            (10
+                * level
+                * 1.1 ** level
+                * dependencies.serverSettings.economySpeed
+                * (1.44 - 0.004 * dependencies.planet.temperature)
+                * dependencies.productionSettings.deuteriumSynthesizer)
+                / 100,
         );
         return mineProduction;
     }
@@ -37,6 +37,5 @@ class DeuteriumSynthesizerClass extends ProductionBuilding {
             energy: 0,
         };
     }
-
 }
 export const DeuteriumSynthesizer = new DeuteriumSynthesizerClass();

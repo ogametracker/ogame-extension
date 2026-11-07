@@ -39,7 +39,7 @@
                     :x2="width * maxXNormalized"
                     :y2="yData.svg"
                     class="y-grid-line"
-                    :class="{ 'y-grid-line--first': y == 0 }"
+                    :class="{ 'y-grid-line--first': Number(y) === 0 }"
                 />
             </g>
 
@@ -83,20 +83,15 @@
                     class="dataset-point-group"
                     @mouseenter="activeXNormalizedSync = x"
                 >
-                    <template v-for="dataset in reversedDatasets">
+                    <template v-for="dataset in reversedDatasets" :key="dataset.key">
                         <circle
                             v-if="
-                                dataset.normalizedValuesByNormalizedX[x] != null
-                                && dataset.valuesByNormalizedX[x] != 0
+                                dataset.normalizedValuesByNormalizedX[x] != null && dataset.valuesByNormalizedX[x] != 0
                             "
-                            :key="`point-${dataset.key}-${x}`"
                             v-show="dataset.visible && !dataset.hidePoints"
                             class="dataset-point"
                             :cx="x * width"
-                            :cy="
-                                height *
-                                (1 - dataset.normalizedValuesByNormalizedX[x])
-                            "
+                            :cy="height * (1 - dataset.normalizedValuesByNormalizedX[x])"
                             :style="{ fill: dataset.color }"
                         />
                     </template>
@@ -114,121 +109,104 @@
     </svg>
 </template>
 
-<script lang="ts">
-    import { Component, Prop, PropSync, Vue } from 'vue-property-decorator';
-    import { ScrollableChartInternalDataset, YGridLineData } from './ScrollableChart.vue';
+<script setup lang="ts">
+import type { PropType } from 'vue';
+import type { ScrollableChartInternalDataset, YGridLineData } from './ScrollableChart.vue';
 
-    @Component({})
-    export default class ScrollableChartSvgGroup extends Vue {
+const props = defineProps({
+    showXValuesInGrid: { required: true, type: Boolean },
+    width: { required: true, type: Number },
+    height: { required: true, type: Number },
+    maxXNormalized: { required: true, type: Number },
+    xValuesNormalized: { required: true, type: Array as PropType<number[]> },
+    xAxisTicksNormalized: { required: true, type: Array as PropType<number[]> },
+    yGridLines: { required: true, type: Object as PropType<YGridLineData> },
+    reversedDatasets: { required: true, type: Array as PropType<ScrollableChartInternalDataset[]> },
+});
 
-        @Prop({ required: true, type: Boolean })
-        private showXValuesInGrid!: boolean;
+const activeXNormalizedSync = defineModel<number | null>('activeXNormalized', {
+    required: true,
+    type: Number as PropType<number | null>,
+});
 
-        @Prop({ required: true, type: Number })
-        private width!: number;
+function getRectWidth(xIndex: number) {
+    const xValuesNormalized = props.xValuesNormalized;
+    const leftX = xValuesNormalized[xIndex - 1] ?? 0;
+    const x = xValuesNormalized[xIndex];
+    const rightX = xValuesNormalized[xIndex + 1] ?? props.maxXNormalized;
 
-        @Prop({ required: true, type: Number })
-        private height!: number;
-
-        @PropSync('activeXNormalized', { required: false, type: Number, default: () => null })
-        private activeXNormalizedSync!: number | null;
-
-        @Prop({ required: true, type: Number })
-        private maxXNormalized!: number;
-
-        @Prop({ required: true, type: Array })
-        private xValuesNormalized!: number[];
-
-        @Prop({ required: true, type: Array })
-        private xAxisTicksNormalized!: number[];
-
-        @Prop({ required: true, type: Object })
-        private yGridLines!: YGridLineData;
-
-
-        @Prop({ required: true, type: Array })
-        private reversedDatasets!: ScrollableChartInternalDataset[]; 
-
-
-        private getRectWidth(xIndex: number) {
-            const xValuesNormalized = this.xValuesNormalized;
-            const leftX = xValuesNormalized[xIndex - 1] ?? 0;
-            const x = xValuesNormalized[xIndex];
-            const rightX = xValuesNormalized[xIndex + 1] ?? this.maxXNormalized;
-
-            const width = (x - leftX) / 2 + (rightX - x) / 2;
-            return width;
-        }
-    }
+    const width = (x - leftX) / 2 + (rightX - x) / 2;
+    return width;
+}
 </script>
 
 <style lang="scss" scoped>
-    .translation-group {
-        transform: translateX(var(--chart-x-translation));
-    }
+.translation-group {
+    transform: translateX(var(--chart-x-translation));
+}
 
-    .x-tick-grid-line {
-        stroke: rgba(white, 0.0666);
+.x-tick-grid-line {
+    stroke: rgba(white, 0.0666);
+    stroke-width: 1px;
+    fill: none;
+
+    &.x-tick-grid-line-active {
+        stroke: rgba(white, 0.5);
+        stroke-width: 3px;
+    }
+}
+
+.x-grid-line {
+    stroke: rgba(white, 0.15);
+    stroke-width: 1px;
+    fill: none;
+
+    &.x-grid-line-active {
+        stroke: rgba(white, 0.5);
+        stroke-width: 3px;
+    }
+}
+
+.y-grid-line {
+    stroke: rgba(white, 0.2);
+    stroke-width: 1px;
+    fill: none;
+}
+
+.x-grid-line--first,
+.y-grid-line--first {
+    stroke: rgba(white, 0.75);
+}
+
+.dataset-background {
+    stroke: none;
+}
+
+.dataset-line {
+    fill: none;
+    stroke-width: 2px;
+    filter: brightness(0.7);
+
+    &--dashed {
+        stroke-dasharray: 5px;
         stroke-width: 1px;
-        fill: none;
-
-        &.x-tick-grid-line-active {
-            stroke: rgba(white, 0.5);
-            stroke-width: 3px;
-        }
     }
+}
 
-    .x-grid-line {
-        stroke: rgba(white, 0.15);
+.dataset-point-group {
+    .dataset-point {
+        stroke: rgba(black, 0.5);
+        r: 3px;
         stroke-width: 1px;
-        fill: none;
-
-        &.x-grid-line-active {
-            stroke: rgba(white, 0.5);
-            stroke-width: 3px;
-        }
     }
 
-    .y-grid-line {
-        stroke: rgba(white, 0.2);
-        stroke-width: 1px;
-        fill: none;
+    .dataset-point-group-rect {
+        fill: transparent;
     }
 
-    .x-grid-line--first,
-    .y-grid-line--first {
-        stroke: rgba(white, 0.75);
+    &:hover > .dataset-point {
+        stroke: rgba(black, 0.5);
+        r: 4px;
     }
-
-    .dataset-background {
-        stroke: none;
-    }
-
-    .dataset-line {
-        fill: none;
-        stroke-width: 2px;
-        filter: brightness(0.7);
-
-        &--dashed {
-            stroke-dasharray: 5px;
-            stroke-width: 1px;
-        }
-    }
-
-    .dataset-point-group {
-        .dataset-point {
-            stroke: rgba(black, 0.5);
-            r: 3px;
-            stroke-width: 1px;
-        }
-
-        .dataset-point-group-rect {
-            fill: transparent;
-        }
-
-        &:hover > .dataset-point {
-            stroke: rgba(black, 0.5);
-            r: 4px;
-        }
-    }
+}
 </style>

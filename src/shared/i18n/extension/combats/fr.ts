@@ -1,11 +1,11 @@
-import { CombatResultType } from "@/shared/models/combat-reports/CombatResultType";
-import { CombatsTranslations } from "./type";
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
+import { CombatResultType } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { CombatsTranslations } from './type';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const fr: RecursivePartial<CombatsTranslations> = {
     header: 'Combats',
     tabHeaders: {
-        overview: 'Vue d\'ensemble',
+        overview: "Vue d'ensemble",
         loot: 'Butin',
         lostShips: 'Vaisseaux perdus',
         subHeaders: {
@@ -13,7 +13,7 @@ export const fr: RecursivePartial<CombatsTranslations> = {
             onExpeditions: 'En expéditions',
 
             amount: 'Quantité',
-            resources: 'Unités de ressources'
+            resources: 'Unités de ressources',
         },
     },
     combats: 'Combats',
@@ -23,5 +23,4 @@ export const fr: RecursivePartial<CombatsTranslations> = {
         [CombatResultType.lost]: 'Défaites',
         [CombatResultType.draw]: 'Matchs nuls',
     },
-
 };

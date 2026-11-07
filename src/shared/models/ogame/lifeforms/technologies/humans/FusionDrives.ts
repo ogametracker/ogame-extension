@@ -1,9 +1,9 @@
-import { ShipType } from "../../../ships/ShipType";
-import { ShipTypes } from "../../../ships/ShipTypes";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { StatsBonus, StatsBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { ShipType } from '../../../ships/ShipType';
+import { ShipTypes } from '../../../ships/ShipTypes';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { StatsBonus, StatsBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class FusionDrivesClass extends LifeformTechnology implements StatsBonusLifeformTechnology {
     public constructor() {
@@ -38,11 +38,10 @@ class FusionDrivesClass extends LifeformTechnology implements StatsBonusLifeform
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return ShipTypes.filter(ship => this.appliesTo(ship))
-            .map<LifeformBonusType>(ship => ({
-                type: LifeformBonusTypeId.StatsBonus,
-                tech: ship,
-            }));
+        return ShipTypes.filter(ship => this.appliesTo(ship)).map<LifeformBonusType>(ship => ({
+            type: LifeformBonusTypeId.StatsBonus,
+            tech: ship,
+        }));
     }
 
     public getStatsBonus(ship: ShipType, level: number): StatsBonus {

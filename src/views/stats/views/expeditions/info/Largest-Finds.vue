@@ -1,281 +1,302 @@
 <template>
-    <loading-spinner v-if="loading" />
+    <LoadingSpinner v-if="loading" />
     <div v-else>
         <div v-for="key in keys" :key="key" class="find-column">
-            <h3 v-text="$i18n.$t.extension.expeditions.topFinds.title(keyTranslations[key])" />
+            <h3 v-text="translations().extension.expeditions.topFinds.title(keyTranslations[key])" />
 
-            <grid-table inline :columns="columns" :items="largestFinds[key].values" :style="`--color: ${colors[key]}`">
+            <GridTable inline :columns="columns" :items="largestFinds[key].values" :style="`--color: ${colors[key]}`">
                 <template #cell-size="{ value }">
-                    <expedition-size-icon :size="value" class="scaled-icon" />
+                    <ExpeditionSizeIcon :size="value" class="scaled-icon" />
                 </template>
                 <template #cell-amount="{ value }">
-                    <span v-text="$i18n.$n(value)" />
+                    <span v-text="formatNumber(value)" />
                 </template>
                 <template #cell-date="{ value }">
-                    <span v-text="$i18n.$d(value, 'date')" />
+                    <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
 
         <div class="find-column" :style="`--color: ${colors.shipUnitsConverted}`">
-            <h3 v-text="$i18n.$t.extension.expeditions.topFinds.title($i18n.$t.extension.expeditions.topFinds.shipAmount)" />
+            <h3
+                v-text="
+                    translations().extension.expeditions.topFinds.title(
+                        translations().extension.expeditions.topFinds.shipAmount,
+                    )
+                "
+            />
             <select v-model.number="selectedShip" style="display: block; margin-bottom: 4px">
-                <option v-for="ship in ShipTypes" :key="ship" :value="ship" v-text="$i18n.$t.ogame.ships[ship]" />
+                <option v-for="ship in ShipTypes" :key="ship" :value="ship" v-text="translations().ogame.ships[ship]" />
             </select>
 
-            <grid-table inline :columns="shipColumns" :items="largestFinds.shipAmounts[selectedShip].values">
+            <GridTable inline :columns="shipColumns" :items="largestFinds.shipAmounts[selectedShip].values">
                 <template #cell-amount="{ value }">
-                    <span v-text="$i18n.$n(value)" />
+                    <span v-text="formatNumber(value)" />
                 </template>
                 <template #cell-date="{ value }">
-                    <span v-text="$i18n.$d(value, 'date')" />
+                    <span v-text="formatDate(value, 'date')" />
                 </template>
-            </grid-table>
+            </GridTable>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { ExpeditionEventSize } from '@/shared/models/expeditions/ExpeditionEventSize';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ExpeditionDataModule } from '../../../data/ExpeditionDataModule';
-    import ExpeditionSizeIcon from '@/views/stats/components/expeditions/ExpeditionSizeIcon.vue';
-    import { ExpeditionEventDarkMatter, ExpeditionEventFleet, ExpeditionEventResources, ExpeditionFindableShipTypes, ExpeditionFindableShipType } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { GridTableColumn } from '../../../components/common/GridTable.vue';
-    import { SettingsDataModule } from '../../../data/SettingsDataModule';
-    import { getRGBString } from '../../../utils/getRGBString';
-    import { ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-    import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-    import { TopList } from '@/views/stats/models/TopList';
-    import { getMsuOrDsu } from '@/views/stats/models/settings/getMsuOrDsu';
-    import { createRecord } from "@/shared/utils/createRecord";
+<script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import { computed, onMounted, ref } from 'vue';
+import { translations, formatNumber, formatDate } from '@stats/i18n';
+import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { useExpeditionStore } from '../../../data/ExpeditionDataModule';
+import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
+import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import type {
+    ExpeditionEventDarkMatter,
+    ExpeditionEventFleet,
+    ExpeditionEventResources,
+    ExpeditionFindableShipType,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import type { GridTableColumn } from '../../../components/common/GridTable.vue';
+import { useSettingsStore } from '../../../data/SettingsDataModule';
+import { getRGBString } from '../../../utils/getRGBString';
+import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { TopList } from '@stats/models/TopList';
+import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
-    type Find = {
-        size: ExpeditionEventSize;
-        amount: number;
-        date: number;
+type Find = {
+    size: ExpeditionEventSize;
+    amount: number;
+    date: number;
+};
+
+type ShipAmountFind = {
+    amount: number;
+    date: number;
+};
+
+type Finds = {
+    metal: TopList<Find>;
+    crystal: TopList<Find>;
+    deuterium: TopList<Find>;
+    shipUnits: TopList<Find>;
+    shipUnitsConverted: TopList<Find>;
+    darkMatter: TopList<Find>;
+    shipAmounts: Record<ExpeditionFindableShipType, TopList<ShipAmountFind>>;
+};
+
+type FindKey = Exclude<keyof Finds, 'shipAmounts'>;
+
+const settingsStore = useSettingsStore();
+
+const expeditionStore = useExpeditionStore();
+
+const loading = ref(true);
+
+const ShipTypes = ExpeditionFindableShipTypes;
+
+const largestFinds: Finds = {
+    metal: new TopList<Find>({
+        comparator: (a, b) => b.amount - a.amount,
+        maxSize: 25,
+    }),
+    crystal: new TopList<Find>({
+        comparator: (a, b) => b.amount - a.amount,
+        maxSize: 25,
+    }),
+    deuterium: new TopList<Find>({
+        comparator: (a, b) => b.amount - a.amount,
+        maxSize: 25,
+    }),
+    shipUnits: new TopList<Find>({
+        comparator: (a, b) => b.amount - a.amount,
+        maxSize: 25,
+    }),
+    shipUnitsConverted: new TopList<Find>({
+        comparator: (a, b) => b.amount - a.amount,
+        maxSize: 25,
+    }),
+    darkMatter: new TopList<Find>({
+        comparator: (a, b) => b.amount - a.amount,
+        maxSize: 25,
+    }),
+    shipAmounts: createRecord(
+        ExpeditionFindableShipTypes,
+        ship =>
+            new TopList<ShipAmountFind>({
+                comparator: (a, b) => b.amount - a.amount,
+                maxSize: 25,
+            }),
+    ),
+};
+
+const keys: FindKey[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
+
+const selectedShip = ref<ExpeditionFindableShipType>(ShipType.espionageProbe);
+
+const keyTranslations = computed<Record<FindKey, string>>(() => {
+    return {
+        metal: translations().ogame.resources.metal,
+        crystal: translations().ogame.resources.crystal,
+        deuterium: translations().ogame.resources.deuterium,
+        shipUnits: translations().extension.expeditions.topFinds.shipUnits,
+        shipUnitsConverted:
+            translations().extension.expeditions.topFinds.shipUnits
+            + ` (${
+                settingsStore.settings.conversionRates.mode == 'msu'
+                    ? translations().extension.common.msu
+                    : translations().extension.common.dsu
+            })`,
+        darkMatter: translations().ogame.premium.darkMatter,
+    };
+});
+
+const colors = computed<Record<FindKey, string>>(() => {
+    const localColors = settingsStore.settings.colors;
+
+    return {
+        metal: getRGBString(localColors.resources.metal)!,
+        crystal: getRGBString(localColors.resources.crystal)!,
+        deuterium: getRGBString(localColors.resources.deuterium)!,
+        darkMatter: getRGBString(localColors.expeditions.events.darkMatter)!,
+        shipUnits: getRGBString(localColors.expeditions.events.fleet)!,
+        shipUnitsConverted: getRGBString(localColors.expeditions.events.fleet)!,
+    };
+});
+
+const columns = computed<GridTableColumn<keyof Find>[]>(() => {
+    return [
+        {
+            key: 'size',
+            label: translations().extension.expeditions.topFinds.size,
+        },
+        {
+            key: 'amount',
+            label: translations().extension.expeditions.topFinds.amount,
+        },
+        {
+            key: 'date',
+            label: translations().extension.expeditions.topFinds.date,
+        },
+    ];
+});
+
+const shipColumns = computed<GridTableColumn<keyof ShipAmountFind>[]>(() => {
+    return [
+        {
+            key: 'amount',
+            label: translations().extension.expeditions.topFinds.amount,
+        },
+        {
+            key: 'date',
+            label: translations().extension.expeditions.topFinds.date,
+        },
+    ];
+});
+
+function addDarkMatterExpo(expo: ExpeditionEventDarkMatter) {
+    largestFinds.darkMatter.add({
+        size: expo.size,
+        amount: expo.darkMatter,
+        date: expo.date,
+    });
+}
+
+function addFleetExpo(expo: ExpeditionEventFleet) {
+    // ship units (metal + crystal)
+    {
+        const units = ExpeditionFindableShipTypes.map(shipType => {
+            const count = expo.fleet[shipType] ?? 0;
+            const ship = ShipByTypes[shipType];
+
+            const cost = ship.cost;
+            return (cost.metal + cost.crystal) * count;
+        }).reduce((total, cur) => total + cur, 0);
+
+        largestFinds.shipUnits.add({
+            size: expo.size,
+            amount: units,
+            date: expo.date,
+        });
     }
-    type ShipAmountFind = {
-        amount: number;
-        date: number;
+    // ship units (MSU)
+    {
+        const unitsMsu = ExpeditionFindableShipTypes.map(shipType => {
+            const count = expo.fleet[shipType] ?? 0;
+            const ship = ShipByTypes[shipType];
+
+            const cost = ship.cost;
+            return getMsuOrDsu(cost) * count;
+        }).reduce((total, cur) => total + cur, 0);
+
+        largestFinds.shipUnitsConverted.add({
+            size: expo.size,
+            amount: unitsMsu,
+            date: expo.date,
+        });
     }
 
-    type Finds = {
-        metal: TopList<Find>;
-        crystal: TopList<Find>;
-        deuterium: TopList<Find>;
-        shipUnits: TopList<Find>;
-        shipUnitsConverted: TopList<Find>;
-        darkMatter: TopList<Find>;
-        shipAmounts: Record<ExpeditionFindableShipType, TopList<ShipAmountFind>>;
+    // per ship type
+    ExpeditionFindableShipTypes.forEach(ship => {
+        const amount = expo.fleet[ship] ?? 0;
+        if (amount == 0) {
+            return;
+        }
+
+        largestFinds.shipAmounts[ship].add({
+            date: expo.date,
+            amount,
+        });
+    });
+}
+
+function addResourceExpo(expo: ExpeditionEventResources) {
+    const resource =
+        expo.resources.metal > 0
+            ? ResourceType.metal
+            : expo.resources.crystal > 0
+              ? ResourceType.crystal
+              : ResourceType.deuterium;
+
+    if (expo.resources[resource] == 0) {
+        return;
     }
 
-    @Component({
-        components: {
-            ExpeditionSizeIcon,
+    largestFinds[resource].add({
+        size: expo.size,
+        amount: expo.resources[resource],
+        date: expo.date,
+    });
+}
+
+onMounted(async () => {
+    const expeditions = await expeditionStore.getRawData();
+
+    expeditions.forEach(expo => {
+        if (expo.type == ExpeditionEventType.resources) {
+            addResourceExpo(expo);
+        } else if (expo.type == ExpeditionEventType.fleet) {
+            addFleetExpo(expo);
+        } else if (expo.type == ExpeditionEventType.darkMatter) {
+            addDarkMatterExpo(expo);
         }
-    })
-    export default class LargestFinds extends Vue {
+    });
 
-        private loading = true;
-        private readonly ShipTypes = ExpeditionFindableShipTypes;
-
-        private largestFinds: Finds = {
-            metal: new TopList<Find>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            }),
-            crystal: new TopList<Find>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            }),
-            deuterium: new TopList<Find>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            }),
-            shipUnits: new TopList<Find>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            }),
-            shipUnitsConverted: new TopList<Find>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            }),
-            darkMatter: new TopList<Find>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            }),
-            shipAmounts: createRecord(ExpeditionFindableShipTypes, ship => new TopList<ShipAmountFind>({
-                comparator: (a, b) => b.amount - a.amount,
-                maxSize: 25,
-            })),
-        };
-
-        private readonly keys: (keyof Finds)[] = ['metal', 'crystal', 'deuterium', 'shipUnits', 'shipUnitsConverted', 'darkMatter'];
-
-        private selectedShip: ExpeditionFindableShipType = ShipType.espionageProbe;
-
-        private get keyTranslations(): Record<keyof Finds, string> {
-            return {
-                metal: this.$i18n.$t.ogame.resources.metal,
-                crystal: this.$i18n.$t.ogame.resources.crystal,
-                deuterium: this.$i18n.$t.ogame.resources.deuterium,
-                shipUnits: this.$i18n.$t.extension.expeditions.topFinds.shipUnits,
-                shipUnitsConverted: this.$i18n.$t.extension.expeditions.topFinds.shipUnits + ` (${
-                    SettingsDataModule.settings.conversionRates.mode == 'msu'
-                        ? this.$i18n.$t.extension.common.msu
-                        : this.$i18n.$t.extension.common.dsu
-                })`,
-                darkMatter: this.$i18n.$t.ogame.premium.darkMatter,
-            };
-        }
-
-        private get colors(): Record<keyof Finds, string> {
-            const colors = SettingsDataModule.settings.colors;
-
-            return {
-                metal: getRGBString(colors.resources.metal)!,
-                crystal: getRGBString(colors.resources.crystal)!,
-                deuterium: getRGBString(colors.resources.deuterium)!,
-                darkMatter: getRGBString(colors.expeditions.events.darkMatter)!,
-                shipUnits: getRGBString(colors.expeditions.events.fleet)!,
-                shipUnitsConverted: getRGBString(colors.expeditions.events.fleet)!,
-            };
-        }
-
-        private get columns(): GridTableColumn<keyof Find>[] {
-            return [
-                {
-                    key: 'size',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.size,
-                },
-                {
-                    key: 'amount',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.amount,
-                },
-                {
-                    key: 'date',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.date,
-                },
-            ];
-        }
-
-        private get shipColumns(): GridTableColumn<keyof ShipAmountFind>[] {
-            return [
-                {
-                    key: 'amount',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.amount,
-                },
-                {
-                    key: 'date',
-                    label: this.$i18n.$t.extension.expeditions.topFinds.date,
-                },
-            ];
-        }
-
-        async mounted() {
-            const expeditions = await ExpeditionDataModule.getRawData();
-
-            expeditions.forEach(expo => {
-                if (expo.type == ExpeditionEventType.resources) {
-                    this.addResourceExpo(expo);
-                }
-                else if (expo.type == ExpeditionEventType.fleet) {
-                    this.addFleetExpo(expo);
-                }
-                else if (expo.type == ExpeditionEventType.darkMatter) {
-                    this.addDarkMatterExpo(expo);
-                }
-            });
-
-            this.loading = false;
-        }
-
-        private addDarkMatterExpo(expo: ExpeditionEventDarkMatter) {
-            this.largestFinds.darkMatter.add({
-                size: expo.size,
-                amount: expo.darkMatter,
-                date: expo.date,
-            });
-        }
-
-        private addFleetExpo(expo: ExpeditionEventFleet) {
-            // ship units (metal + crystal)
-            {
-                const units = ExpeditionFindableShipTypes.map(shipType => {
-                    const count = expo.fleet[shipType] ?? 0;
-                    const ship = ShipByTypes[shipType];
-
-                    const cost = ship.cost;
-                    return (cost.metal + cost.crystal) * count;
-                }).reduce((total, cur) => total + cur, 0);
-
-                this.largestFinds.shipUnits.add({
-                    size: expo.size,
-                    amount: units,
-                    date: expo.date,
-                });
-            }
-            // ship units (MSU)
-            {
-                const unitsMsu = ExpeditionFindableShipTypes.map(shipType => {
-                    const count = expo.fleet[shipType] ?? 0;
-                    const ship = ShipByTypes[shipType];
-
-                    const cost = ship.cost;
-                    return getMsuOrDsu(cost) * count;
-                }).reduce((total, cur) => total + cur, 0);
-
-                this.largestFinds.shipUnitsConverted.add({
-                    size: expo.size,
-                    amount: unitsMsu,
-                    date: expo.date,
-                });
-            }
-
-            // per ship type
-            ExpeditionFindableShipTypes.forEach(ship => {
-                const amount = expo.fleet[ship] ?? 0;
-                if(amount == 0) {
-                    return;
-                }
-
-                this.largestFinds.shipAmounts[ship].add({
-                    date: expo.date,
-                    amount,
-                });
-            });
-        }
-
-        private addResourceExpo(expo: ExpeditionEventResources) {
-            const resource = expo.resources.metal > 0
-                ? ResourceType.metal
-                : expo.resources.crystal > 0
-                    ? ResourceType.crystal
-                    : ResourceType.deuterium;
-                    
-            if(expo.resources[resource] == 0) {
-                return;
-            }
-
-            this.largestFinds[resource].add({
-                size: expo.size,
-                amount: expo.resources[resource],
-                date: expo.date,
-            });
-        }
-    }
+    loading.value = false;
+});
 </script>
-<style lang="scss" scoped>
-    .scaled-icon {
-        transform: scale(1.6);
-    }
 
-    .find-column {
-        display: inline-flex;
-        flex-direction: column;
-        margin-right: 16px;
-    }
+<style lang="scss" scoped>
+.scaled-icon {
+    transform: scale(1.6);
+}
+
+.find-column {
+    display: inline-flex;
+    flex-direction: column;
+    margin-right: 16px;
+}
 </style>

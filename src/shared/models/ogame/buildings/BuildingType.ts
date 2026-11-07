@@ -24,31 +24,27 @@ export enum BuildingType {
     jumpGate = 43,
 }
 
-export type MoonBuildingType = (
+export type MoonBuildingType =
     | BuildingType.metalStorage
     | BuildingType.crystalStorage
     | BuildingType.deuteriumTank
-
     | BuildingType.roboticsFactory
     | BuildingType.shipyard
     | BuildingType.lunarBase
     | BuildingType.sensorPhalanx
-    | BuildingType.jumpGate
-);
-export type MoonSupplyBuildingType = (
+    | BuildingType.jumpGate;
+export type MoonSupplyBuildingType =
     | BuildingType.metalStorage
     | BuildingType.crystalStorage
-    | BuildingType.deuteriumTank
-);
-export type MoonFacilityBuildingType = (
+    | BuildingType.deuteriumTank;
+export type MoonFacilityBuildingType =
     | BuildingType.roboticsFactory
     | BuildingType.shipyard
     | BuildingType.lunarBase
     | BuildingType.sensorPhalanx
-    | BuildingType.jumpGate
-);
+    | BuildingType.jumpGate;
 
-export type PlanetBuildingType = (
+export type PlanetBuildingType =
     | BuildingType.metalMine
     | BuildingType.crystalMine
     | BuildingType.deuteriumSynthesizer
@@ -57,7 +53,6 @@ export type PlanetBuildingType = (
     | BuildingType.deuteriumTank
     | BuildingType.solarPlant
     | BuildingType.fusionReactor
-
     | BuildingType.roboticsFactory
     | BuildingType.shipyard
     | BuildingType.researchLab
@@ -65,9 +60,8 @@ export type PlanetBuildingType = (
     | BuildingType.missileSilo
     | BuildingType.naniteFactory
     | BuildingType.terraformer
-    | BuildingType.spaceDock
-);
-export type PlanetSupplyBuildingType = (
+    | BuildingType.spaceDock;
+export type PlanetSupplyBuildingType =
     | BuildingType.metalMine
     | BuildingType.crystalMine
     | BuildingType.deuteriumSynthesizer
@@ -75,9 +69,8 @@ export type PlanetSupplyBuildingType = (
     | BuildingType.crystalStorage
     | BuildingType.deuteriumTank
     | BuildingType.solarPlant
-    | BuildingType.fusionReactor
-);
-export type PlanetFacilityBuildingType = (
+    | BuildingType.fusionReactor;
+export type PlanetFacilityBuildingType =
     | BuildingType.roboticsFactory
     | BuildingType.shipyard
     | BuildingType.researchLab
@@ -85,5 +78,4 @@ export type PlanetFacilityBuildingType = (
     | BuildingType.missileSilo
     | BuildingType.naniteFactory
     | BuildingType.terraformer
-    | BuildingType.spaceDock
-);
+    | BuildingType.spaceDock;

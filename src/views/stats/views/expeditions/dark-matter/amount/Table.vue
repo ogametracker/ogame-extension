@@ -1,69 +1,63 @@
 <template>
     <div class="table-container">
-        <ranged-stats-table
-            :dataItems="expos"
-            :items="items"
-            show-average
-            :averageNumberFormatOptions="avgFormat"
-        >
+        <RangedStatsTable :dataItems="expos" :items="items" show-average :averageNumberFormatOptions="avgFormat">
             <template #cell-label="{ value }">
                 <span v-text="value" class="mr-2" />
 
-                <o-resource resource="dark-matter" size="24px" />
+                <OResource resource="dark-matter" size="24px" />
             </template>
-        </ranged-stats-table>
+        </RangedStatsTable>
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <date-range-settings />
-        </floating-menu>
+            <DateRangeSettings />
+        </FloatingMenu>
     </div>
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import RangedStatsTable, { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
+<script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import RangedStatsTable from '@stats/components/stats/RangedStatsTable.vue';
+import type { RangedStatsTableItem } from '@stats/components/stats/RangedStatsTable.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import DateRangeSettings from '@stats/components/settings/DateRangeSettings.vue';
 
-    @Component({
-        components: {
-            RangedStatsTable,
-            DateRangeSettings,
+const expeditionStore = useExpeditionStore();
+
+const showSettings = ref(false);
+
+const avgFormat = ref<Intl.NumberFormatOptions>({
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+});
+
+const expos = computed(() => expeditionStore.dailyResultsArray);
+
+const items = computed<RangedStatsTableItem<DailyExpeditionResult>[]>(() => {
+    return [
+        {
+            label: translations().ogame.premium.darkMatter,
+            getValue: nextExpos => nextExpos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
         },
-    })
-    export default class Table extends Vue {
-
-        private showSettings = false;
-
-        private avgFormat: Intl.NumberFormatOptions = {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 1,
-        };
-
-        private get expos() {
-            return ExpeditionDataModule.dailyResultsArray;
-        }
-
-        private get items(): RangedStatsTableItem<DailyExpeditionResult>[] {
-            return [{
-                label: this.$i18n.$t.ogame.premium.darkMatter,
-                getValue: expos => expos.reduce((acc, expo) => acc + expo.findings.darkMatter, 0),
-            }];
-        }
-    }
+    ];
+});
 </script>
+
 <style lang="scss" scoped>
-    .table-container {
-        display: grid;
-        column-gap: 4px;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.table-container {
+    display: grid;
+    column-gap: 4px;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

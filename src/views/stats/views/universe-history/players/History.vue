@@ -1,16 +1,16 @@
 <template>
     <div class="history" v-if="historyTrackingEnabled">
-        <loading-spinner v-if="dataModuleLoading" />
+        <LoadingSpinner v-if="dataModuleLoading" />
         <template v-else>
-            <grid-table :columns="tableColumns" :items="tableItems" class="player-selection-table">
+            <GridTable :columns="tableColumns" :items="tableItems" class="player-selection-table">
                 <template #cell-player="{ value: player }">
                     <template v-if="player == null">
                         <input
                             type="text"
                             v-model="selectedPlayerName"
-                            :placeholder="$i18n.$t.extension.universeHistory.playerSelection.search"
+                            :placeholder="translations().extension.universeHistory.playerSelection.search"
                             list="player-list"
-                            @change="onPlayerSelected($event.target.value)"
+                            @change="onPlayerSelected(($event.target as HTMLInputElement).value)"
                             style="width: 100%"
                         />
                         <datalist id="player-list">
@@ -24,210 +24,208 @@
                         <span v-text="player.name" />
                     </div>
                 </template>
-            </grid-table>
+            </GridTable>
 
-            <tabs :tabs="tabs">
+            <Tabs :tabs="tabs">
                 <template #tab-content-status>
-                    <status-history-chart v-if="playerId != null" :playerId="playerId" />
+                    <StatusHistoryChart v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-nickname>
-                    <player-name-history-table v-if="playerId != null" :playerId="playerId" />
+                    <PlayerNameHistoryTable v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-alliance>
-                    <player-alliance-history-table v-if="playerId != null" :playerId="playerId" />
+                    <PlayerAllianceHistoryTable v-if="playerId != null" :playerId="playerId" />
                 </template>
 
                 <template #tab-content-planet-moons>
-                    <player-planets-and-moons-history v-if="playerId != null" :playerId="playerId" />
+                    <PlayerPlanetsAndMoonsHistory v-if="playerId != null" :playerId="playerId" />
                 </template>
-            </tabs>
+            </Tabs>
         </template>
     </div>
-    <universe-history-tracking-settings v-else />
+    <UniverseHistoryTrackingSettings v-else />
 </template>
 
-<script lang="ts">
-    import { OgameTrackerUniverseHistoryPlayerAlliance, OgameTrackerUniverseHistoryPlayerName, OgameTrackerUniverseHistoryPlayerState } from '@/shared/db/schema/universe-history';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
-    import { GridTableColumn } from '@/views/stats/components/common/GridTable.vue';
-    import { Tab } from '@/views/stats/components/common/Tabs.vue';
-    import { GlobalOgameMetaData } from '@/views/stats/data/global';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { UniverseHistoryDataModule, UniverseHistoryPlayer } from '@/views/stats/data/UniverseHistoryDataModule';
-    import { Component, Prop, Ref, Vue } from 'vue-property-decorator';
-    import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
-    import StatusHistoryChart from '@stats/components/universe-history/StatusHistoryChart.vue';
-    import PlayerNameHistoryTable from '@stats/components/universe-history/PlayerNameHistoryTable.vue';
-    import PlayerAllianceHistoryTable from '@stats/components/universe-history/PlayerAllianceHistoryTable.vue';
-    import PlayerPlanetsAndMoonsHistory from '@stats/components/universe-history/PlayerPlanetsAndMoonsHistory.vue';
-    import { UniverseSpecificSettingsDataModule } from '@/views/stats/data/UniverseSpecificSettingsDataModule';
+<script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import Tabs from '@stats/components/common/Tabs.vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { translations } from '@stats/i18n';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
+import type { Tab } from '@stats/components/common/Tabs.vue';
+import { GlobalOgameMetaData } from '@stats/data/global';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import { useUniverseHistoryStore } from '@stats/data/UniverseHistoryDataModule';
+import type { UniverseHistoryPlayer } from '@stats/data/UniverseHistoryDataModule';
+import UniverseHistoryTrackingSettings from '@stats/components/settings/UniverseHistoryTrackingSettings.vue';
+import StatusHistoryChart from '@stats/components/universe-history/StatusHistoryChart.vue';
+import PlayerNameHistoryTable from '@stats/components/universe-history/PlayerNameHistoryTable.vue';
+import PlayerAllianceHistoryTable from '@stats/components/universe-history/PlayerAllianceHistoryTable.vue';
+import PlayerPlanetsAndMoonsHistory from '@stats/components/universe-history/PlayerPlanetsAndMoonsHistory.vue';
+import { useUniverseSpecificSettingsStore } from '@stats/data/UniverseSpecificSettingsDataModule';
 
-    @Component({
-        components: {
-            UniverseHistoryTrackingSettings,
-            StatusHistoryChart,
-            PlayerNameHistoryTable,
-            PlayerAllianceHistoryTable,
-            PlayerPlanetsAndMoonsHistory,
+const router = useRouter();
+
+const route = useRoute();
+
+const settingsStore = useSettingsStore();
+
+const universeHistoryStore = useUniverseHistoryStore();
+
+const universeSpecificSettingsStore = useUniverseSpecificSettingsStore();
+
+const historyTrackingEnabled = computed(() => settingsStore.settings.universeHistory.trackHistory);
+
+const tableColumns = computed<GridTableColumn<'player'>[]>(() => {
+    return [
+        {
+            key: 'player',
+            label: translations().extension.universeHistory.playerSelection.header,
+            headerClass: 'player-selection-table-cell',
+            class: 'player-selection-table-cell',
         },
-    })
-    export default class History extends Vue {
+    ];
+});
 
-        private get historyTrackingEnabled() {
-            return SettingsDataModule.settings.universeHistory.trackHistory;
-        }
+const tableItems = computed<{ player: UniverseHistoryPlayer | null }[]>(() => {
+    return [{ player: null }, { player: selectedPlayer.value }].filter(
+        (value, i, array) => array.findIndex(v => v.player == value.player) == i,
+    );
+});
 
-        private get tableColumns(): GridTableColumn<'player'>[] {
-            return [{
-                key: 'player',
-                label: this.$i18n.$t.extension.universeHistory.playerSelection.header,
-                headerClass: 'player-selection-table-cell',
-                class: 'player-selection-table-cell',
-            }];
-        }
+const tabs = computed<Tab[]>(() => {
+    return [
+        {
+            key: 'status',
+            label: translations().extension.universeHistory.historyTabs.status,
+        },
+        {
+            key: 'nickname',
+            label: translations().extension.universeHistory.historyTabs.nicknames,
+        },
+        {
+            key: 'alliance',
+            label: translations().extension.universeHistory.historyTabs.alliances,
+        },
+        {
+            key: 'planet-moons',
+            label: translations().extension.universeHistory.historyTabs.planetAndMoons,
+        },
+    ];
+});
 
-        private get tableItems(): { player: UniverseHistoryPlayer | null }[] {
-            return [
-                { player: null },
-                { player: this.selectedPlayer },
-            ].filter((value, i, array) => array.findIndex(v => v.player == value.player) == i);
-        }
+const selectedPlayer = computed(() => universeHistoryStore.players.find(p => p.id == playerId.value) ?? null);
 
-        private get tabs(): Tab[] {
-            return [
-                {
-                    key: 'status',
-                    label: this.$i18n.$t.extension.universeHistory.historyTabs.status,
-                },
-                {
-                    key: 'nickname',
-                    label: this.$i18n.$t.extension.universeHistory.historyTabs.nicknames,
-                },
-                {
-                    key: 'alliance',
-                    label: this.$i18n.$t.extension.universeHistory.historyTabs.alliances,
-                },
-                {
-                    key: 'planet-moons',
-                    label: this.$i18n.$t.extension.universeHistory.historyTabs.planetAndMoons,
-                },
-            ];
-        }
-
-        private get selectedPlayer() {
-            return UniverseHistoryDataModule.players.find(p => p.id == this.playerId) ?? null;
-        }
-
-        private get playerId(): number | null {
-            try {
-                const playerId = parseIntSafe(this.$route.query.player as string | null ?? '', 10);
-                return playerId;
-            } catch {
-                return null;
-            }
-        }
-
-        private dataModuleLoading = true;
-        private selectedPlayerName = '';
-
-        private async mounted() {
-            await UniverseSpecificSettingsDataModule.ready;
-            await this.redirectToDefault();
-
-            this.dataModuleLoading = true;
-            await UniverseHistoryDataModule.ready;
-            this.dataModuleLoading = false;
-        }
-
-        private async redirectToDefault() {
-            if (this.playerId != null) {
-                return;
-            }
-
-            const defaultPlayerId = UniverseSpecificSettingsDataModule.settings.universeHistory.players.history
-                ?? GlobalOgameMetaData.playerId;
-
-            await this.updatePlayerIdRoute(defaultPlayerId);
-        }
-
-        private updateSettings(playerId: number) {
-            const settings = UniverseSpecificSettingsDataModule.settings;
-            UniverseSpecificSettingsDataModule.updateSettings({
-                ...settings,
-                universeHistory: {
-                    ...settings.universeHistory,
-                    players: {
-                        ...settings.universeHistory.players,
-                        history: playerId,
-                    },
-                },
-            });
-        }
-
-        private async updatePlayerIdRoute(id: number) {
-            this.updateSettings(id);
-
-            await this.$router.replace({
-                query: {
-                    player: id.toString(),
-                },
-            });
-            await this.redirectToDefault();
-        }
-
-        private get playerNames() {
-            return UniverseHistoryDataModule.players
-                .map(player => player.name)
-                .sort();
-        }
-
-        private async onPlayerSelected(name: string) {
-            const player = UniverseHistoryDataModule.players.find(p => p.name.toLowerCase() == name.toLowerCase());
-            if (player == null) {
-                return;
-            }
-
-            await this.$nextTick();
-            this.selectedPlayerName = '';
-
-            await this.updatePlayerIdRoute(player.id);
-        }
+const playerId = computed<number | null>(() => {
+    try {
+        const localPlayerId = parseIntSafe((route.query.player as string | null) ?? '', 10);
+        return localPlayerId;
+    } catch {
+        return null;
     }
+});
+
+const dataModuleLoading = ref(true);
+
+const selectedPlayerName = ref('');
+
+async function redirectToDefault() {
+    if (playerId.value != null) {
+        return;
+    }
+
+    const defaultPlayerId =
+        universeSpecificSettingsStore.settings.universeHistory.players.history ?? GlobalOgameMetaData.playerId;
+
+    await updatePlayerIdRoute(defaultPlayerId);
+}
+
+function updateSettings(nextPlayerId: number) {
+    const settings = universeSpecificSettingsStore.settings;
+    universeSpecificSettingsStore.updateSettings({
+        ...settings,
+        universeHistory: {
+            ...settings.universeHistory,
+            players: {
+                ...settings.universeHistory.players,
+                history: nextPlayerId,
+            },
+        },
+    });
+}
+
+async function updatePlayerIdRoute(id: number) {
+    updateSettings(id);
+
+    await router.replace({
+        query: {
+            player: id.toString(),
+        },
+    });
+    await redirectToDefault();
+}
+
+const playerNames = computed(() => {
+    return universeHistoryStore.players.map(player => player.name).sort();
+});
+
+async function onPlayerSelected(name: string) {
+    const player = universeHistoryStore.players.find(p => p.name.toLowerCase() == name.toLowerCase());
+    if (player == null) {
+        return;
+    }
+
+    await nextTick();
+    selectedPlayerName.value = '';
+
+    await updatePlayerIdRoute(player.id);
+}
+
+onMounted(async () => {
+    await universeSpecificSettingsStore.ready;
+    await redirectToDefault();
+
+    dataModuleLoading.value = true;
+    await universeHistoryStore.ready;
+    dataModuleLoading.value = false;
+});
 </script>
+
 <style lang="scss" scoped>
-    .history {
-        display: grid;
-        grid-template-columns: 200px 1fr;
-        height: 100%;
-    }
+.history {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 100%;
+}
 
-    .list {
-        display: flex;
-        flex-direction: column;
-    }
+.list {
+    display: flex;
+    flex-direction: column;
+}
 
-    .player-selection {
+.player-selection {
+    margin-right: 16px;
+
+    &-table {
+        height: fit-content;
         margin-right: 16px;
 
-        &-table {
-            height: fit-content;
-            margin-right: 16px;
-
-            &::v-deep {
-                .player-selection-table-cell {
-                    text-align: left;
-                    justify-content: start;
-                    border-bottom: 1px solid rgba(var(--color), 0.5);
-                }
-            }
+        :deep(.player-selection-table-cell) {
+            text-align: left;
+            justify-content: start;
+            border-bottom: 1px solid rgba(var(--color), 0.5);
         }
     }
+}
 
-    .date-range {
-        display: grid;
-        grid-template-columns: 1fr auto 1fr;
-        gap: 4px;
-    }
+.date-range {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 4px;
+}
 </style>

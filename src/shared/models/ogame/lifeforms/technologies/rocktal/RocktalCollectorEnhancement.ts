@@ -1,8 +1,8 @@
-import { PlayerClass, PlayerClasses } from "../../../classes/PlayerClass";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ClassBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { PlayerClass, PlayerClasses } from '../../../classes/PlayerClass';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ClassBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class RocktalCollectorEnhancementClass extends LifeformTechnology implements ClassBonusLifeformTechnology {
     public constructor() {
@@ -27,23 +27,22 @@ class RocktalCollectorEnhancementClass extends LifeformTechnology implements Cla
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return PlayerClasses.filter(p => this.appliesTo(p))
-            .map<LifeformBonusType>(playerClass => ({
-                type: LifeformBonusTypeId.PlayerClassBonus,
-                playerClass,
-            }));
+        return PlayerClasses.filter(p => this.appliesTo(p)).map<LifeformBonusType>(playerClass => ({
+            type: LifeformBonusTypeId.PlayerClassBonus,
+            playerClass,
+        }));
     }
-    
+
     public appliesTo(playerClass: PlayerClass): boolean {
         return playerClass == PlayerClass.collector;
     }
-    
+
     public get type(): LifeformTechnologyType {
         return LifeformTechnologyType.rocktalCollectorEnhancement;
     }
 
     public getClassBonus(playerClass: PlayerClass, level: number): number {
-        if(!this.appliesTo(playerClass)) {
+        if (!this.appliesTo(playerClass)) {
             return 0;
         }
 

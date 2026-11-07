@@ -1,12 +1,12 @@
-import { _log, _logDebug } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { ogameTrackerCloseDialogEventName } from '../../shared/messages/communication';
-import { getOgameMeta } from '../../shared/ogame-web/getOgameMeta';
-import ingamei18n from "@/shared/i18n/extension/ingame";
-import { getLanguage } from "@/shared/i18n/getLanguage";
+import { _log, _logDebug } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { ogameTrackerCloseDialogEventName } from '@ogame-tracker/shared/messages/communication';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import ingamei18n from '@ogame-tracker/shared/i18n/extension/ingame';
+import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
 
 import './styles.scss';
-import { LanguageKey } from "@/shared/i18n/LanguageKey";
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
 
 const observer = new MutationObserver(() => {
     const menu = document.querySelector('#menuTableTools');
@@ -31,9 +31,10 @@ const observer = new MutationObserver(() => {
                     </span>
                 </span>
                 <div class="menubutton"></div>
-                ${language != null
-                ? ''
-                : `<div class="warning-lang-not-supported tooltip" title="The OGame locale '${ogameMeta.userLanguage}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
+                ${
+                    language != null
+                        ? ''
+                        : `<div class="warning-lang-not-supported tooltip" title="The OGame locale '${ogameMeta.userLanguage}' is not supported.<br/>Expeditions, combats on expeditions, and debris field reports will not be tracked.">
                         <span class="mdi mdi-alert"></span>
                     </div>`
                 }

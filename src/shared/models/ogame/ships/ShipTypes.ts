@@ -1,22 +1,30 @@
-import { Battlecruiser } from "./Battlecruiser";
-import { Battleship } from "./Battleship";
-import { Bomber } from "./Bomber";
-import { ColonyShip } from "./ColonyShip";
-import { Crawler } from "./Crawler";
-import { Cruiser } from "./Cruiser";
-import { DeathStar } from "./DeathStar";
-import { Destroyer } from "./Destroyer";
-import { EspionageProbe } from "./EspionageProbe";
-import { HeavyFighter } from "./HeavyFighter";
-import { LargeCargo } from "./LargeCargo";
-import { LightFighter } from "./LightFighter";
-import { Pathfinder } from "./Pathfinder";
-import { Reaper } from "./Reaper";
-import { Recycler } from "./Recycler";
-import { Ship } from "./Ship";
-import { CivilShipType, MilitaryShipType, MoonShipType, NonStationaryShipType, PlanetShipType, ShipType, StationaryShipType } from "./ShipType";
-import { SmallCargo } from "./SmallCargo";
-import { SolarSatellite } from "./SolarSatellite";
+import { Battlecruiser } from './Battlecruiser';
+import { Battleship } from './Battleship';
+import { Bomber } from './Bomber';
+import { ColonyShip } from './ColonyShip';
+import { Crawler } from './Crawler';
+import { Cruiser } from './Cruiser';
+import { DeathStar } from './DeathStar';
+import { Destroyer } from './Destroyer';
+import { EspionageProbe } from './EspionageProbe';
+import { HeavyFighter } from './HeavyFighter';
+import { LargeCargo } from './LargeCargo';
+import { LightFighter } from './LightFighter';
+import { Pathfinder } from './Pathfinder';
+import { Reaper } from './Reaper';
+import { Recycler } from './Recycler';
+import { Ship } from './Ship';
+import {
+    CivilShipType,
+    MilitaryShipType,
+    MoonShipType,
+    NonStationaryShipType,
+    PlanetShipType,
+    ShipType,
+    StationaryShipType,
+} from './ShipType';
+import { SmallCargo } from './SmallCargo';
+import { SolarSatellite } from './SolarSatellite';
 
 export const ShipTypes: ShipType[] = [
     ShipType.smallCargo,
@@ -37,10 +45,7 @@ export const ShipTypes: ShipType[] = [
     ShipType.reaper,
     ShipType.pathfinder,
 ];
-export const StationaryShipTypes: StationaryShipType[] = [
-    ShipType.solarSatellite,
-    ShipType.crawler,
-];
+export const StationaryShipTypes: StationaryShipType[] = [ShipType.solarSatellite, ShipType.crawler];
 export const NonStationaryShipTypes: NonStationaryShipType[] = [
     ShipType.smallCargo,
     ShipType.largeCargo,
@@ -58,7 +63,6 @@ export const NonStationaryShipTypes: NonStationaryShipType[] = [
     ShipType.reaper,
     ShipType.pathfinder,
 ];
-
 
 export const PlanetShipTypes: PlanetShipType[] = [
     ShipType.smallCargo,

@@ -1,0 +1,53 @@
+name: Release
+on:
+  push:
+    branches:
+      - live
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out selected commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '26'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build release archives
+        id: build
+        run: npm run publish -- --no-tag
+
+      - name: Tag commit and create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.build.outputs.version }}
+          TAG: v${{ steps.build.outputs.version }}
+        shell: bash
+        run: |
+          assets=(
+            "publish/ogame-tracker-chrome--$VERSION.zip"
+            "publish/ogame-tracker-firefox--$VERSION.zip"
+            "publish/ogame-tracker-src--$VERSION.zip"
+          )
+          for asset in "${assets[@]}"; do
+            test -s "$asset"
+          done
+          git tag "$TAG" "$GITHUB_SHA"
+          git push origin "refs/tags/$TAG"
+          gh release create "$TAG" "${assets[@]}" \
+            --verify-tag \
+            --title "OGame Tracker $VERSION" \
+            --generate-notes

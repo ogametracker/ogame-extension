@@ -1,10 +1,10 @@
-import { BuildingType } from "../../buildings/BuildingType";
-import { Cost } from "../../common/Cost";
-import { ResourceType } from "../../resources/ResourceType";
-import { CostAndTimeReduction } from "../common-interfaces";
-import { LifeformBuildingType } from "../LifeformBuildingType";
-import { LifeformTechnologyType } from "../LifeformTechnologyType";
-import { LifeformBuilding } from "./LifeformBuilding";
+import { BuildingType } from '../../buildings/BuildingType';
+import { Cost } from '../../common/Cost';
+import { ResourceType } from '../../resources/ResourceType';
+import { CostAndTimeReduction } from '../common-interfaces';
+import { LifeformBuildingType } from '../LifeformBuildingType';
+import { LifeformTechnologyType } from '../LifeformTechnologyType';
+import { LifeformBuilding } from './LifeformBuilding';
 
 export interface ResourceProductionBonusLifeformBuilding extends LifeformBuilding {
     appliesTo(resource: ResourceType | 'energy'): boolean;
@@ -23,7 +23,6 @@ export interface AnyBuildingCostAndTimeReductionLifeformBuilding extends Lifefor
     appliesTo(building: AnyBuildingType): boolean;
     getCostAndTimeReduction(building: AnyBuildingType, level: number): CostAndTimeReduction;
 }
-
 
 export interface ResourceConsumptionReductionLifeformBuilding extends LifeformBuilding {
     getConsumptionReduction(level: number): Cost;

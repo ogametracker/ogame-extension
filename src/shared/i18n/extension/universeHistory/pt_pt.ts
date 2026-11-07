@@ -1,9 +1,9 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { UniverseHistoryTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { UniverseHistoryTranslations } from './type';
 
 export const pt_pt: RecursivePartial<UniverseHistoryTranslations> = {
     header: 'Histórico do Universo',
-    settings: {  
+    settings: {
         messages: {
             notEnabledHtml: `
             <b>Monitorização do histórico das tabelas de pontuação não está activo.</b><br/>
@@ -20,7 +20,7 @@ export const pt_pt: RecursivePartial<UniverseHistoryTranslations> = {
             trackingTimesHtml: `
             Pelo menos uma vez por dia as pontuações e os dados do universo serão actualizados (se a funcionalidade estiver activa).<br/>
             Poderás ver o momento do update abaixo.
-            Se uma actualização for perdida por algum motivo será feita novamente assim que possível.`
+            Se uma actualização for perdida por algum motivo será feita novamente assim que possível.`,
         },
         enableHighscoreTrackingOnly: 'Activar monitorização das pontuações do universo',
         enableHistoryTracking: 'Activar a monitorização do historico do universo',
@@ -91,5 +91,6 @@ export const pt_pt: RecursivePartial<UniverseHistoryTranslations> = {
         admin: 'Administrado',
     },
 
-    loadingTakingLong: 'Carregar os dados está a demorar mais do que era esperado. A base de dados poderá está a ser actualizada neste momento. Espera um pouco mais ou tenta mais tarde.',
+    loadingTakingLong:
+        'Carregar os dados está a demorar mais do que era esperado. A base de dados poderá está a ser actualizada neste momento. Espera um pouco mais ou tenta mais tarde.',
 };

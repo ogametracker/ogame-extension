@@ -1,14 +1,14 @@
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
-import { BuildingType } from "../../buildings/BuildingType";
-import { PlayerClass } from "../../classes/PlayerClass";
-import { Cost } from "../../common/Cost";
-import { DefenseType } from "../../defenses/DefenseType";
-import { ResearchType } from "../../research/ResearchType";
-import { ShipType } from "../../ships/ShipType";
-import { CostAndTimeReduction } from "../common-interfaces";
-import { LifeformTechnologyType } from "../LifeformTechnologyType";
-import { LifeformTechnology } from "./LifeformTechnology";
-import { FleetMissionType } from "../../fleets/FleetMissionType";
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { BuildingType } from '../../buildings/BuildingType';
+import { PlayerClass } from '../../classes/PlayerClass';
+import { Cost } from '../../common/Cost';
+import { DefenseType } from '../../defenses/DefenseType';
+import { ResearchType } from '../../research/ResearchType';
+import { ShipType } from '../../ships/ShipType';
+import { CostAndTimeReduction } from '../common-interfaces';
+import { LifeformTechnologyType } from '../LifeformTechnologyType';
+import { LifeformTechnology } from './LifeformTechnology';
+import { FleetMissionType } from '../../fleets/FleetMissionType';
 
 export interface ResourceProductionBonusLifeformTechnology extends LifeformTechnology {
     getProductionBonus(level: number): Cost;
@@ -21,7 +21,10 @@ export interface BuildingCostAndTimeReductionLifeformTechnology extends Lifeform
 
 export interface ResearchCostAndTimeReductionLifeformTechnology extends LifeformTechnology {
     appliesTo(research: ResearchType | LifeformTechnologyType): boolean;
-    getResearchCostAndTimeReduction(research: ResearchType | LifeformTechnologyType, level: number): CostAndTimeReduction;
+    getResearchCostAndTimeReduction(
+        research: ResearchType | LifeformTechnologyType,
+        level: number,
+    ): CostAndTimeReduction;
 }
 
 export interface CrawlerProductionBonusAndConsumptionReductionLifeformTechnology extends LifeformTechnology {
@@ -67,7 +70,6 @@ export interface ExpeditionEventProbabilityBonusLifeformTechnology extends Lifef
     appliesTo(type: ExpeditionEventType): boolean;
     getExpeditionEventProbabilityBonus(type: ExpeditionEventType, level: number): number;
 }
-
 
 export interface PhalanxRangeBonusLifeformTechnology extends LifeformTechnology {
     getPhalanxRangeBonus(level: number): number;

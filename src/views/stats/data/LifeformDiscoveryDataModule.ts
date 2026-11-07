@@ -1,17 +1,26 @@
-import { MessageType } from '@/shared/messages/MessageType';
-import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { defineStore } from 'pinia';
+import { computed, onScopeDispose, ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getPlayerDatabase } from '@/shared/db/access';
-import { createRecord } from '@/shared/utils/createRecord';
-import { LifeformDiscoveryEventType, LifeformDiscoveryEventTypes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
-import { LifeformDiscoveryEvent } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
-import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
-import { NewLifeformDiscoveryMessage } from '@/shared/messages/tracking/lifeform-discoveries';
-import { LifeformDiscoveryEventArtifactFindingSize, LifeformDiscoveryEventArtifactFindingSizes } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
-import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import {
+    LifeformDiscoveryEventType,
+    LifeformDiscoveryEventTypes,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import type { LifeformDiscoveryEvent } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import type { ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import type { NewLifeformDiscoveryMessage } from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
+import {
+    LifeformDiscoveryEventArtifactFindingSize,
+    LifeformDiscoveryEventArtifactFindingSizes,
+} from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { useUniversesAndAccountsStore } from './UniversesAndAccountsDataModule';
 
 export interface DailyLifeformDiscoveryResult {
     date: number;
@@ -28,59 +37,52 @@ export interface LifeformDiscoveryProgressInfo {
     gainedExperience: number;
 }
 
-@Component
-class LifeformDiscoveryDataModuleClass extends Vue {
-    public dailyResults: Partial<Record<number, DailyLifeformDiscoveryResult>> = {};
-    public readonly lifeforms: Record<ValidLifeformType, LifeformDiscoveryProgressInfo> = createRecord(ValidLifeformTypes, lf => ({
-        discoveriesCount: 0,
-        gainedExperience: 0,
-    }));
-    private internal_firstDate: number | null = null;
-    private internal_count = 0;
+export const useLifeformDiscoveryStore = defineStore('lifeformDiscovery', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const dailyResults = ref<Partial<Record<number, DailyLifeformDiscoveryResult>>>({});
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    const lifeforms = ref<Record<ValidLifeformType, LifeformDiscoveryProgressInfo>>(
+        createRecord(ValidLifeformTypes, lf => ({
+            discoveriesCount: 0,
+            gainedExperience: 0,
+        })),
+    );
+
+    const internal_firstDate = ref<number | null>(null);
+
+    const internal_count = ref(0);
+
+    const count = computed(() => {
+        return internal_count.value;
+    });
+
+    const dailyResultsArray = computed<DailyLifeformDiscoveryResult[]>(() => {
+        return Object.values(dailyResults.value) as DailyLifeformDiscoveryResult[];
+    });
+
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    public get count() {
-        return this.internal_count;
-    }
-
-    public get dailyResultsArray(): DailyLifeformDiscoveryResult[] {
-        return Object.values(this.dailyResults) as DailyLifeformDiscoveryResult[];
-    }
-
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
-    }
-
-    private getAccounts() {
-        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+    function getAccounts() {
+        const la = useUniversesAndAccountsStore().currentAccount.linkedAccounts ?? [];
         const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
             playerId: acc.id,
             language: acc.serverLanguage,
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         return accounts;
     }
 
-    private async loadData() {
-        await this.$nextTick();
-        await UniversesAndAccountsDataModule.ready;
+    async function loadData() {
+        await useUniversesAndAccountsStore().ready;
 
-        const accounts = this.getAccounts();
+        const accounts = getAccounts();
 
         let minDate: number | null = null;
         for (const account of accounts) {
@@ -88,69 +90,66 @@ class LifeformDiscoveryDataModuleClass extends Vue {
 
             const lifeformDiscoveries = await db.getAll('lifeformDiscoveries');
             lifeformDiscoveries.forEach(discovery => {
-                this.addLifeformDiscovery(discovery);
+                addLifeformDiscovery(discovery);
 
                 minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, discovery.date);
             });
-            this.internal_firstDate = minDate;
+            internal_firstDate.value = minDate;
         }
 
-        this._resolveReady();
+        resolveReady();
     }
 
-    public async getRawData() {
+    async function getRawData() {
         const lifeformDiscoveries: LifeformDiscoveryEvent[] = [];
-        const accounts = this.getAccounts();
-        
+        const accounts = getAccounts();
+
         for (const account of accounts) {
             const db = await getPlayerDatabase(account);
             const accLfMissions = await db.getAll('lifeformDiscoveries');
-            lifeformDiscoveries.push(...accLfMissions);
+            accLfMissions.forEach(discovery => lifeformDiscoveries.push(discovery));
         }
 
         return lifeformDiscoveries;
     }
 
-    private addLifeformDiscovery(discovery: LifeformDiscoveryEvent) {
-        this.addLifeformDiscoveryToDailyResult(discovery);
-        this.addLifeformDiscoveryToLifeformInfos(discovery);
+    function addLifeformDiscovery(discovery: LifeformDiscoveryEvent) {
+        addLifeformDiscoveryToDailyResult(discovery);
+        addLifeformDiscoveryToLifeformInfos(discovery);
     }
 
-    private addTimeout: number | undefined = undefined;
-    private addDiscoveries: LifeformDiscoveryEvent[] = [];
+    let addTimeout: number | undefined = undefined;
 
-    private addLifeformDiscovery_delayed(discovery: LifeformDiscoveryEvent) {
-        this.addDiscoveries.push(discovery);
+    let addDiscoveries: LifeformDiscoveryEvent[] = [];
 
-        clearTimeout(this.addTimeout);
-        this.addTimeout = setTimeout(() => {
-            const addDiscoveries = this.addDiscoveries;
-            this.addDiscoveries = [];
-            addDiscoveries.forEach(discovery => this.addLifeformDiscovery(discovery));
+    function addLifeformDiscovery_delayed(discovery: LifeformDiscoveryEvent) {
+        addDiscoveries.push(discovery);
+
+        clearTimeout(addTimeout);
+        addTimeout = window.setTimeout(() => {
+            const pending = addDiscoveries;
+            addDiscoveries = [];
+            pending.forEach(discovery => addLifeformDiscovery(discovery));
         }, 500);
     }
 
-    private addLifeformDiscoveryToLifeformInfos(discovery: LifeformDiscoveryEvent) {
+    function addLifeformDiscoveryToLifeformInfos(discovery: LifeformDiscoveryEvent) {
         if (discovery.type == LifeformDiscoveryEventType.newLifeformFound) {
-            this.lifeforms[discovery.lifeform].discoveredDate = discovery.date;
-            this.lifeforms[discovery.lifeform].discoveriesCount++;
-        }
-        else if (discovery.type == LifeformDiscoveryEventType.knownLifeformFound) {
-            this.lifeforms[discovery.lifeform].discoveriesCount++;
-            this.lifeforms[discovery.lifeform].gainedExperience += discovery.experience;
+            lifeforms.value[discovery.lifeform].discoveredDate = discovery.date;
+            lifeforms.value[discovery.lifeform].discoveriesCount++;
+        } else if (discovery.type == LifeformDiscoveryEventType.knownLifeformFound) {
+            lifeforms.value[discovery.lifeform].discoveriesCount++;
+            lifeforms.value[discovery.lifeform].gainedExperience += discovery.experience;
         }
     }
 
-    private addLifeformDiscoveryToDailyResult(discovery: LifeformDiscoveryEvent) {
-        this.internal_count++;
+    function addLifeformDiscoveryToDailyResult(discovery: LifeformDiscoveryEvent) {
+        internal_count.value++;
 
         const day = startOfDay(discovery.date).getTime();
 
-        let dailyResult = this.dailyResults[day];
-        if (dailyResult == null) {
-            dailyResult = this.getNewDailyResult(day);
-            this.$set(this.dailyResults, day, dailyResult);
-        }
+        dailyResults.value[day] ??= getNewDailyResult(day);
+        const dailyResult = dailyResults.value[day];
 
         dailyResult.events[discovery.type]++;
 
@@ -172,7 +171,7 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         }
     }
 
-    private getNewDailyResult(date: number): DailyLifeformDiscoveryResult {
+    function getNewDailyResult(date: number): DailyLifeformDiscoveryResult {
         return {
             date,
             events: createRecord(LifeformDiscoveryEventTypes, 0),
@@ -183,11 +182,11 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         };
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(message => this.onMessage(message));
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private onMessage(msg: Message) {
+    function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -196,20 +195,35 @@ class LifeformDiscoveryDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewLifeformDiscovery: {
                 const { data: discovery } = msg as NewLifeformDiscoveryMessage;
-                this.addLifeformDiscovery_delayed(discovery);
+                addLifeformDiscovery_delayed(discovery);
                 break;
             }
         }
     }
 
-    public get firstDay(): number {
-        return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
-    }
+    const firstDay = computed<number>(() => {
+        return startOfDay(internal_firstDate.value ?? Date.now()).getTime();
+    });
 
-    public async clear(): Promise<void> {
+    async function clear(): Promise<void> {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         await db.clear('lifeformDiscoveries');
     }
-}
 
-export const LifeformDiscoveryDataModule = new LifeformDiscoveryDataModuleClass();
+    onScopeDispose(() => clearTimeout(addTimeout));
+
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        dailyResults,
+        lifeforms,
+        internal_firstDate,
+        internal_count,
+        count,
+        dailyResultsArray,
+        getRawData,
+        firstDay,
+        clear,
+    };
+});

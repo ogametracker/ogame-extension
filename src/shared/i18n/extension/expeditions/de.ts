@@ -1,9 +1,9 @@
-import { ExpeditionEventSize } from "@/shared/models/expeditions/ExpeditionEventSize";
-import { ExpeditionEventType } from "@/shared/models/expeditions/ExpeditionEventType";
-import { ExpeditionsTranslations } from "./type";
+import { ExpeditionEventSize } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { ExpeditionsTranslations } from './type';
 import { de as ogamePremium } from '../../ogame/premium/de';
 import { de as ogameFactions } from '../../ogame/factions/de';
-import { ExpeditionDepletionLevel } from "@/shared/models/expeditions/ExpeditionDepletionLevel";
+import { ExpeditionDepletionLevel } from '@ogame-tracker/shared/models/expeditions/ExpeditionDepletionLevel';
 
 export const de: ExpeditionsTranslations = {
     header: 'Expeditionen',
@@ -80,6 +80,10 @@ export const de: ExpeditionsTranslations = {
             shipFindBonus: 'Bonus Schiffsfunde',
             darkMatterFindBonus: 'Bonus DM-Funde',
             discovererBonus: 'Bonus Entdeckerklasse',
+            resourceFindItemBonus: 'Rohstofffunde Item-Bonus',
+            improvedChancesItemBonus: 'Expeditions-Computer',
+            active: 'aktiv',
+            inactive: 'nicht aktiv',
         },
 
         maximumFinds: 'Maximalfunde',

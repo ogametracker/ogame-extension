@@ -1,10 +1,9 @@
-import { Cost } from "../common/Cost";
-import { Ship } from "./Ship";
-import { ShipType } from "./ShipType";
+import { Cost } from '../common/Cost';
+import { Ship } from './Ship';
+import { ShipType } from './ShipType';
 
 class DeathStarClass extends Ship {
-
-    public get type() { 
+    public get type() {
         return ShipType.deathStar;
     }
 
@@ -13,12 +12,12 @@ class DeathStarClass extends Ship {
             metal: 5_000_000,
             crystal: 4_000_000,
             deuterium: 1_000_000,
-            energy: 0,            
+            energy: 0,
         };
     }
 
     public baseHull(): number {
-         return 9_000_000;
+        return 9_000_000;
     }
 
     public baseShield(): number {
@@ -30,7 +29,7 @@ class DeathStarClass extends Ship {
     }
 
     public baseSpeed(): number {
-         return 100;
+        return 100;
     }
 
     public baseCargoCapacity(): number {

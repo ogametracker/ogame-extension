@@ -1,21 +1,21 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
-import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
+import { ProductionBuilding, ProductionBuildingDependencies } from './ProductionBuilding';
 class CrystalMineClass extends ProductionBuilding {
-
     public get type() {
         return BuildingType.crystalMine;
     }
-    
+
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const boost = this.getProductionBoost(dependencies.planet.position, dependencies.serverSettings);
         const mineProduction = Math.trunc(
-            20
-            * dependencies.serverSettings.economySpeed
-            * (1 + boost)
-            * level
-            * 1.1 ** level
-            * dependencies.productionSettings.crystalMine / 100
+            (20
+                * dependencies.serverSettings.economySpeed
+                * (1 + boost)
+                * level
+                * 1.1 ** level
+                * dependencies.productionSettings.crystalMine)
+                / 100,
         );
 
         return mineProduction;
@@ -53,6 +53,5 @@ class CrystalMineClass extends ProductionBuilding {
             energy: 0,
         };
     }
-
 }
 export const CrystalMine = new CrystalMineClass();

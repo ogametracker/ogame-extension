@@ -1,5 +1,5 @@
-import { LanguageKey } from "../../../LanguageKey";
-import { ExpeditionMessages } from "./types";
+import { LanguageKey } from '../../../LanguageKey';
+import { ExpeditionMessages } from './types';
 import { cs } from './cs';
 import { de } from './de';
 import { da } from './da';

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "moduleResolution": "bundler",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "types": ["chrome"],
+        "lib": ["esnext", "dom", "dom.iterable"]
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["**/node_modules", "**/dist"]
+}

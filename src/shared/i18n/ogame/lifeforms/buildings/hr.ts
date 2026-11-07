@@ -1,6 +1,6 @@
-import { LifeformBuildingsTranslations } from "./types";
+import { LifeformBuildingsTranslations } from './types';
 import { en } from './en';
-import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
 
 export const hr: LifeformBuildingsTranslations = {
     [LifeformBuildingType.residentialSector]: 'Stambeni Sektor',

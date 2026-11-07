@@ -1,86 +1,100 @@
-import { LifeformTechnologyType } from "../LifeformTechnologyType";
-import { LifeformType } from "../LifeformType";
-import { BattlecruiserMkII } from "./humans/BattlecruiserMkII";
-import { BomberMkII } from "./humans/BomberMkII";
-import { CruiserMkII } from "./humans/CruiserMkII";
-import { DestroyerMkII } from "./humans/DestroyerMkII";
-import { EnhancedProductionTechnologies } from "./humans/EnhancedProductionTechnologies";
-import { FusionDrives } from "./humans/FusionDrives";
-import { HighPerformanceExtractors } from "./humans/HighPerformanceExtractors";
-import { HighPerformanceTerraformer } from "./humans/HighPerformanceTerraformer";
-import { ImprovedLabTechnology } from "./humans/ImprovedLabTechnology";
-import { IntergalacticEnvoys } from "./humans/IntergalacticEnvoys";
-import { LightFighterMkII } from "./humans/LightFighterMkII";
-import { LowTemperatureDrives } from "./humans/LowTemperatureDrives";
-import { OrbitalDen } from "./humans/OrbitalDen";
-import { PlasmaTerraformer } from "./humans/PlasmaTerraformer";
-import { ResearchAI } from "./humans/ResearchAI";
-import { RobotAssistants } from "./humans/RobotAssistants";
-import { StealthFieldGenerator } from "./humans/StealthFieldGenerator";
-import { Supercomputer } from "./humans/Supercomputer";
-import { BuildingCostAndTimeReductionLifeformTechnology, ClassBonusLifeformTechnology, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology, DenCapacityBonusLifeformTechnology, ExpeditionBonusLifeformTechnology, ExpeditionEventProbabilityBonusLifeformTechnology, FleetFuelReturnLifeformTechnology, FleetSpeedBonusLifeformTechnology, FuelConsumptionReductionLifeformTechnology, PhalanxRangeBonusLifeformTechnology, ResearchCostAndTimeReductionLifeformTechnology, ResourceProductionBonusLifeformTechnology, StatsBonusLifeformTechnology } from "./interfaces";
-import { EfficientSwarmIntelligence } from "./kaelesh/EfficientSwarmIntelligence";
-import { EnhancedSensorTechnology } from "./kaelesh/EnhancedSensorTechnology";
-import { GravitationSensors } from "./kaelesh/GravitationSensors";
-import { HeatRecovery } from "./kaelesh/HeatRecovery";
-import { InterplanetaryAnalysisNetwork } from "./kaelesh/InterplanetaryAnalysisNetwork";
-import { KaeleshDiscovererEnhancement } from "./kaelesh/KaeleshDiscovererEnhancement";
-import { NeuroInterface } from "./kaelesh/NeuroInterface";
-import { NeuromodalCompressor } from "./kaelesh/NeuromodalCompressor";
-import { Overclocking_Battleship } from "./kaelesh/Overclocking_Battleship";
-import { Overclocking_HeavyFighter } from "./kaelesh/Overclocking_HeavyFighter";
-import { Overclocking_LargeCargo } from "./kaelesh/Overclocking_LargeCargo";
-import { PsionicNetwork } from "./kaelesh/PsionicNetwork";
-import { PsionicShieldMatrix } from "./kaelesh/PsionicShieldMatrix";
-import { Psychoharmoniser } from "./kaelesh/Psychoharmoniser";
-import { SixthSense } from "./kaelesh/SixthSense";
-import { SulphideProcess } from "./kaelesh/SulphideProcess";
-import { TelekineticDrive } from "./kaelesh/TelekineticDrive";
-import { TelekineticTractorBeam } from "./kaelesh/TelekineticTractorBeam";
-import { LifeformTechnology } from "./LifeformTechnology";
-import { ArtificialSwarmIntelligence } from "./mechas/ArtificialSwarmIntelligence";
-import { AutomatedTransportLines } from "./mechas/AutomatedTransportLines";
-import { CatalyserTechnology } from "./mechas/CatalyserTechnology";
-import { DepotAI } from "./mechas/DepotAI";
-import { EfficiencyModule } from "./mechas/EfficiencyModule";
-import { ExperimentalRecyclingTechnology } from "./mechas/ExperimentalRecyclingTechnology";
-import { ExperimentalWeaponsTechnology } from "./mechas/ExperimentalWeaponsTechnology";
-import { GeneralOverhaul_Battlecruiser } from "./mechas/GeneralOverhaul_Battlecruiser";
-import { GeneralOverhaul_Battleship } from "./mechas/GeneralOverhaul_Battleship";
-import { GeneralOverhaul_Bomber } from "./mechas/GeneralOverhaul_Bomber";
-import { GeneralOverhaul_Cruiser } from "./mechas/GeneralOverhaul_Cruiser";
-import { GeneralOverhaul_Destroyer } from "./mechas/GeneralOverhaul_Destroyer";
-import { GeneralOverhaul_LightFighter } from "./mechas/GeneralOverhaul_LightFighter";
-import { HighTemperatureSuperconductors } from "./mechas/HighTemperatureSuperconductors";
-import { ImprovedDroneAI } from "./mechas/ImprovedDroneAI";
-import { MechanGeneralEnhancement } from "./mechas/MechanGeneralEnhancement";
-import { PlasmaDrive } from "./mechas/PlasmaDrive";
-import { SlingshotAutopilot } from "./mechas/SlingshotAutopilot";
-import { AcousticScanning } from "./rocktal/AcousticScanning";
-import { CargoHoldExpansion_CivilianShips } from "./rocktal/CargoHoldExpansion_CivilianShips";
-import { DepthSounding } from "./rocktal/DepthSounding";
-import { DiamondEnergyTransmitter } from "./rocktal/DiamondEnergyTransmitter";
-import { GeothermalPowerPlants } from "./rocktal/GeothermalPowerPlants";
-import { HardenedDiamondDrillHeads } from "./rocktal/HardenedDiamondDrillHeads";
-import { HighEnergyPumpSystems } from "./rocktal/HighEnergyPumpSystems";
-import { ImprovedStellarator } from "./rocktal/ImprovedStellarator";
-import { IonCrystalEnhancement_HeavyFighter } from "./rocktal/IonCrystalEnhancement_HeavyFighter";
-import { IonCrystalModules } from "./rocktal/IonCrystalModules";
-import { MagmaPoweredProduction } from "./rocktal/MagmaPoweredProduction";
-import { MagmaPoweredPumpSystems } from "./rocktal/MagmaPoweredPumpSystems";
-import { ObsidianShieldReinforcement } from "./rocktal/ObsidianShieldReinforcement";
-import { OptimisedSiloConstructionMethod } from "./rocktal/OptimisedSiloConstructionMethod";
-import { RocktalCollectorEnhancement } from "./rocktal/RocktalCollectorEnhancement";
-import { RuneShields } from "./rocktal/RuneShields";
-import { SeismicMiningTechnology } from "./rocktal/SeismicMiningTechnology";
-import { VolcanicBatteries } from "./rocktal/VolcanicBatteries";
+import { LifeformTechnologyType } from '../LifeformTechnologyType';
+import { LifeformType } from '../LifeformType';
+import { BattlecruiserMkII } from './humans/BattlecruiserMkII';
+import { BomberMkII } from './humans/BomberMkII';
+import { CruiserMkII } from './humans/CruiserMkII';
+import { DestroyerMkII } from './humans/DestroyerMkII';
+import { EnhancedProductionTechnologies } from './humans/EnhancedProductionTechnologies';
+import { FusionDrives } from './humans/FusionDrives';
+import { HighPerformanceExtractors } from './humans/HighPerformanceExtractors';
+import { HighPerformanceTerraformer } from './humans/HighPerformanceTerraformer';
+import { ImprovedLabTechnology } from './humans/ImprovedLabTechnology';
+import { IntergalacticEnvoys } from './humans/IntergalacticEnvoys';
+import { LightFighterMkII } from './humans/LightFighterMkII';
+import { LowTemperatureDrives } from './humans/LowTemperatureDrives';
+import { OrbitalDen } from './humans/OrbitalDen';
+import { PlasmaTerraformer } from './humans/PlasmaTerraformer';
+import { ResearchAI } from './humans/ResearchAI';
+import { RobotAssistants } from './humans/RobotAssistants';
+import { StealthFieldGenerator } from './humans/StealthFieldGenerator';
+import { Supercomputer } from './humans/Supercomputer';
+import {
+    BuildingCostAndTimeReductionLifeformTechnology,
+    ClassBonusLifeformTechnology,
+    CrawlerProductionBonusAndConsumptionReductionLifeformTechnology,
+    DenCapacityBonusLifeformTechnology,
+    ExpeditionBonusLifeformTechnology,
+    ExpeditionEventProbabilityBonusLifeformTechnology,
+    FleetFuelReturnLifeformTechnology,
+    FleetSpeedBonusLifeformTechnology,
+    FuelConsumptionReductionLifeformTechnology,
+    PhalanxRangeBonusLifeformTechnology,
+    ResearchCostAndTimeReductionLifeformTechnology,
+    ResourceProductionBonusLifeformTechnology,
+    StatsBonusLifeformTechnology,
+} from './interfaces';
+import { EfficientSwarmIntelligence } from './kaelesh/EfficientSwarmIntelligence';
+import { EnhancedSensorTechnology } from './kaelesh/EnhancedSensorTechnology';
+import { GravitationSensors } from './kaelesh/GravitationSensors';
+import { HeatRecovery } from './kaelesh/HeatRecovery';
+import { InterplanetaryAnalysisNetwork } from './kaelesh/InterplanetaryAnalysisNetwork';
+import { KaeleshDiscovererEnhancement } from './kaelesh/KaeleshDiscovererEnhancement';
+import { NeuroInterface } from './kaelesh/NeuroInterface';
+import { NeuromodalCompressor } from './kaelesh/NeuromodalCompressor';
+import { Overclocking_Battleship } from './kaelesh/Overclocking_Battleship';
+import { Overclocking_HeavyFighter } from './kaelesh/Overclocking_HeavyFighter';
+import { Overclocking_LargeCargo } from './kaelesh/Overclocking_LargeCargo';
+import { PsionicNetwork } from './kaelesh/PsionicNetwork';
+import { PsionicShieldMatrix } from './kaelesh/PsionicShieldMatrix';
+import { Psychoharmoniser } from './kaelesh/Psychoharmoniser';
+import { SixthSense } from './kaelesh/SixthSense';
+import { SulphideProcess } from './kaelesh/SulphideProcess';
+import { TelekineticDrive } from './kaelesh/TelekineticDrive';
+import { TelekineticTractorBeam } from './kaelesh/TelekineticTractorBeam';
+import { LifeformTechnology } from './LifeformTechnology';
+import { ArtificialSwarmIntelligence } from './mechas/ArtificialSwarmIntelligence';
+import { AutomatedTransportLines } from './mechas/AutomatedTransportLines';
+import { CatalyserTechnology } from './mechas/CatalyserTechnology';
+import { DepotAI } from './mechas/DepotAI';
+import { EfficiencyModule } from './mechas/EfficiencyModule';
+import { ExperimentalRecyclingTechnology } from './mechas/ExperimentalRecyclingTechnology';
+import { ExperimentalWeaponsTechnology } from './mechas/ExperimentalWeaponsTechnology';
+import { GeneralOverhaul_Battlecruiser } from './mechas/GeneralOverhaul_Battlecruiser';
+import { GeneralOverhaul_Battleship } from './mechas/GeneralOverhaul_Battleship';
+import { GeneralOverhaul_Bomber } from './mechas/GeneralOverhaul_Bomber';
+import { GeneralOverhaul_Cruiser } from './mechas/GeneralOverhaul_Cruiser';
+import { GeneralOverhaul_Destroyer } from './mechas/GeneralOverhaul_Destroyer';
+import { GeneralOverhaul_LightFighter } from './mechas/GeneralOverhaul_LightFighter';
+import { HighTemperatureSuperconductors } from './mechas/HighTemperatureSuperconductors';
+import { ImprovedDroneAI } from './mechas/ImprovedDroneAI';
+import { MechanGeneralEnhancement } from './mechas/MechanGeneralEnhancement';
+import { PlasmaDrive } from './mechas/PlasmaDrive';
+import { SlingshotAutopilot } from './mechas/SlingshotAutopilot';
+import { AcousticScanning } from './rocktal/AcousticScanning';
+import { CargoHoldExpansion_CivilianShips } from './rocktal/CargoHoldExpansion_CivilianShips';
+import { DepthSounding } from './rocktal/DepthSounding';
+import { DiamondEnergyTransmitter } from './rocktal/DiamondEnergyTransmitter';
+import { GeothermalPowerPlants } from './rocktal/GeothermalPowerPlants';
+import { HardenedDiamondDrillHeads } from './rocktal/HardenedDiamondDrillHeads';
+import { HighEnergyPumpSystems } from './rocktal/HighEnergyPumpSystems';
+import { ImprovedStellarator } from './rocktal/ImprovedStellarator';
+import { IonCrystalEnhancement_HeavyFighter } from './rocktal/IonCrystalEnhancement_HeavyFighter';
+import { IonCrystalModules } from './rocktal/IonCrystalModules';
+import { MagmaPoweredProduction } from './rocktal/MagmaPoweredProduction';
+import { MagmaPoweredPumpSystems } from './rocktal/MagmaPoweredPumpSystems';
+import { ObsidianShieldReinforcement } from './rocktal/ObsidianShieldReinforcement';
+import { OptimisedSiloConstructionMethod } from './rocktal/OptimisedSiloConstructionMethod';
+import { RocktalCollectorEnhancement } from './rocktal/RocktalCollectorEnhancement';
+import { RuneShields } from './rocktal/RuneShields';
+import { SeismicMiningTechnology } from './rocktal/SeismicMiningTechnology';
+import { VolcanicBatteries } from './rocktal/VolcanicBatteries';
 
-export const ResourceProductionBonusLifeformTechnologiesByLifeform: Record<LifeformType, ResourceProductionBonusLifeformTechnology[]> = {
+export const ResourceProductionBonusLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    ResourceProductionBonusLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
-    [LifeformType.humans]: [
-        EnhancedProductionTechnologies,
-        HighPerformanceExtractors,
-    ],
+    [LifeformType.humans]: [EnhancedProductionTechnologies, HighPerformanceExtractors],
     [LifeformType.rocktal]: [
         AcousticScanning,
         DepthSounding,
@@ -92,68 +106,56 @@ export const ResourceProductionBonusLifeformTechnologiesByLifeform: Record<Lifef
         SeismicMiningTechnology,
         VolcanicBatteries,
     ],
-    [LifeformType.mechas]: [
-        ArtificialSwarmIntelligence,
-        AutomatedTransportLines,
-        CatalyserTechnology,
-    ],
-    [LifeformType.kaelesh]: [
-        Psychoharmoniser,
-        SulphideProcess,
-    ],
+    [LifeformType.mechas]: [ArtificialSwarmIntelligence, AutomatedTransportLines, CatalyserTechnology],
+    [LifeformType.kaelesh]: [Psychoharmoniser, SulphideProcess],
 };
-export const ResourceProductionBonusLifeformTechnologies = Object.values(ResourceProductionBonusLifeformTechnologiesByLifeform).flatMap(r => r);
-
+export const ResourceProductionBonusLifeformTechnologies = Object.values(
+    ResourceProductionBonusLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
 export const ClassBonusLifeformTechnologiesByLifeform: Record<LifeformType, ClassBonusLifeformTechnology[]> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
-    [LifeformType.rocktal]: [
-        RocktalCollectorEnhancement,
-    ],
-    [LifeformType.mechas]: [
-        MechanGeneralEnhancement,
-    ],
-    [LifeformType.kaelesh]: [
-        KaeleshDiscovererEnhancement,
-    ],
+    [LifeformType.rocktal]: [RocktalCollectorEnhancement],
+    [LifeformType.mechas]: [MechanGeneralEnhancement],
+    [LifeformType.kaelesh]: [KaeleshDiscovererEnhancement],
 };
 export const ClassBonusLifeformTechnologies = Object.values(ClassBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
-
-export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform: Record<LifeformType, CrawlerProductionBonusAndConsumptionReductionLifeformTechnology[]> = {
+export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    CrawlerProductionBonusAndConsumptionReductionLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
-    [LifeformType.rocktal]: [
-        IonCrystalModules,
-    ],
+    [LifeformType.rocktal]: [IonCrystalModules],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [],
 };
-export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies = Object.values(CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform).flatMap(r => r);
+export const CrawlerProductionBonusAndConsumptionReductionLifeformTechnologies = Object.values(
+    CrawlerProductionBonusAndConsumptionReductionLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
-
-export const BuildingCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, BuildingCostAndTimeReductionLifeformTechnology[]> = {
+export const BuildingCostAndTimeReductionLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    BuildingCostAndTimeReductionLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
-    [LifeformType.rocktal]: [
-        HighPerformanceTerraformer,
-        PlasmaTerraformer,
-        OptimisedSiloConstructionMethod,
-    ],
-    [LifeformType.mechas]: [
-        DepotAI,
-    ],
+    [LifeformType.rocktal]: [HighPerformanceTerraformer, PlasmaTerraformer, OptimisedSiloConstructionMethod],
+    [LifeformType.mechas]: [DepotAI],
     [LifeformType.kaelesh]: [],
 };
-export const BuildingCostAndTimeReductionLifeformTechnologies = Object.values(BuildingCostAndTimeReductionLifeformTechnologiesByLifeform).flatMap(r => r);
+export const BuildingCostAndTimeReductionLifeformTechnologies = Object.values(
+    BuildingCostAndTimeReductionLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
-
-export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<LifeformType, ResearchCostAndTimeReductionLifeformTechnology[]> = {
+export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    ResearchCostAndTimeReductionLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
-    [LifeformType.humans]: [
-        Supercomputer,
-    ],
+    [LifeformType.humans]: [Supercomputer],
     [LifeformType.rocktal]: [
         ImprovedStellarator,
         StealthFieldGenerator,
@@ -164,30 +166,16 @@ export const ResearchCostAndTimeReductionLifeformTechnologiesByLifeform: Record<
         DiamondEnergyTransmitter,
         RuneShields,
     ],
-    [LifeformType.mechas]: [
-        ImprovedDroneAI,
-        HighTemperatureSuperconductors,
-        ExperimentalWeaponsTechnology,
-    ],
-    [LifeformType.kaelesh]: [
-        NeuroInterface,
-        EfficientSwarmIntelligence,
-        PsionicShieldMatrix,
-    ],
+    [LifeformType.mechas]: [ImprovedDroneAI, HighTemperatureSuperconductors, ExperimentalWeaponsTechnology],
+    [LifeformType.kaelesh]: [NeuroInterface, EfficientSwarmIntelligence, PsionicShieldMatrix],
 };
-export const ResearchCostAndTimeReductionLifeformTechnologies = Object.values(ResearchCostAndTimeReductionLifeformTechnologiesByLifeform).flatMap(r => r);
-
+export const ResearchCostAndTimeReductionLifeformTechnologies = Object.values(
+    ResearchCostAndTimeReductionLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
 export const StatsBonusLifeformTechnologiesByLifeform: Record<LifeformType, StatsBonusLifeformTechnology[]> = {
     [LifeformType.none]: [],
-    [LifeformType.humans]: [
-        FusionDrives,
-        LightFighterMkII,
-        CruiserMkII,
-        BomberMkII,
-        DestroyerMkII,
-        BattlecruiserMkII,
-    ],
+    [LifeformType.humans]: [FusionDrives, LightFighterMkII, CruiserMkII, BomberMkII, DestroyerMkII, BattlecruiserMkII],
     [LifeformType.rocktal]: [
         CargoHoldExpansion_CivilianShips,
         IonCrystalEnhancement_HeavyFighter,
@@ -212,97 +200,97 @@ export const StatsBonusLifeformTechnologiesByLifeform: Record<LifeformType, Stat
 };
 export const StatsBonusLifeformTechnologies = Object.values(StatsBonusLifeformTechnologiesByLifeform).flatMap(r => r);
 
-
-export const FuelConsumptionReductionLifeformTechnologiesByLifeform: Record<LifeformType, FuelConsumptionReductionLifeformTechnology[]> = {
+export const FuelConsumptionReductionLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    FuelConsumptionReductionLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [],
-    [LifeformType.mechas]: [
-        EfficiencyModule,
-    ],
-    [LifeformType.kaelesh]: [
-        HeatRecovery,
-    ],
+    [LifeformType.mechas]: [EfficiencyModule],
+    [LifeformType.kaelesh]: [HeatRecovery],
 };
-export const FuelConsumptionReductionLifeformTechnologies = Object.values(FuelConsumptionReductionLifeformTechnologiesByLifeform).flatMap(r => r);
+export const FuelConsumptionReductionLifeformTechnologies = Object.values(
+    FuelConsumptionReductionLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
+export const FleetFuelReturnLifeformTechnologiesByLifeform: Record<LifeformType, FleetFuelReturnLifeformTechnology[]> =
+    {
+        [LifeformType.none]: [],
+        [LifeformType.humans]: [],
+        [LifeformType.rocktal]: [],
+        [LifeformType.mechas]: [SlingshotAutopilot],
+        [LifeformType.kaelesh]: [],
+    };
+export const FleetFuelReturnLifeformTechnologies = Object.values(FleetFuelReturnLifeformTechnologiesByLifeform).flatMap(
+    r => r,
+);
 
-export const FleetFuelReturnLifeformTechnologiesByLifeform: Record<LifeformType, FleetFuelReturnLifeformTechnology[]> = {
+export const DenCapacityBonusLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    DenCapacityBonusLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
-    [LifeformType.humans]: [],
-    [LifeformType.rocktal]: [],
-    [LifeformType.mechas]: [
-        SlingshotAutopilot,
-    ],
-    [LifeformType.kaelesh]: [],
-};
-export const FleetFuelReturnLifeformTechnologies = Object.values(FleetFuelReturnLifeformTechnologiesByLifeform).flatMap(r => r);
-
-
-export const DenCapacityBonusLifeformTechnologiesByLifeform: Record<LifeformType, DenCapacityBonusLifeformTechnology[]> = {
-    [LifeformType.none]: [],
-    [LifeformType.humans]: [
-        OrbitalDen,
-    ],
+    [LifeformType.humans]: [OrbitalDen],
     [LifeformType.rocktal]: [],
     [LifeformType.mechas]: [],
     [LifeformType.kaelesh]: [],
 };
-export const DenCapacityBonusLifeformTechnologies = Object.values(DenCapacityBonusLifeformTechnologiesByLifeform).flatMap(r => r);
+export const DenCapacityBonusLifeformTechnologies = Object.values(
+    DenCapacityBonusLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
+export const ExpeditionBonusLifeformTechnologiesByLifeform: Record<LifeformType, ExpeditionBonusLifeformTechnology[]> =
+    {
+        [LifeformType.none]: [],
+        [LifeformType.humans]: [],
+        [LifeformType.rocktal]: [],
+        [LifeformType.mechas]: [],
+        [LifeformType.kaelesh]: [TelekineticTractorBeam, EnhancedSensorTechnology, SixthSense, GravitationSensors],
+    };
+export const ExpeditionBonusLifeformTechnologies = Object.values(ExpeditionBonusLifeformTechnologiesByLifeform).flatMap(
+    r => r,
+);
 
-export const ExpeditionBonusLifeformTechnologiesByLifeform: Record<LifeformType, ExpeditionBonusLifeformTechnology[]> = {
+export const ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    ExpeditionEventProbabilityBonusLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [],
     [LifeformType.mechas]: [],
-    [LifeformType.kaelesh]: [
-        TelekineticTractorBeam,
-        EnhancedSensorTechnology,
-        SixthSense,
-        GravitationSensors,
-    ],
+    [LifeformType.kaelesh]: [PsionicNetwork],
 };
-export const ExpeditionBonusLifeformTechnologies = Object.values(ExpeditionBonusLifeformTechnologiesByLifeform).flatMap(r => r);
+export const ExpeditionEventProbabilityBonusLifeformTechnologies = Object.values(
+    ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
-
-export const ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform: Record<LifeformType, ExpeditionEventProbabilityBonusLifeformTechnology[]> = {
+export const PhalanxRangeBonusLifeformTechnologiesByLifeform: Record<
+    LifeformType,
+    PhalanxRangeBonusLifeformTechnology[]
+> = {
     [LifeformType.none]: [],
     [LifeformType.humans]: [],
     [LifeformType.rocktal]: [],
     [LifeformType.mechas]: [],
-    [LifeformType.kaelesh]: [
-        PsionicNetwork,
-    ],
+    [LifeformType.kaelesh]: [InterplanetaryAnalysisNetwork],
 };
-export const ExpeditionEventProbabilityBonusLifeformTechnologies = Object.values(ExpeditionEventProbabilityBonusLifeformTechnologiesByLifeform).flatMap(r => r);
+export const PhalanxRangeBonusLifeformTechnologies = Object.values(
+    PhalanxRangeBonusLifeformTechnologiesByLifeform,
+).flatMap(r => r);
 
-
-export const PhalanxRangeBonusLifeformTechnologiesByLifeform: Record<LifeformType, PhalanxRangeBonusLifeformTechnology[]> = {
-    [LifeformType.none]: [],
-    [LifeformType.humans]: [],
-    [LifeformType.rocktal]: [],
-    [LifeformType.mechas]: [],
-    [LifeformType.kaelesh]: [
-        InterplanetaryAnalysisNetwork,
-    ],
-};
-export const PhalanxRangeBonusLifeformTechnologies = Object.values(PhalanxRangeBonusLifeformTechnologiesByLifeform).flatMap(r => r);
-
-
-export const FleetSpeedBonusLifeformTechnologiesByLifeform: Record<LifeformType, FleetSpeedBonusLifeformTechnology[]> = {
-    [LifeformType.none]: [],
-    [LifeformType.humans]: [
-        IntergalacticEnvoys,
-    ],
-    [LifeformType.rocktal]: [],
-    [LifeformType.mechas]: [],
-    [LifeformType.kaelesh]: [
-        TelekineticDrive,
-    ],
-};
-export const FleetSpeedBonusLifeformTechnologies = Object.values(FleetSpeedBonusLifeformTechnologiesByLifeform).flatMap(r => r);
-
+export const FleetSpeedBonusLifeformTechnologiesByLifeform: Record<LifeformType, FleetSpeedBonusLifeformTechnology[]> =
+    {
+        [LifeformType.none]: [],
+        [LifeformType.humans]: [IntergalacticEnvoys],
+        [LifeformType.rocktal]: [],
+        [LifeformType.mechas]: [],
+        [LifeformType.kaelesh]: [TelekineticDrive],
+    };
+export const FleetSpeedBonusLifeformTechnologies = Object.values(FleetSpeedBonusLifeformTechnologiesByLifeform).flatMap(
+    r => r,
+);
 
 export const LifeformTechnologiesByType: Record<LifeformTechnologyType, LifeformTechnology> = {
     [LifeformTechnologyType.intergalacticEnvoys]: IntergalacticEnvoys,

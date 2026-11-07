@@ -1,6 +1,6 @@
-import { ValidLifeformType } from "../ogame/lifeforms/LifeformType";
-import { LifeformDiscoveryEventArtifactFindingSize } from "./LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "./LifeformDiscoveryEventType";
+import { ValidLifeformType } from '../ogame/lifeforms/LifeformType';
+import { LifeformDiscoveryEventArtifactFindingSize } from './LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from './LifeformDiscoveryEventType';
 
 interface LifeformDiscoveryEventBase {
     id: number;
@@ -29,10 +29,9 @@ export type LifeformDiscoveryEventArtifacts = LifeformDiscoveryEventBase & {
     artifacts: number;
 };
 
-export type LifeformDiscoveryEvent = (
+export type LifeformDiscoveryEvent =
     | LifeformDiscoveryEventNothing
     | LifeformDiscoveryEventLostShip
     | LifeformDiscoveryEventNewLifeformFound
     | LifeformDiscoveryEventKnownLifeformFound
-    | LifeformDiscoveryEventArtifacts
-);
+    | LifeformDiscoveryEventArtifacts;

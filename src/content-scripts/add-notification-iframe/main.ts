@@ -1,8 +1,8 @@
-import { ogameTrackerNotificationWindowResizeEventName } from "@/shared/messages/communication";
-import { _throw } from "@/shared/utils/_throw";
+import { ogameTrackerNotificationWindowResizeEventName } from '@ogame-tracker/shared/messages/communication';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
 import './styles.scss';
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
 
 const iframe = document.createElement('iframe');
 iframe.id = 'ogame-tracker-notifications__v2';
@@ -11,12 +11,11 @@ iframe.src = getPageUrl();
 document.body.append(iframe);
 
 window.addEventListener('message', e => {
-    if(e.data?.type == ogameTrackerNotificationWindowResizeEventName) {
+    if (e.data?.type == ogameTrackerNotificationWindowResizeEventName) {
         iframe.style.setProperty('--width', e.data.width);
         iframe.style.setProperty('--height', e.data.height);
     }
 });
-
 
 function getPageUrl() {
     const url = chrome.runtime.getURL('/views/notifications.html');

@@ -1,12 +1,15 @@
-import { ResearchType } from "../../../research/ResearchType";
-import { ResearchTypes } from "../../../research/ResearchTypes";
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { ResearchType } from '../../../research/ResearchType';
+import { ResearchTypes } from '../../../research/ResearchTypes';
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ResearchCostAndTimeReductionLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
-class DiamondEnergyTransmitterClass extends LifeformTechnology implements ResearchCostAndTimeReductionLifeformTechnology {
+class DiamondEnergyTransmitterClass
+    extends LifeformTechnology
+    implements ResearchCostAndTimeReductionLifeformTechnology
+{
     public constructor() {
         super({
             metal: {
@@ -29,17 +32,16 @@ class DiamondEnergyTransmitterClass extends LifeformTechnology implements Resear
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return ResearchTypes.filter(t => this.appliesTo(t))
-            .flatMap<LifeformBonusType>(tech => [
-                {
-                    type: LifeformBonusTypeId.TechCostReduction,
-                    tech,
-                },
-                {
-                    type: LifeformBonusTypeId.TechTimeReduction,
-                    tech,
-                }
-            ]);
+        return ResearchTypes.filter(t => this.appliesTo(t)).flatMap<LifeformBonusType>(tech => [
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech,
+            },
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            },
+        ]);
     }
 
     public appliesTo(research: ResearchType): boolean {

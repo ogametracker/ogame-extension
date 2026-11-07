@@ -1,60 +1,56 @@
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { getPlayerDatabase } from "@/shared/db/access";
-import { Message } from "@/shared/messages/Message";
-import { MessageType } from "@/shared/messages/MessageType";
-import { NotifyUniverseSpecificSettingsUpdateMessage } from "@/shared/messages/universe-specific-settings";
-import { loadUniverseSpecificSettings } from "@/shared/models/universe-specific-settings/loadUniverseSpecificSettings";
-import { UniverseSpecificSettings } from "@/shared/models/universe-specific-settings/UniverseSpecificSettings";
-import { ogameMetasEqual } from "@/shared/ogame-web/ogameMetasEqual";
-import { Component, Vue } from 'vue-property-decorator';
-import { GlobalOgameMetaData, statsViewUuid } from "./global";
+import { toDatabaseRecord } from './toDatabaseRecord';
+import { defineStore } from 'pinia';
+import { shallowRef } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import type { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { NotifyUniverseSpecificSettingsUpdateMessage } from '@ogame-tracker/shared/messages/universe-specific-settings';
+import { loadUniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/loadUniverseSpecificSettings';
+import type { UniverseSpecificSettings } from '@ogame-tracker/shared/models/universe-specific-settings/UniverseSpecificSettings';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { GlobalOgameMetaData, statsViewUuid } from './global';
 
-@Component
-class UniverseSpecificSettingsDataModuleClass extends Vue {
-    public settings: UniverseSpecificSettings = null!;
+export const useUniverseSpecificSettingsStore = defineStore('universeSpecificSettings', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const settings = shallowRef<UniverseSpecificSettings>(null!);
 
-    public updateSettings(settings: UniverseSpecificSettings) {
-        console.debug('updating universe specific settings', settings);
-        this.settings = settings;
+    function updateSettings(nextSettings: UniverseSpecificSettings) {
+        console.debug('updating universe specific settings', nextSettings);
+        const snapshot = toDatabaseRecord(nextSettings);
+        settings.value = nextSettings;
 
         void (async () => {
             const db = await getPlayerDatabase(GlobalOgameMetaData);
-            await db.put('universeSpecificSettings', settings, 0);
+            await db.put('universeSpecificSettings', snapshot, 0);
 
             const msg: NotifyUniverseSpecificSettingsUpdateMessage = {
                 ogameMeta: GlobalOgameMetaData,
                 senderUuid: statsViewUuid,
                 type: MessageType.NotifyUniverseSpecificSettingsUpdate,
-            }
+            };
             await broadcastMessage(msg);
-        })();
+        })().catch(console.error);
     }
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(async message => await this.onMessage(message));
+    async function loadData() {
+        settings.value = await loadUniverseSpecificSettings(GlobalOgameMetaData);
+
+        resolveReady();
     }
 
-    private async loadData() {
-        this.settings = await loadUniverseSpecificSettings(GlobalOgameMetaData);
-
-        this._resolveReady();
-    }
-
-    private async onMessage(msg: Message) {
+    async function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -66,11 +62,17 @@ class UniverseSpecificSettingsDataModuleClass extends Vue {
 
         switch (type) {
             case MessageType.NotifyUniverseSpecificSettingsUpdate: {
-                await this.loadData();
+                await loadData();
                 break;
             }
         }
     }
-}
 
-export const UniverseSpecificSettingsDataModule = new UniverseSpecificSettingsDataModuleClass();
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        settings,
+        updateSettings,
+    };
+});

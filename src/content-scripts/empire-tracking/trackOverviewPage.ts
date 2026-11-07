@@ -1,30 +1,34 @@
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { MessageType } from "../../shared/messages/MessageType";
-import { UpdatePlanetActiveItemsMessage } from "../../shared/messages/tracking/empire";
-import { PlanetActiveItems } from "../../shared/models/empire/PlanetActiveItems";
-import { ItemHash } from "../../shared/models/ogame/items/ItemHash";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { _throw } from "../../shared/utils/_throw";
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { UpdatePlanetActiveItemsMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import type { ActiveItemHashes } from '@ogame-tracker/shared/models/empire/PlanetActiveItems';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 
 export function trackOverviewPage(): void {
-    const activeItems: PlanetActiveItems = {};
+    const activeItems: ActiveItemHashes = Object.create(null);
 
     const observer = new MutationObserver(() => {
-        if (['ogame-timestamp', 'ogame-planet-id'].some(name => document.querySelector(`meta[name="${name}"]`) == null)) {
+        if (
+            ['ogame-timestamp', 'ogame-planet-id'].some(name => document.querySelector(`meta[name="${name}"]`) == null)
+        ) {
             return;
         }
 
-        const ogameNowText = (document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content
+        const ogameNowText =
+            (document.querySelector('meta[name="ogame-timestamp"]') as HTMLMetaElement | null)?.content
             ?? _throw('no meta element found for ogame-timestamp');
         const ogameNow = parseIntSafe(ogameNowText, 10) * 1000;
 
-        const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+        const planetIdText =
+            (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
             ?? _throw('no meta element found for ogame-planet-id');
         const planetId = parseIntSafe(planetIdText, 10);
 
-        const planetType = (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
+        const planetType =
+            (document.querySelector('meta[name="ogame-planet-type"]') as HTMLMetaElement | null)?.content
             ?? _throw('did not find meta ogame-planet-type');
         const isMoon = planetType == 'moon';
 
@@ -35,7 +39,10 @@ export function trackOverviewPage(): void {
                 const hash = item.getAttribute('data-uuid') ?? _throw('no item uuid found');
                 const durationLeftElem = item.querySelector('.js_duration') ?? _throw('no item duration found');
                 const durationLeftText = durationLeftElem.textContent ?? _throw('no duration found');
-                const totalDuration = parseIntSafe(durationLeftElem.getAttribute('data-total-duration') ?? _throw('no duration found'), 10);
+                const totalDuration = parseIntSafe(
+                    durationLeftElem.getAttribute('data-total-duration') ?? _throw('no duration found'),
+                    10,
+                );
 
                 let activeUntil: number | 'permanent' = 'permanent';
                 if (durationLeftText != '' && totalDuration > 0) {
@@ -43,7 +50,7 @@ export function trackOverviewPage(): void {
                     activeUntil = ogameNow + durationLeft;
                 }
                 item.setAttribute('ogt-active-until', activeUntil.toString());
-                activeItems[hash as ItemHash] = activeUntil;
+                activeItems[hash] = activeUntil;
             } catch (error) {
                 console.error(error);
             }

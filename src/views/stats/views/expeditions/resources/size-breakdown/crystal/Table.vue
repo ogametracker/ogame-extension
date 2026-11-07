@@ -1,16 +1,8 @@
 <template>
-    <size-table resource="crystal" />
+    <SizeTable :resource="ResourceType.crystal" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import SizeTable from '@stats/components/expeditions/resources/sizes-by-resource/Table.vue';
-
-    @Component({
-        components: {
-            SizeTable,
-        },
-    })
-    export default class Table extends Vue {
-    }
+<script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import SizeTable from '@stats/components/expeditions/resources/sizes-by-resource/Table.vue';
 </script>

@@ -1,36 +1,90 @@
 <template>
     <div class="expedition-settings">
         <div class="header">
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.header" />
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.header" />
         </div>
 
         <div class="body">
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.averageWavesPerDay" />
+            <span
+                v-text="translations().extension.empire.amortization.settings.expeditionSettings.averageWavesPerDay"
+            />
             <span>
                 <input type="number" v-model.number.lazy="settings.wavesPerDay" min="0" max="20" step="0.1" />
             </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.items" />
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.slotItems" />
             <span class="item-grid">
-                <o-item v-for="item in slotItems" :key="item" :item="item" :disabled="!settings.items.includes(item)" @click="toggleItem(item)" />
+                <OItem
+                    v-for="item in slotItems"
+                    :key="item"
+                    :item="item"
+                    :disabled="!settings.items.includes(item)"
+                    @click="toggleItem(item)"
+                />
             </span>
 
-            <i v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.averageExpeditionsPerDay" />
-            <i v-text="$i18n.$n(expeditionsPerDay)" />
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.resourceFindItems" />
+            <span class="item-grid">
+                <OItem
+                    v-for="item in resourceBonusItems"
+                    :key="item"
+                    :item="item"
+                    :disabled="!settings.items.includes(item)"
+                    @click="toggleResourceFindBonusItem(item)"
+                />
+            </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.shipUnitFactors" />
+            <span
+                v-text="translations().extension.empire.amortization.settings.expeditionSettings.improvedChanceItems"
+            />
+            <span class="item-grid">
+                <OItem
+                    v-for="item in chanceBonusItems"
+                    :key="item"
+                    :item="item"
+                    :disabled="!settings.items.includes(item)"
+                    @click="toggleItem(item)"
+                />
+            </span>
+
+            <i
+                v-text="
+                    translations().extension.empire.amortization.settings.expeditionSettings.averageExpeditionsPerDay
+                "
+            />
+            <i v-text="formatNumber(expeditionsPerDay)" />
+
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.shipUnitFactors" />
             <div class="resource-factors">
-                <o-resource resource="metal" />
-                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.metal" min="0" max="1" step="0.01" />
+                <OResource :resource="ResourceType.metal" />
+                <input
+                    type="number"
+                    v-model.number.lazy="settings.fleetUnitsFactors.metal"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                />
 
-                <o-resource resource="crystal" />
-                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.crystal" min="0" max="1" step="0.01" />
+                <OResource :resource="ResourceType.crystal" />
+                <input
+                    type="number"
+                    v-model.number.lazy="settings.fleetUnitsFactors.crystal"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                />
 
-                <o-resource resource="deuterium" />
-                <input type="number" v-model.number.lazy="settings.fleetUnitsFactors.deuterium" min="0" max="1" step="0.01" />
+                <OResource :resource="ResourceType.deuterium" />
+                <input
+                    type="number"
+                    v-model.number.lazy="settings.fleetUnitsFactors.deuterium"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                />
             </div>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.expeditionSettings.topPlayerScore" />
+            <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.topPlayerScore" />
             <span>
                 <select v-model.number.lazy="settings.serverSettings.topScore">
                     <option v-for="(text, value) in topScores" :key="value" :value="value" v-text="text" />
@@ -40,170 +94,188 @@
     </div>
 </template>
 
-<script lang="ts">
-    import { AmortizationExpeditionSettings } from '@/shared/models/empire/amortization/AmortizationExpeditionSettings';
-    import { Component, Prop, PropSync, Vue, VModel, Watch } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
-    import { _throw } from '@/shared/utils/_throw';
-    import { AmortizationExpeditionResultsBreakdown } from '@/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
-    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import { PlayerClass } from '@/shared/models/ogame/classes/PlayerClass';
-    import { getItemSlotBonus } from '@/shared/models/ogame/expeditions/getItemSlotBonus';
-    import { createRecord } from '@/shared/utils/createRecord';
-    import { parseIntSafe } from '@/shared/utils/parseNumbers';
+<script setup lang="ts">
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import { computed, watch } from 'vue';
+import { translations, formatNumber } from '@stats/i18n';
+import type { AmortizationExpeditionSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionSettings';
+import type { PropType } from 'vue';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { AmortizationExpeditionResultsBreakdown } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
+import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+import { getItemSlotBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getItemSlotBonus';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 
-    @Component({})
-    export default class AmortizationExpeditionSettingsInputs extends Vue {
-        @VModel({ required: true, type: Object as PropType<AmortizationExpeditionSettings> })
-        private settings!: AmortizationExpeditionSettings;
+const props = defineProps({
+    playerSettings: { required: true, type: Object as PropType<AmortizationPlayerSettings> },
+    breakdown: { required: true, type: Object as PropType<AmortizationExpeditionResultsBreakdown> },
+});
 
-        @Prop({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
-        private playerSettings!: AmortizationPlayerSettings;
+const settings = defineModel<AmortizationExpeditionSettings>({
+    required: true,
+    type: Object as PropType<AmortizationExpeditionSettings>,
+});
 
-        @Prop({ required: true, type: Object as PropType<AmortizationExpeditionResultsBreakdown> })
-        private breakdown!: AmortizationExpeditionResultsBreakdown;
+const topScores = computed<Record<number, string>>(() => {
+    return {
+        0: `< ${formatNumber(100_000)}`,
+        100_000: `< ${formatNumber(1_000_000)}`,
+        1_000_000: `< ${formatNumber(5_000_000)}`,
+        5_000_000: `< ${formatNumber(25_000_000)}`,
+        25_000_000: `< ${formatNumber(50_000_000)}`,
+        50_000_000: `< ${formatNumber(75_000_000)}`,
+        75_000_000: `< ${formatNumber(100_000_000)}`,
+        100_000_000: `≥ ${formatNumber(100_000_000)}`,
+    };
+});
 
-        private get topScores(): Record<number, string> {
-            return {
-                0: `< ${this.$i18n.$n(100_000)}`,
-                100_000: `< ${this.$i18n.$n(1_000_000)}`,
-                1_000_000: `< ${this.$i18n.$n(5_000_000)}`,
-                5_000_000: `< ${this.$i18n.$n(25_000_000)}`,
-                25_000_000: `< ${this.$i18n.$n(50_000_000)}`,
-                50_000_000: `< ${this.$i18n.$n(75_000_000)}`,
-                75_000_000: `< ${this.$i18n.$n(100_000_000)}`,
-                100_000_000: `≥ ${this.$i18n.$n(100_000_000)}`,
-            };
+const slotItems: ItemId[] = [
+    'expeditionslots_1slot_7days',
+    'expeditionslots_2slots_7days',
+    'expeditionslots_3slots_7days',
+];
+
+const resourceBonusItems: ItemId[] = [
+    'expedition_resourceBoost_10percent_7days',
+    'expedition_resourceBoost_15percent_7days',
+    'expedition_resourceBoost_20percent_7days',
+    'expedition_resourceBoost_25percent_7days',
+    'expedition_resourceBoost_30percent_7days',
+    'expedition_resourceBoost_35percent_7days',
+    'expedition_resourceBoost_40percent_7days',
+];
+
+const chanceBonusItems: ItemId[] = ['expedition_improvedChances_7days'];
+
+function onSettingsChanged() {
+    const selected = settings.value.items.map(id => {
+        const effect = Items[id]?.effect;
+        if (effect?.type !== 'expeditionSlots') {
+            return id;
+        }
+        const canonicalItem = slotItems.find(option => {
+            const optionEffect = Items[option]?.effect;
+            return optionEffect?.type === 'expeditionSlots' && optionEffect.value === effect.value;
+        });
+        return canonicalItem ?? id;
+    });
+    const unique = [...new Set(selected)];
+    if (unique.length !== settings.value.items.length || unique.some((id, i) => id !== settings.value.items[i])) {
+        settings.value.items = unique;
+    }
+
+    props.breakdown.options.playerClass = props.playerSettings.playerClass;
+    props.breakdown.options.admiral = props.playerSettings.officers.admiral;
+    props.breakdown.options.astrophysicsLevel = props.playerSettings.levelAstrophysics;
+    props.breakdown.options.itemBonusSlots = getItemSlotBonus(
+        createRecord(settings.value.items, _ => 'permanent' as const),
+    );
+    props.breakdown.options.fleetFindsResourceFactors = settings.value.fleetUnitsFactors;
+    props.breakdown.options.serverSettings = settings.value.serverSettings;
+
+    if (topScores.value[settings.value.serverSettings.topScore] == null) {
+        settings.value.serverSettings.topScore =
+            Object.keys(topScores.value)
+                .map(k => parseIntSafe(k))
+                .sort((a, b) => b - a)
+                .find(score => score <= settings.value.serverSettings.topScore)
+            ?? _throw('failed to find matching top score');
+    }
+}
+
+const expeditionsPerDay = computed(() => props.breakdown.slots * settings.value.wavesPerDay);
+
+function toggleItem(item: ItemId) {
+    const index = settings.value.items.indexOf(item);
+    if (index < 0) {
+        settings.value.items.push(item);
+        return true;
+    } else {
+        settings.value.items.splice(index, 1);
+        return false;
+    }
+}
+
+function toggleResourceFindBonusItem(item: ItemId) {
+    if (!toggleItem(item)) {
+        return;
+    }
+
+    for (const itemId of resourceBonusItems) {
+        if (itemId == item) {
+            continue;
         }
 
-        private readonly slotItems: ItemHash[] = [
-            ItemHash.expeditionslots_bronze_7days,
-            ItemHash.expeditionslots_silver_7days,
-            ItemHash.expeditionslots_gold_7days,
-        ];
-
-        private readonly slotItemsMap: Partial<Record<ItemHash, ItemHash>> = {
-            [ItemHash.expeditionslots_bronze_7days]: ItemHash.expeditionslots_bronze_7days,
-            [ItemHash.expeditionslots_bronze_7days_pts]: ItemHash.expeditionslots_bronze_7days,
-            [ItemHash.expeditionslots_silver_7days]: ItemHash.expeditionslots_silver_7days,
-            [ItemHash.expeditionslots_silver_7days_pts]: ItemHash.expeditionslots_silver_7days,
-            [ItemHash.expeditionslots_gold_7days]: ItemHash.expeditionslots_gold_7days,
-            [ItemHash.expeditionslots_gold_7days_pts]: ItemHash.expeditionslots_gold_7days,
-
-            [ItemHash.expeditionslots_bronze_30days]: ItemHash.expeditionslots_bronze_7days,
-            [ItemHash.expeditionslots_bronze_30days_pts]: ItemHash.expeditionslots_bronze_7days,
-            [ItemHash.expeditionslots_silver_30days]: ItemHash.expeditionslots_silver_7days,
-            [ItemHash.expeditionslots_silver_30days_pts]: ItemHash.expeditionslots_silver_7days,
-            [ItemHash.expeditionslots_gold_30days]: ItemHash.expeditionslots_gold_7days,
-            [ItemHash.expeditionslots_gold_30days_pts]: ItemHash.expeditionslots_gold_7days,
-
-            [ItemHash.expeditionslots_bronze_90days]: ItemHash.expeditionslots_bronze_7days,
-            [ItemHash.expeditionslots_bronze_90days_pts]: ItemHash.expeditionslots_bronze_7days,
-            [ItemHash.expeditionslots_silver_90days]: ItemHash.expeditionslots_silver_7days,
-            [ItemHash.expeditionslots_silver_90days_pts]: ItemHash.expeditionslots_silver_7days,
-            [ItemHash.expeditionslots_gold_90days]: ItemHash.expeditionslots_gold_7days,
-            [ItemHash.expeditionslots_gold_90days_pts]: ItemHash.expeditionslots_gold_7days,
-        };
-
-        @Watch('settings', { immediate: true, deep: true })
-        @Watch('playerSettings', { immediate: true, deep: true })
-        private onSettingsChanged() {
-            const mapItems = (Object.keys(this.slotItemsMap) as ItemHash[]).filter(i => !this.slotItems.includes(i));
-            mapItems.forEach(item => {
-                const index = this.settings.items.indexOf(item);
-                if (index < 0) {
-                    return;
-                }
-
-                this.settings.items.splice(index, 1, this.slotItemsMap[item] ?? _throw(`missing item configuration for '${item}'`));
-            });
-
-            this.breakdown.options.playerClass = this.playerSettings.playerClass;
-            this.breakdown.options.admiral = this.playerSettings.officers.admiral;
-            this.breakdown.options.astrophysicsLevel = this.playerSettings.levelAstrophysics;
-            this.breakdown.options.itemBonusSlots = getItemSlotBonus(createRecord(this.settings.items, _ => 'permanent' as const));
-            this.breakdown.options.fleetFindsResourceFactors = this.settings.fleetUnitsFactors;
-            this.breakdown.options.serverSettings = this.settings.serverSettings;
-
-            if (this.topScores[this.settings.serverSettings.topScore] == null) {
-                this.settings.serverSettings.topScore = Object.keys(this.topScores)
-                    .map(k => parseIntSafe(k))
-                    .sort((a, b) => b - a)
-                    .find(score => score <= this.settings.serverSettings.topScore)
-                    ?? _throw('failed to find matching top score');
-            }
-        }
-
-        private get expeditionsPerDay() {
-            return this.breakdown.slots * this.settings.wavesPerDay;
-        }
-
-        private toggleItem(item: ItemHash) {
-            const index = this.settings.items.indexOf(item);
-            if (index < 0) {
-                this.settings.items.push(item);
-            }
-            else {
-                this.settings.items.splice(index, 1);
-            }
+        const index = settings.value.items.indexOf(itemId);
+        if (index >= 0) {
+            settings.value.items.splice(index, 1);
         }
     }
+}
+
+watch(() => settings.value, onSettingsChanged, { immediate: true, deep: true });
+
+watch(() => props.playerSettings, onSettingsChanged, { immediate: true, deep: true });
 </script>
+
 <style lang="scss" scoped>
-    .expedition-settings {
-        width: 300px;
-        border: 1px solid rgba(var(--color), 0.5);
-        display: flex;
-        flex-direction: column;
-        border-radius: 4px;
-        overflow: hidden;
+.expedition-settings {
+    width: 300px;
+    border: 1px solid rgba(var(--color), 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    overflow: hidden;
 
-        &.disabled {
-            --color: 80, 80, 80;
-            backdrop-filter: grayscale(0.5);
-        }
+    &.disabled {
+        --color: 80, 80, 80;
+        backdrop-filter: grayscale(0.5);
     }
+}
 
-    .header,
-    .body {
-        padding: 8px;
-    }
-    .header {
-        background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
-        text-align: center;
-    }
+.header,
+.body {
+    padding: 8px;
+}
+.header {
+    background: black linear-gradient(0deg, rgba(var(--color), 0.5), rgba(var(--color), 0.7));
+    text-align: center;
+}
 
-    .body {
-        display: grid;
-        grid-template-columns: minmax(auto, 100px) 1fr;
-        align-items: center;
-        gap: 8px 16px;
-    }
+.body {
+    display: grid;
+    grid-template-columns: minmax(auto, 100px) 1fr;
+    align-items: center;
+    gap: 8px 16px;
+}
 
-    input[type="number"] {
-        width: 60px;
-    }
+input[type='number'] {
+    width: 60px;
+}
 
-    .topScore {
-        width: 100%;
-    }
+.topScore {
+    width: 100%;
+}
 
-    .item-grid {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        width: max-content;
-        gap: 4px;
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    width: max-content;
+    gap: 4px;
 
-        > .o-item {
-            cursor: pointer;
-        }
+    > .o-item {
+        cursor: pointer;
     }
+}
 
-    .resource-factors {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        width: max-content;
-        gap: 4px;
-    }
+.resource-factors {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    width: max-content;
+    gap: 4px;
+}
 </style>

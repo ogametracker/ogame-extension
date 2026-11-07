@@ -1,5 +1,5 @@
-import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
 
 export interface EmpireTranslations {
     header: string;
@@ -123,7 +123,9 @@ export interface EmpireTranslations {
             expeditionSettings: {
                 header: string;
                 averageWavesPerDay: string;
-                items: string;
+                slotItems: string;
+                resourceFindItems: string;
+                improvedChanceItems: string;
                 averageExpeditionsPerDay: string;
                 shipUnitFactors: string;
                 topPlayerScore: string;

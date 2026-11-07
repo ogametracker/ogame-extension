@@ -1,14 +1,17 @@
-import { LifeformType, ValidLifeformTypes } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { observerCallbacks } from "./main";
-import { _throw } from "@/shared/utils/_throw";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { getLifeformExperienceNeededForLevel } from "@/shared/models/ogame/lifeforms/experience";
-import { UpdateLifeformExperienceMessage, UpdatePlanetActiveLifeformTechnologyLevelsMessage } from "@/shared/messages/tracking/empire";
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
-import { MessageType } from "@/shared/messages/MessageType";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformType, ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { observerCallbacks } from './main';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { getLifeformExperienceNeededForLevel } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
+import {
+    UpdateLifeformExperienceMessage,
+    UpdatePlanetActiveLifeformTechnologyLevelsMessage,
+} from '@ogame-tracker/shared/messages/tracking/empire';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
 export function trackLifeformBonusesPage() {
     observerCallbacks.push({
@@ -23,32 +26,38 @@ export function trackLifeformBonusesPage() {
 function updateActiveLifeformResearchSlots(element: Element) {
     const selectedResearchesPerPlanet: Record<number, Partial<Record<LifeformTechnologyType, number>>> = {};
 
-    const bonusElements = element.querySelectorAll('lifeform-technology-bonuses bonus-item-content[data-toggable-target]');
-    for(const bonusElement of bonusElements) {
+    const bonusElements = element.querySelectorAll(
+        'lifeform-technology-bonuses bonus-item-content[data-toggable-target]',
+    );
+    for (const bonusElement of bonusElements) {
         const targetText = bonusElement.getAttribute('data-toggable-target') ?? _throw('missing data-toggable-target');
-        if(!/^\d+$/.test(targetText)) {
+        if (!/^\d+$/.test(targetText)) {
             continue;
         }
 
         const planetId = parseIntSafe(targetText);
         const planetSelection = (selectedResearchesPerPlanet[planetId] ??= {});
 
-        const slotElements = bonusElement.querySelectorAll('bonus-item-content-holder > space-object-technology:not(space-object-technology:first-of-type)');    
-        for(const slotElement of slotElements) {
-            const levelText = slotElement.querySelector(':scope > space-object-technology-item:nth-of-type(2)')?.textContent ?? _throw('missing research level');
+        const slotElements = bonusElement.querySelectorAll(
+            'bonus-item-content-holder > space-object-technology:not(space-object-technology:first-of-type)',
+        );
+        for (const slotElement of slotElements) {
+            const levelText =
+                slotElement.querySelector(':scope > space-object-technology-item:nth-of-type(2)')?.textContent
+                ?? _throw('missing research level');
             const level = parseIntSafe(levelText);
 
-            const techIdText = [...slotElement.querySelector(':scope technology-icon')?.attributes ?? []]
-                .map(attr => attr.name.match(/^lifeformtech(?<id>\d+)$/)?.groups?.id)
-                .find(id => id != null)
-                ?? _throw('missing research id');
+            const techIdText =
+                [...(slotElement.querySelector(':scope technology-icon')?.attributes ?? [])]
+                    .map(attr => attr.name.match(/^lifeformtech(?<id>\d+)$/)?.groups?.id)
+                    .find(id => id != null) ?? _throw('missing research id');
             const techId = parseIntSafe(techIdText) as LifeformTechnologyType;
 
             planetSelection[techId] = level;
         }
     }
 
-    for(const [planetId, technologyLevels] of Object.entries(selectedResearchesPerPlanet)) {
+    for (const [planetId, technologyLevels] of Object.entries(selectedResearchesPerPlanet)) {
         const message: UpdatePlanetActiveLifeformTechnologyLevelsMessage = {
             ogameMeta: getOgameMeta(),
             type: MessageType.UpdatePlanetActiveLifeformTechnologyLevels,
@@ -75,24 +84,25 @@ function updateLifeformExperience(element: Element) {
     ValidLifeformTypes.forEach(lifeform => {
         const selector = `.lifeform${index[lifeform]} + .xpHolder > .xpbar`;
         const elem = element.querySelector(selector);
-        if(elem == null) {
+        if (elem == null) {
             return;
         }
         const title = elem.getAttribute('data-tooltip-title') ?? _throw('no experience title found');
-        const match = title.match(/\s*(?<level>\d+)[^\d]*:?\s*(?<exp>[^\s\/]*)\/?\d?/i);
-        
-        const levelText = match?.groups?.level.replace(/[^\d]/g, '') 
+        const match = title.match(/\s*(?<level>\d+)[^\d]*:?\s*(?<exp>[^\s/]*)\/?\d?/i);
+
+        const levelText =
+            match?.groups?.level.replace(/[^\d]/g, '')
             ?? elem.querySelector('.currentlevel')?.textContent?.trim()
             ?? _throw('no level match');
         const level = parseIntSafe(levelText, 10);
 
         let currentExp = 0;
-        if(level < 100) {
+        if (level < 100) {
             const currentExpText = match?.groups?.exp.replace(/[^\d]/g, '') ?? _throw('no exp match');
             currentExp = parseIntSafe(currentExpText, 10);
         }
         const exp = getLifeformExperienceNeededForLevel(level) + currentExp;
-        
+
         lifeformExperience[lifeform] = exp;
     });
 

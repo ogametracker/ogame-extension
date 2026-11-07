@@ -1,7 +1,13 @@
-import { HighscoreType, HighscoreTypeName } from "@/shared/models/ogame/highscore";
-import { DBSchema } from "idb";
+import { HighscoreType, HighscoreTypeName } from '@ogame-tracker/shared/models/ogame/highscore';
+import { DBSchema } from 'idb';
 
-export type DbUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw';
+export type DbUniverseHistoryPlayerStateItem =
+    | 'admin'
+    | 'banned'
+    | 'vacation'
+    | 'inactive'
+    | 'inactive-long'
+    | 'outlaw';
 
 export type DbUniverseHistoryPlayerState = null | DbUniverseHistoryPlayerStateItem[] | 'deleted';
 
@@ -205,7 +211,6 @@ export interface OgameTrackerUniverseHistoryDbSchema extends DBSchema {
             moonId: number;
         };
     };
-
 
     alliances: {
         key: number;

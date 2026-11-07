@@ -1,14 +1,16 @@
-import { DebrisFieldReport } from '@/shared/models/debris-field-reports/DebrisFieldReport';
-import { MessageType } from '@/shared/messages/MessageType';
-import { NewDebrisFieldReportMessage } from '@/shared/messages/tracking/debris-fields';
-import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { defineStore } from 'pinia';
+import { computed, onScopeDispose, ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
+import type { DebrisFieldReport } from '@ogame-tracker/shared/models/debris-field-reports/DebrisFieldReport';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { NewDebrisFieldReportMessage } from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import type { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getPlayerDatabase } from '@/shared/db/access';
-import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
-import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { useUniversesAndAccountsStore } from './UniversesAndAccountsDataModule';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
 export type DebrisFieldResources = Record<ResourceType, number>;
 
@@ -19,95 +21,84 @@ export interface DailyDebrisFieldReportResult {
     expedition: DebrisFieldResources;
 }
 
-@Component
-class DebrisFieldReportDataModuleClass extends Vue {
-    public dailyResults: Partial<Record<number, DailyDebrisFieldReportResult>> = {};
-    private internal_firstDate: number | null = null;
-    private internal_count = 0;
-    private internal_minId = 0;
+export const useDebrisFieldReportStore = defineStore('debrisFieldReport', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const dailyResults = ref<Partial<Record<number, DailyDebrisFieldReportResult>>>({});
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    const internal_firstDate = ref<number | null>(null);
+
+    const internal_count = ref(0);
+
+    const internal_minId = ref(0);
+
+    const minId = computed(() => {
+        return internal_minId.value;
+    });
+
+    const count = computed(() => {
+        return internal_count.value;
+    });
+
+    const dailyResultsArray = computed<DailyDebrisFieldReportResult[]>(() => {
+        return Object.values(dailyResults.value) as DailyDebrisFieldReportResult[];
+    });
+
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    public get minId() {
-        return this.internal_minId;
-    }
+    async function loadData() {
+        await useUniversesAndAccountsStore().ready;
 
-    public get count() {
-        return this.internal_count;
-    }
-
-    public get dailyResultsArray(): DailyDebrisFieldReportResult[] {
-        return Object.values(this.dailyResults) as DailyDebrisFieldReportResult[];
-    }
-
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
-    }
-
-    private async loadData() {
-        await this.$nextTick();
-        await UniversesAndAccountsDataModule.ready;
-
-        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const la = useUniversesAndAccountsStore().currentAccount.linkedAccounts ?? [];
         const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
             playerId: acc.id,
             language: acc.serverLanguage,
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         let minDate: number | null = null;
         for (const account of accounts) {
             const db = await getPlayerDatabase(account);
-            
+
             const reports = await db.getAll('debrisFieldReports');
             reports.forEach(report => {
-                this.addDebrisFieldReportToDailyResult(report);
-                
+                addDebrisFieldReportToDailyResult(report);
+
                 minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
             });
-            this.internal_firstDate = minDate;
+            internal_firstDate.value = minDate;
         }
 
-        this._resolveReady();
+        resolveReady();
     }
 
-    private addTimeout: number | undefined = undefined;
-    private addReports: DebrisFieldReport[] = [];
+    let addTimeout: number | undefined = undefined;
 
-    private addDebrisFieldReportToDailyResult_delayed(report: DebrisFieldReport) {
-        this.addReports.push(report);
+    let addReports: DebrisFieldReport[] = [];
 
-        clearTimeout(this.addTimeout);
-        this.addTimeout = setTimeout(() => {
-            const addReports = this.addReports;
-            this.addReports = [];
-            addReports.forEach(report => this.addDebrisFieldReportToDailyResult(report));
+    function addDebrisFieldReportToDailyResult_delayed(report: DebrisFieldReport) {
+        addReports.push(report);
+
+        clearTimeout(addTimeout);
+        addTimeout = window.setTimeout(() => {
+            const pending = addReports;
+            addReports = [];
+            pending.forEach(report => addDebrisFieldReportToDailyResult(report));
         }, 500);
     }
 
-    private addDebrisFieldReportToDailyResult(report: DebrisFieldReport) {
-        this.internal_count++;
+    function addDebrisFieldReportToDailyResult(report: DebrisFieldReport) {
+        internal_count.value++;
 
         const day = startOfDay(report.date).getTime();
 
-        let dailyResult = this.dailyResults[day];
-        if (dailyResult == null) {
-            dailyResult = this.getNewDailyResult(day);
-            this.$set(this.dailyResults, day, dailyResult);
-        }
+        dailyResults.value[day] ??= getNewDailyResult(day);
+        const dailyResult = dailyResults.value[day];
 
         dailyResult.total.metal += report.metal;
         dailyResult.total.crystal += report.crystal;
@@ -117,17 +108,16 @@ class DebrisFieldReportDataModuleClass extends Vue {
             dailyResult.expedition.metal += report.metal;
             dailyResult.expedition.crystal += report.crystal;
             dailyResult.expedition.deuterium += report.deuterium ?? 0;
-        } 
-        else {
+        } else {
             dailyResult.normal.metal += report.metal;
             dailyResult.normal.crystal += report.crystal;
             dailyResult.normal.deuterium += report.deuterium ?? 0;
         }
 
-        this.internal_minId = Math.min(this.internal_minId, report.id);
+        internal_minId.value = Math.min(internal_minId.value, report.id);
     }
 
-    private getNewDailyResult(date: number): DailyDebrisFieldReportResult {
+    function getNewDailyResult(date: number): DailyDebrisFieldReportResult {
         return {
             date,
             total: {
@@ -148,11 +138,11 @@ class DebrisFieldReportDataModuleClass extends Vue {
         };
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(message => this.onMessage(message));
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private onMessage(msg: Message) {
+    function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -161,20 +151,35 @@ class DebrisFieldReportDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewDebrisFieldReport: {
                 const { data } = msg as NewDebrisFieldReportMessage;
-                this.addDebrisFieldReportToDailyResult_delayed(data);
+                addDebrisFieldReportToDailyResult_delayed(data);
                 break;
             }
         }
     }
 
-    public get firstDay(): number {
-        return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
-    }
+    const firstDay = computed<number>(() => {
+        return startOfDay(internal_firstDate.value ?? Date.now()).getTime();
+    });
 
-    public async clear(): Promise<void> {
+    async function clear(): Promise<void> {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         await db.clear('debrisFieldReports');
     }
-}
 
-export const DebrisFieldReportDataModule = new DebrisFieldReportDataModuleClass();
+    onScopeDispose(() => clearTimeout(addTimeout));
+
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        dailyResults,
+        internal_firstDate,
+        internal_count,
+        internal_minId,
+        minId,
+        count,
+        dailyResultsArray,
+        firstDay,
+        clear,
+    };
+});

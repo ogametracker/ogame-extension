@@ -1,6 +1,6 @@
-import { LifeformBonusType } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { LifeformBonusType } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class ResidentialSectorClass extends LifeformBuilding {
     public constructor() {
@@ -27,7 +27,7 @@ class ResidentialSectorClass extends LifeformBuilding {
     public get bonuses(): LifeformBonusType[] {
         return [];
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.residentialSector;
     }

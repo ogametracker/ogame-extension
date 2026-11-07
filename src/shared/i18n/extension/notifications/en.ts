@@ -1,11 +1,9 @@
-import { NotificationTranslations } from "./type";
+import { NotificationTranslations } from './type';
 
 export const en: NotificationTranslations = {
     combatTracking: {
         title: (value: string) =>
-            value == '1'
-                ? `${value} new combat report tracked`
-                : `${value} new combat reports tracked`,
+            value == '1' ? `${value} new combat report tracked` : `${value} new combat reports tracked`,
         message: (value: string) =>
             value == '1'
                 ? `${value} new combat report has been tracked.`
@@ -13,9 +11,7 @@ export const en: NotificationTranslations = {
     },
     debrisFieldReportTracking: {
         title: (value: string) =>
-            value == '1'
-                ? `${value} new debris field report tracked`
-                : `${value} new debris field reports tracked`,
+            value == '1' ? `${value} new debris field report tracked` : `${value} new debris field reports tracked`,
         message: (value: string) =>
             value == '1'
                 ? `${value} new debris field report has been tracked.`
@@ -23,10 +19,7 @@ export const en: NotificationTranslations = {
     },
     expeditionTracking: {
         fleetLost: {
-            title: (value: string) =>
-                value == '1'
-                    ? `${value} lost fleet`
-                    : `${value} lost fleet`,
+            title: (value: string) => (value == '1' ? `${value} lost fleet` : `${value} lost fleet`),
             message: (value: string) =>
                 value == '1'
                     ? `${value} fleet did not return from its expedition.`
@@ -34,9 +27,7 @@ export const en: NotificationTranslations = {
         },
         result: {
             title: (value: string) =>
-                value == '1'
-                    ? `${value} new expedition tracked`
-                    : `${value} new expeditions tracked`,
+                value == '1' ? `${value} new expedition tracked` : `${value} new expeditions tracked`,
             summary: 'Summary of findings',
             events: 'Expedition events',
         },
@@ -46,17 +37,15 @@ export const en: NotificationTranslations = {
             value == '1'
                 ? `${value} new lifeform discovery mission tracked`
                 : `${value} new lifeform discovery missions tracked`,
-        message: (value: string) => 
-        value == '1'
-            ? `${value} new lifeform discovery mission has been tracked.`
-            : `${value} new lifeform discovery missions have been tracked.`,
+        message: (value: string) =>
+            value == '1'
+                ? `${value} new lifeform discovery mission has been tracked.`
+                : `${value} new lifeform discovery missions have been tracked.`,
     },
 
     messageTrackingError: {
         title: (value: string) =>
-            value == '1'
-                ? `Failed to process ${value} message`
-                : `Failed to process ${value} messages`,
+            value == '1' ? `Failed to process ${value} message` : `Failed to process ${value} messages`,
         message: (value: string) =>
             value == '1'
                 ? `${value} message caused an error and has not been tracked. The causing message has been marked in red. Please contact the developer.`

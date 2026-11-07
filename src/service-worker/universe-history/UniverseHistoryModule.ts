@@ -1,23 +1,29 @@
-import { broadcastMessage } from "@/shared/communication/broadcastMessage";
-import { getServerDatabase, getUniverseHistoryDatabase } from "@/shared/db/access";
-import { OgameTrackerUniverseHistoryDbSchema } from "@/shared/db/schema";
-import { DbUniverseHistoryAllianceState, DbUniverseHistoryCoordinates, DbUniverseHistoryPlanetMoonState, DbUniverseHistoryPlayerState, DbUniverseHistoryPlayerStateItem, DbUniverseHistoryScoreType } from "@/shared/db/schema/universe-history";
-import { MessageOgameMeta } from "@/shared/messages/Message";
-import { MessageType } from "@/shared/messages/MessageType";
-import { NotifyUniverseHistoryUpdateMessage } from "@/shared/messages/tracking/universe-history";
-import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { HighscoreType, HighscoreTypeNames } from "@/shared/models/ogame/highscore";
-import { parseCoordinates } from "@/shared/utils/parseCoordinates";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { _log, _logDebug } from "@/shared/utils/_log";
-import { _throw } from "@/shared/utils/_throw";
-import { serviceWorkerUuid } from "@/shared/uuid";
-import { addDays, startOfDay } from "date-fns";
-import { XMLParser } from "fast-xml-parser";
-import { IDBPTransaction, StoreNames } from "idb";
-import { settingsService } from "../main";
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { getServerDatabase, getUniverseHistoryDatabase } from '@ogame-tracker/shared/db/access';
+import { OgameTrackerUniverseHistoryDbSchema } from '@ogame-tracker/shared/db/schema';
+import {
+    DbUniverseHistoryAllianceState,
+    DbUniverseHistoryCoordinates,
+    DbUniverseHistoryPlanetMoonState,
+    DbUniverseHistoryPlayerState,
+    DbUniverseHistoryPlayerStateItem,
+    DbUniverseHistoryScoreType,
+} from '@ogame-tracker/shared/db/schema/universe-history';
+import { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { NotifyUniverseHistoryUpdateMessage } from '@ogame-tracker/shared/messages/tracking/universe-history';
+import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { HighscoreType, HighscoreTypeNames } from '@ogame-tracker/shared/models/ogame/highscore';
+import { parseCoordinates } from '@ogame-tracker/shared/utils/parseCoordinates';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _log, _logDebug } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
+import { addDays, startOfDay } from 'date-fns';
+import { XMLParser } from 'fast-xml-parser';
+import { IDBPTransaction, StoreNames } from 'idb';
+import { settingsService } from '../main';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace OgameApi {
     export interface Response {
         timestamp: string;
@@ -132,9 +138,12 @@ interface Moon {
     planetId: number;
 }
 
-
 type UniverseHistoryDbStoreName = StoreNames<OgameTrackerUniverseHistoryDbSchema>;
-type UniverseHistoryDbTransaction = IDBPTransaction<OgameTrackerUniverseHistoryDbSchema, StoreNames<OgameTrackerUniverseHistoryDbSchema>[], 'readwrite'>;
+type UniverseHistoryDbTransaction = IDBPTransaction<
+    OgameTrackerUniverseHistoryDbSchema,
+    StoreNames<OgameTrackerUniverseHistoryDbSchema>[],
+    'readwrite'
+>;
 
 export class UniverseHistoryModule {
     private updateTimes: number[] = [];
@@ -146,7 +155,7 @@ export class UniverseHistoryModule {
     });
 
     private readonly meta: MessageOgameMeta;
-    private timeout: number | undefined = undefined;
+    private timeout: ReturnType<typeof setTimeout> | undefined = undefined;
     private inUpdate = false;
 
     private get settings() {
@@ -198,11 +207,15 @@ export class UniverseHistoryModule {
             }
         }
 
-        const nextUpdate = nextUpdates.length == 1
-            ? nextUpdates[0]
-            : nextUpdates.find((_, i) => nextUpdates[i + 1] >= now) ?? _throw('failed to find next update time for universe history');
+        const nextUpdate =
+            nextUpdates.length == 1
+                ? nextUpdates[0]
+                : (nextUpdates.find((_, i) => nextUpdates[i + 1] >= now)
+                  ?? _throw('failed to find next update time for universe history'));
         const timeLeft = Math.max(0, nextUpdate - now);
-        _logDebug(`next universe history tracking in ${timeLeft} ms (${new Date(Date.now() + timeLeft)}) for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
+        _logDebug(
+            `next universe history tracking in ${timeLeft} ms (${new Date(Date.now() + timeLeft)}) for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`,
+        );
 
         clearTimeout(this.timeout);
         this.timeout = setTimeout(async () => await this.trackUniverseUpdates(), timeLeft);
@@ -215,7 +228,9 @@ export class UniverseHistoryModule {
 
         this.inUpdate = true;
         try {
-            _logDebug(`tracking universe history for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`);
+            _logDebug(
+                `tracking universe history for universe ${this.meta.serverId} ${this.meta.language.toUpperCase()}`,
+            );
             const players = await this.getPlayers();
             const alliances = await this.getAlliances();
             const playerScores = await this.getAllPlayerScores();
@@ -269,7 +284,13 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateHistory(tx: UniverseHistoryDbTransaction, players: Player[], alliances: Alliance[], playerScores: Partial<Record<number, PlayerScorePositions>>, planets: Planet[]): Promise<void> {
+    private async updateHistory(
+        tx: UniverseHistoryDbTransaction,
+        players: Player[],
+        alliances: Alliance[],
+        playerScores: Partial<Record<number, PlayerScorePositions>>,
+        planets: Planet[],
+    ): Promise<void> {
         const now = Date.now();
 
         await this.updatePlayers(tx, players, now, playerScores);
@@ -282,7 +303,13 @@ export class UniverseHistoryModule {
         await tx.objectStore('_lastUpdate').put(now, 0);
     }
 
-    private async updateAlliances(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>) {
+    private async updateAlliances(
+        tx: UniverseHistoryDbTransaction,
+        alliances: Alliance[],
+        now: number,
+        players: Player[],
+        playerScores: Partial<Record<number, PlayerScorePositions>>,
+    ) {
         _logDebug('updating alliance history');
 
         await this.updateKnownAlliances(tx, alliances);
@@ -302,15 +329,19 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateAllianceTags(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, replace = false) {
+    private async updateAllianceTags(
+        tx: UniverseHistoryDbTransaction,
+        alliances: Alliance[],
+        now: number,
+        replace = false,
+    ) {
         const lastTags: Partial<Record<number, string>> = {};
         const lastTagUpdates: Partial<Record<number, number>> = {};
 
         const store = tx.objectStore('allianceTags');
         if (replace) {
             await store.clear();
-        }
-        else {
+        } else {
             let cursor = await store.openCursor();
             while (cursor != null) {
                 const dbValue = cursor.value;
@@ -338,15 +369,19 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateAllianceNames(tx: UniverseHistoryDbTransaction, alliances: Alliance[], now: number, replace = false) {
+    private async updateAllianceNames(
+        tx: UniverseHistoryDbTransaction,
+        alliances: Alliance[],
+        now: number,
+        replace = false,
+    ) {
         const lastNames: Partial<Record<number, string>> = {};
         const lastNameUpdates: Partial<Record<number, number>> = {};
 
         const store = tx.objectStore('allianceNames');
         if (replace) {
             await store.clear();
-        }
-        else {
+        } else {
             let cursor = await store.openCursor();
             while (cursor != null) {
                 const dbValue = cursor.value;
@@ -374,7 +409,12 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateAllianceMembers(tx: UniverseHistoryDbTransaction, alliances: Alliance[], players: Player[], now: number) {
+    private async updateAllianceMembers(
+        tx: UniverseHistoryDbTransaction,
+        alliances: Alliance[],
+        players: Player[],
+        now: number,
+    ) {
         const lastMembers: Partial<Record<number, number[]>> = {};
         const lastMemberUpdates: Partial<Record<number, number>> = {};
 
@@ -455,7 +495,13 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updateAllianceScores(tx: UniverseHistoryDbTransaction, alliances: Alliance[], players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>, now: number) {
+    private async updateAllianceScores(
+        tx: UniverseHistoryDbTransaction,
+        alliances: Alliance[],
+        players: Player[],
+        playerScores: Partial<Record<number, PlayerScorePositions>>,
+        now: number,
+    ) {
         const lastScores: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, ScorePosition>> = {};
         const lastScoreUpdates: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, number>> = {};
 
@@ -479,7 +525,7 @@ export class UniverseHistoryModule {
 
         const scoreTypes = HighscoreTypeNames;
         const scoresByType = {} as Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>>;
-        scoreTypes.forEach(type => scoresByType[type] = {});
+        scoreTypes.forEach(type => (scoresByType[type] = {}));
 
         for (const ally of alliances) {
             const memberScores = players.filter(p => p.alliance == ally.id).map(p => playerScores[p.id]);
@@ -498,9 +544,9 @@ export class UniverseHistoryModule {
         const sortedScoresByType = {} as Record<DbUniverseHistoryScoreType, number[]>;
         scoreTypes.forEach(type => {
             const allyScores = scoresByType[type];
-            const sortedScores = [...new Set<number>(
-                Object.values(allyScores).filter(score => score != null) as number[]
-            )].sort((a, b) => b - a);
+            const sortedScores = [
+                ...new Set<number>(Object.values(allyScores).filter(score => score != null) as number[]),
+            ].sort((a, b) => b - a);
 
             sortedScoresByType[type] = sortedScores;
         });
@@ -508,9 +554,7 @@ export class UniverseHistoryModule {
         for (const ally of alliances) {
             for (const type of scoreTypes) {
                 let score = scoresByType[type][ally.id];
-                const position = score == null
-                    ? 0
-                    : sortedScoresByType[type].indexOf(score) + 1;
+                const position = score == null ? 0 : sortedScoresByType[type].indexOf(score) + 1;
                 score ??= 0;
 
                 const lastAllyScore = lastScores[`${ally.id}.${type}`];
@@ -529,8 +573,12 @@ export class UniverseHistoryModule {
         }
     }
 
-
-    private async updatePlayers(tx: UniverseHistoryDbTransaction, players: Player[], now: number, playerScores: Partial<Record<number, PlayerScorePositions>>) {
+    private async updatePlayers(
+        tx: UniverseHistoryDbTransaction,
+        players: Player[],
+        now: number,
+        playerScores: Partial<Record<number, PlayerScorePositions>>,
+    ) {
         _logDebug('updating player history');
         await this.updateKnownPlayers(tx, players);
         await this.updatePlayerScores(tx, players, playerScores, now);
@@ -555,8 +603,7 @@ export class UniverseHistoryModule {
         const store = tx.objectStore('playerNames');
         if (replace) {
             await store.clear();
-        }
-        else {
+        } else {
             let cursor = await store.openCursor();
             while (cursor != null) {
                 const dbValue = cursor.value;
@@ -647,7 +694,6 @@ export class UniverseHistoryModule {
             });
         }
 
-
         const playerIds = players.map(p => p.id);
         const deletedPlayers = Object.keys(lastStates)
             .map(id => parseIntSafe(id, 10))
@@ -666,7 +712,12 @@ export class UniverseHistoryModule {
         }
     }
 
-    private async updatePlayerScores(tx: UniverseHistoryDbTransaction, players: Player[], playerScores: Partial<Record<number, PlayerScorePositions>>, now: number) {
+    private async updatePlayerScores(
+        tx: UniverseHistoryDbTransaction,
+        players: Player[],
+        playerScores: Partial<Record<number, PlayerScorePositions>>,
+        now: number,
+    ) {
         const lastScores: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, ScorePosition>> = {};
         const lastScoreUpdates: Partial<Record<`${number}.${DbUniverseHistoryScoreType}`, number>> = {};
 
@@ -690,7 +741,7 @@ export class UniverseHistoryModule {
 
         const scoreTypes = HighscoreTypeNames;
         const scoresByType = {} as Record<DbUniverseHistoryScoreType, Partial<Record<number, number>>>;
-        scoreTypes.forEach(type => scoresByType[type] = {});
+        scoreTypes.forEach(type => (scoresByType[type] = {}));
 
         for (const player of players) {
             for (const type of scoreTypes) {
@@ -742,7 +793,6 @@ export class UniverseHistoryModule {
 
         return states;
     }
-
 
     private async updatePlanets(tx: UniverseHistoryDbTransaction, planets: Planet[], now: number) {
         _logDebug('updating planet and moon history');
@@ -867,7 +917,10 @@ export class UniverseHistoryModule {
         }
 
         for (const planet of planets) {
-            if (planet.id in lastCoordinates && this.coordinatesEqual(planet.coordinates, lastCoordinates[planet.id]!)) {
+            if (
+                planet.id in lastCoordinates
+                && this.coordinatesEqual(planet.coordinates, lastCoordinates[planet.id]!)
+            ) {
                 continue;
             }
 
@@ -975,15 +1028,11 @@ export class UniverseHistoryModule {
     }
 
     private coordinatesEqual(a: DbUniverseHistoryCoordinates, b: DbUniverseHistoryCoordinates) {
-        return a.galaxy == b.galaxy
-            && a.system == b.system
-            && a.position == b.position;
+        return a.galaxy == b.galaxy && a.system == b.system && a.position == b.position;
     }
 
     private arraysEqual<T>(a: T[], b: T[]): boolean {
-        return a.length == b.length
-            && a.every(aValue => b.includes(aValue))
-            && b.every(bValue => a.includes(bValue));
+        return a.length == b.length && a.every(aValue => b.includes(aValue)) && b.every(bValue => a.includes(bValue));
     }
 
     private get apiUrlBase() {
@@ -1117,7 +1166,9 @@ export class UniverseHistoryModule {
         return scores;
     }
 
-    private async getPlayerScorePositions(type: Exclude<HighscoreType, HighscoreType.militaryAndNumberOfShips>): Promise<Record<number, ScorePosition>> {
+    private async getPlayerScorePositions(
+        type: Exclude<HighscoreType, HighscoreType.militaryAndNumberOfShips>,
+    ): Promise<Record<number, ScorePosition>> {
         const scores: Record<number, ScorePosition> = {};
 
         const xml = await this.getXml<OgameApi.HighscoreXml>(`highscore.xml?category=1&type=${type}`);
@@ -1131,10 +1182,14 @@ export class UniverseHistoryModule {
         return scores;
     }
 
-    private async getPlayerMilitaryScorePositions(): Promise<Record<number, { points: ScorePosition, numberOfShips: ScorePosition }>> {
-        const scores: Record<number, { points: ScorePosition, numberOfShips: ScorePosition }> = {};
+    private async getPlayerMilitaryScorePositions(): Promise<
+        Record<number, { points: ScorePosition; numberOfShips: ScorePosition }>
+    > {
+        const scores: Record<number, { points: ScorePosition; numberOfShips: ScorePosition }> = {};
 
-        const xml = await this.getXml<OgameApi.HighscoreXml>(`highscore.xml?category=1&type=${HighscoreType.militaryAndNumberOfShips}`);
+        const xml = await this.getXml<OgameApi.HighscoreXml>(
+            `highscore.xml?category=1&type=${HighscoreType.militaryAndNumberOfShips}`,
+        );
         const mapped = xml.highscore.player.map(player => {
             const id = parseIntSafe(player.id ?? _throw('no player id found'), 10);
             const score = parseIntSafe(player.score ?? _throw('no player score found'), 10);

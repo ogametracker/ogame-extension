@@ -1,48 +1,52 @@
 <template>
-    <loading-spinner v-if="loading" />
-    <page v-else :nav-items="navItems" root-route-name="lifeforms" />
+    <LoadingSpinner v-if="loading" />
+    <Page v-else :nav-items="navItems" root-route-name="lifeforms" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from '@/views/stats/components/common/ListNav.vue';
-    import { EmpireDataModule } from '../../data/EmpireDataModule';
-    import { ServerSettingsDataModule } from '../../data/ServerSettingsDataModule';
+<script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import Page from '@stats/components/common/Page.vue';
+import { computed, onMounted, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import type { ListNavItem } from '@stats/components/common/ListNav.vue';
+import { useEmpireStore } from '../../data/EmpireDataModule';
+import { useServerSettingsStore } from '../../data/ServerSettingsDataModule';
 
-    @Component({})
-    export default class Index extends Vue {
-        private loading = true;
+const empireStore = useEmpireStore();
 
-        async mounted() {
-            await EmpireDataModule.ready;
-            await ServerSettingsDataModule.ready;
+const serverSettingsStore = useServerSettingsStore();
 
-            this.loading = false;
-        }
-        
-        private get navItems(): ListNavItem[] {
-            return [
-                {
-                    to: { name: 'lifeforms/overview' },
-                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.overview,
-                },
-                {
-                    to: { name: 'lifeforms/bonus-breakdown' },
-                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.researchBonuses,
-                },
-                {
-                    to: { name: 'lifeforms/planet-bonuses' },
-                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.planetBonuses,
-                },
-                {
-                    to: { name: 'lifeforms/progress' },
-                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.progress,
-                },
-                {
-                    to: { name: 'lifeforms/discoveries' },
-                    label: this.$i18n.$t.extension.empire.lifeforms.subHeaders.discoveryMissions,
-                },
-            ];
-        }
-    }
+const loading = ref(true);
+
+const navItems = computed<ListNavItem[]>(() => {
+    return [
+        {
+            to: { name: 'lifeforms/overview' },
+            label: translations().extension.empire.lifeforms.subHeaders.overview,
+        },
+        {
+            to: { name: 'lifeforms/bonus-breakdown' },
+            label: translations().extension.empire.lifeforms.subHeaders.researchBonuses,
+        },
+        {
+            to: { name: 'lifeforms/planet-bonuses' },
+            label: translations().extension.empire.lifeforms.subHeaders.planetBonuses,
+        },
+        {
+            to: { name: 'lifeforms/progress' },
+            label: translations().extension.empire.lifeforms.subHeaders.progress,
+        },
+        {
+            to: { name: 'lifeforms/discoveries' },
+            label: translations().extension.empire.lifeforms.subHeaders.discoveryMissions,
+        },
+    ];
+});
+
+onMounted(async () => {
+    await empireStore.ready;
+    await serverSettingsStore.ready;
+
+    loading.value = false;
+});
 </script>

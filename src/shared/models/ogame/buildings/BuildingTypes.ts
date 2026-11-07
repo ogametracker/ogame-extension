@@ -1,24 +1,32 @@
-import { BuildingType, MoonBuildingType, MoonFacilityBuildingType, MoonSupplyBuildingType, PlanetBuildingType, PlanetFacilityBuildingType, PlanetSupplyBuildingType } from "./BuildingType";
-import { Building } from "./Building";
-import { AllianceDepot } from "./AllianceDepot";
-import { CrystalMine } from "./CrystalMine";
-import { CrystalStorage } from "./CrystalStorage";
-import { DeuteriumSynthesizer } from "./DeuteriumSynthesizer";
-import { DeuteriumTank } from "./DeuteriumTank";
-import { FusionReactor } from "./FusionReactor";
-import { JumpGate } from "./JumpGate";
-import { LunarBase } from "./LunarBase";
-import { MetalMine } from "./MetalMine";
-import { MetalStorage } from "./MetalStorage";
-import { MissileSilo } from "./MissileSilo";
-import { NaniteFactory } from "./NaniteFactory";
-import { ResearchLab } from "./ResearchLab";
-import { RoboticsFactory } from "./RoboticsFactory";
-import { SensorPhalanx } from "./SensorPhalanx";
-import { Shipyard } from "./Shipyard";
-import { SolarPlant } from "./SolarPlant";
-import { SpaceDock } from "./SpaceDock";
-import { Terraformer } from "./Terraformer";
+import {
+    BuildingType,
+    MoonBuildingType,
+    MoonFacilityBuildingType,
+    MoonSupplyBuildingType,
+    PlanetBuildingType,
+    PlanetFacilityBuildingType,
+    PlanetSupplyBuildingType,
+} from './BuildingType';
+import { Building } from './Building';
+import { AllianceDepot } from './AllianceDepot';
+import { CrystalMine } from './CrystalMine';
+import { CrystalStorage } from './CrystalStorage';
+import { DeuteriumSynthesizer } from './DeuteriumSynthesizer';
+import { DeuteriumTank } from './DeuteriumTank';
+import { FusionReactor } from './FusionReactor';
+import { JumpGate } from './JumpGate';
+import { LunarBase } from './LunarBase';
+import { MetalMine } from './MetalMine';
+import { MetalStorage } from './MetalStorage';
+import { MissileSilo } from './MissileSilo';
+import { NaniteFactory } from './NaniteFactory';
+import { ResearchLab } from './ResearchLab';
+import { RoboticsFactory } from './RoboticsFactory';
+import { SensorPhalanx } from './SensorPhalanx';
+import { Shipyard } from './Shipyard';
+import { SolarPlant } from './SolarPlant';
+import { SpaceDock } from './SpaceDock';
+import { Terraformer } from './Terraformer';
 
 export const BuildingTypes: BuildingType[] = [
     BuildingType.metalMine,
@@ -108,7 +116,6 @@ export const MoonBuildingTypes: MoonBuildingType[] = [
     BuildingType.sensorPhalanx,
     BuildingType.jumpGate,
 ];
-
 
 export const BuildingsByType: Record<BuildingType, Building> = {
     [BuildingType.metalMine]: MetalMine,

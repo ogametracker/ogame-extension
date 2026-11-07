@@ -1,6 +1,6 @@
-import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { EmpireTranslations } from "./type";
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { EmpireTranslations } from './type';
 
 export const en: EmpireTranslations = {
     header: 'Empire',
@@ -21,7 +21,8 @@ export const en: EmpireTranslations = {
         totalPerDay: 'total per day',
         totalPerWeek: 'total per week',
         activeProductionSettings: 'Active Production Settings',
-        messageProduction100: 'The shown values refer to a production factor of 100% and do not take lack of energy into account.',
+        messageProduction100:
+            'The shown values refer to a production factor of 100% and do not take lack of energy into account.',
 
         mines: {
             crawlersAvailable: 'available',
@@ -59,7 +60,8 @@ export const en: EmpireTranslations = {
             groupSelectedItems: 'Group selected items',
             showOriginalItems: 'Show all items individually',
 
-            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
+            levelsOnPlanets: (levels, planets) =>
+                `${levels} ${levels == 1 ? 'level' : 'levels'} on ${planets} ${planets == 1 ? 'planet' : 'planets'}`,
         },
 
         settings: {
@@ -71,7 +73,8 @@ export const en: EmpireTranslations = {
 
                 mines: 'Mines',
                 expeditions: 'Expeditions',
-                expeditionsRequirement: 'Note: Requires at least one of lifeform expedition bonus researches, lifeform research bonus buildings, and astrophysics to be selected',
+                expeditionsRequirement:
+                    'Note: Requires at least one of lifeform expedition bonus researches, lifeform research bonus buildings, and astrophysics to be selected',
                 lifeformProductionBonusBuildings: 'Lifeform production bonus buildings',
                 lifeformTechnologyBoostBuildings: 'Lifeform research bonus buildings',
                 lifeformProductionBonusTechnologies: 'Lifeform production bonus researches',
@@ -124,7 +127,9 @@ export const en: EmpireTranslations = {
             expeditionSettings: {
                 header: 'Expedition Settings',
                 averageWavesPerDay: '⌀ Waves per day',
-                items: 'Slot items',
+                slotItems: 'Slot items',
+                resourceFindItems: 'Resource bonus items',
+                improvedChanceItems: 'Expedition computer',
                 averageExpeditionsPerDay: '⌀ Expeditions per day',
                 shipUnitFactors: 'Ship resource unit factors',
                 topPlayerScore: 'Top player score',
@@ -134,14 +139,16 @@ export const en: EmpireTranslations = {
         info: {
             generatingItems: 'Calculating next best items',
 
-            slowCalculation: 'The amortization calculation became pretty slow now that it includes lifeform buildings and technologies. This will hopefully be improved in the future.',
+            slowCalculation:
+                'The amortization calculation became pretty slow now that it includes lifeform buildings and technologies. This will hopefully be improved in the future.',
             ctrlClick: 'Ctrl + Click on a check to (de)select all items up to the selected one.',
         },
 
         saveLoad: {
             saveButton: 'Save calculated amortization results',
             loadButton: (date: string) => `Load save (${date})`,
-            loadedSave: (date: string, hiddenItems: string) => `Viewing saved results (${date}) - ${hiddenItems} hidden rows`,
+            loadedSave: (date: string, hiddenItems: string) =>
+                `Viewing saved results (${date}) - ${hiddenItems} hidden rows`,
             abandonedPlanet: 'Abandoned Planet',
         },
 

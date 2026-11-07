@@ -7,7 +7,7 @@ import { fr as lifeformBuildings } from '../ogame/lifeforms/buildings/fr';
 import { fr as lifeformTechnologies } from '../ogame/lifeforms/technologies/fr';
 import { fr as premium } from '../ogame/premium/fr';
 
-import { ExtensionTranslations } from "./type";
+import { ExtensionTranslations } from './type';
 import { fr as settings } from './settings/fr';
 import { fr as resources } from './resources/fr';
 import { fr as common } from './common/fr';
@@ -25,7 +25,7 @@ import { fr as tools } from './tools/fr';
 
 import { fr as excelExport } from './excelExport/fr';
 import { fr as playerClasses } from './playerClasses/fr';
-import { RecursivePartial } from '@/shared/types/RecursivePartial';
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
 
 export const fr: RecursivePartial<ExtensionTranslations> = {
     ogame: {

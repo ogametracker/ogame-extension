@@ -1,6 +1,6 @@
-import { MessageOgameMeta } from '@/shared/messages/Message';
-import { _throw } from '@/shared/utils/_throw';
-import { parseIntSafe } from '@/shared/utils/parseNumbers';
+import type { MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 import { v4 } from 'uuid';
 
 const params = new URLSearchParams(location.search);

@@ -1,10 +1,3 @@
-import { _throw } from "./utils/_throw";
+declare const __OGT_BROWSER__: 'chrome' | 'firefox';
 
-type Browser = 'firefox' | 'chrome'
-interface Environment {
-    browser: Browser;
-}
-
-export const env: Environment = {
-    browser: process.env.BROWSER as Browser ?? process.env.VUE_APP_BROWSER ?? _throw('invalid browser environment'),
-};
+export const env = { browser: __OGT_BROWSER__ };

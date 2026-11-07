@@ -1,21 +1,21 @@
-import { LifeformDiscoveryEvent } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEvent";
-import { HighscoreTypeName } from "@/shared/models/ogame/highscore";
-import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { LifeformType, ValidLifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
-import { CombatReport } from "../../models/combat-reports/CombatReport";
-import { DebrisFieldReport } from "../../models/debris-field-reports/DebrisFieldReport";
-import { ExpeditionEvent } from "../../models/expeditions/ExpeditionEvents";
-import { BuildingType, MoonBuildingType, PlanetBuildingType } from "../../models/ogame/buildings/BuildingType";
-import { AllianceClass } from "../../models/ogame/classes/AllianceClass";
-import { PlayerClass } from "../../models/ogame/classes/PlayerClass";
-import { Coordinates } from "../../models/ogame/common/Coordinates";
-import { DefenseType } from "../../models/ogame/defenses/DefenseType";
-import { ItemHash } from "../../models/ogame/items/ItemHash";
-import { ResearchType } from "../../models/ogame/research/ResearchType";
-import { ShipType } from "../../models/ogame/ships/ShipType";
-import { Settings } from "../../models/settings/Settings";
-import { UniverseSpecificSettings } from "../../models/universe-specific-settings/UniverseSpecificSettings";
+import { LifeformDiscoveryEvent } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEvent';
+import { HighscoreTypeName } from '@ogame-tracker/shared/models/ogame/highscore';
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformType, ValidLifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import { CombatReport } from '../../models/combat-reports/CombatReport';
+import { DebrisFieldReport } from '../../models/debris-field-reports/DebrisFieldReport';
+import { ExpeditionEvent } from '../../models/expeditions/ExpeditionEvents';
+import { BuildingType, MoonBuildingType, PlanetBuildingType } from '../../models/ogame/buildings/BuildingType';
+import { AllianceClass } from '../../models/ogame/classes/AllianceClass';
+import { PlayerClass } from '../../models/ogame/classes/PlayerClass';
+import { Coordinates } from '../../models/ogame/common/Coordinates';
+import { DefenseType } from '../../models/ogame/defenses/DefenseType';
+import { ItemHash } from '../../models/ogame/items/ItemHash';
+import { ResearchType } from '../../models/ogame/research/ResearchType';
+import { ShipType } from '../../models/ogame/ships/ShipType';
+import { Settings } from '../../models/settings/Settings';
+import { UniverseSpecificSettings } from '../../models/universe-specific-settings/UniverseSpecificSettings';
 
 export interface V2ExportedAccount {
     language: string;
@@ -77,7 +77,8 @@ export interface V2ExportedEmpirePlanet {
         [ShipType.crawler]: number;
     };
     activeItems: Partial<Record<ItemHash, number | 'permanent'>>;
-    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number>
+        & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
 
     activeLifeform?: LifeformType;
@@ -93,7 +94,8 @@ export interface V2ExportedEmpireMoon {
 
     buildings: Record<MoonBuildingType, number>;
     activeItems: Partial<Record<ItemHash, number | 'permanent'>>;
-    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number> & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
+    defenses: Record<Exclude<DefenseType, DefenseType.smallShieldDome | DefenseType.largeShieldDome>, number>
+        & Record<DefenseType.smallShieldDome | DefenseType.largeShieldDome, boolean>;
     ships: Record<ShipType, number>;
 }
 
@@ -196,9 +198,18 @@ export interface V2ExportedServerSettings {
     lifeformsEnabled: boolean;
 }
 
-export type V2ExportedUniverseHistoryPlayerStateItem = 'admin' | 'banned' | 'vacation' | 'inactive' | 'inactive-long' | 'outlaw';
+export type V2ExportedUniverseHistoryPlayerStateItem =
+    | 'admin'
+    | 'banned'
+    | 'vacation'
+    | 'inactive'
+    | 'inactive-long'
+    | 'outlaw';
 
-export type V2ExportedUniverseHistoryPlayerCompoundState = null | V2ExportedUniverseHistoryPlayerStateItem[] | 'deleted';
+export type V2ExportedUniverseHistoryPlayerCompoundState =
+    | null
+    | V2ExportedUniverseHistoryPlayerStateItem[]
+    | 'deleted';
 
 export type V2ExportedUniverseHistoryAllianceCompoundState = null | 'deleted';
 

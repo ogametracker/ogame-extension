@@ -1,4 +1,4 @@
-import { PlayerClassTranslations } from "./type";
+import { PlayerClassTranslations } from './type';
 
 export const de: PlayerClassTranslations = {
     collector: 'Kollektor',

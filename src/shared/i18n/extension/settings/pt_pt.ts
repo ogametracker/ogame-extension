@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { SettingsTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { SettingsTranslations } from './type';
 
 export const pt_pt: RecursivePartial<SettingsTranslations> = {
     tabs: {
@@ -15,8 +15,6 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
         dangerZone: 'Zona de Perigo',
         accessbility: 'Acessibilidade',
         linkAccounts: 'Linkar Contas',
-
-        migrateOldData: 'Migrar dados antigos',
     },
     dateRanges: {
         defaultNames: {
@@ -27,7 +25,7 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
             currentMonth: 'Este mês',
             newRange: 'novo intervalo',
         },
-        since: (date) => `Desde ${date}`,
+        since: date => `Desde ${date}`,
         firstDayTemplate: '<primeiro dia>',
         headers: {
             label: 'Label',
@@ -65,7 +63,8 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
             dsuLong: 'Converter para Deutério',
         },
         extensionLanguage: 'Idioma (dentro do OGame Tracker)',
-        extensionLanguageFallbackHint: 'Textos serão mostrados em Inglês se não existir tradução para o idioma selecionado.',
+        extensionLanguageFallbackHint:
+            'Textos serão mostrados em Inglês se não existir tradução para o idioma selecionado.',
 
         serverSettings: {
             title: 'Dados do Servidor',
@@ -74,7 +73,8 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
         },
     },
     expeditions: {
-        resourceUnitFactorsOfShipFoundOnExpeditions: 'Factores de unidades de recursos das naves encontradas em expedições',
+        resourceUnitFactorsOfShipFoundOnExpeditions:
+            'Factores de unidades de recursos das naves encontradas em expedições',
     },
     combats: {
         resourceUnitFactorsOfLostShips: 'Factor de unidades de recurso das naves perdidas em combate',
@@ -116,29 +116,38 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
         doYouWantToContinue: 'TENS A CERTEZA QUE QUERES CONTINUAR?',
 
         deleteExpeditions: {
-            button: (account: string) => `Apagar todas as expedições monitorizadas na conta actualmente selecionada (${account})`,
-            confirmationText: (account: string, count: string) => `Se confirmares, todas as ${count} expedições monitorizadas serão apagadas da conta actualmente selecionada (${account}).`,
+            button: (account: string) =>
+                `Apagar todas as expedições monitorizadas na conta actualmente selecionada (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `Se confirmares, todas as ${count} expedições monitorizadas serão apagadas da conta actualmente selecionada (${account}).`,
         },
         deleteCombats: {
-            button: (account: string) => `Apagar todos os combates monitorizados na conta actualmente selecionada (${account})`,
-            confirmationText: (account: string, count: string) => `Se confirmares, todos os ${count} combates monitorizados serão apagados da conta actualmente selecionda (${account}).`,
+            button: (account: string) =>
+                `Apagar todos os combates monitorizados na conta actualmente selecionada (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `Se confirmares, todos os ${count} combates monitorizados serão apagados da conta actualmente selecionda (${account}).`,
         },
         deleteDebrisFieldReports: {
-            button: (account: string) => `Apagar todos os relatórios de reciclagem de campos de destroços monitorizados na conta actualmente selecionada (${account})`,
-            confirmationText: (account: string, count: string) => `Se confirmares, todos os ${count} relatórios de reciclagem de campos de destroços serão apagados da conta actualmente selecionada (${account}).`,
+            button: (account: string) =>
+                `Apagar todos os relatórios de reciclagem de campos de destroços monitorizados na conta actualmente selecionada (${account})`,
+            confirmationText: (account: string, count: string) =>
+                `Se confirmares, todos os ${count} relatórios de reciclagem de campos de destroços serão apagados da conta actualmente selecionada (${account}).`,
         },
         deleteAccount: {
             button: (account: string) => `Apagar toda a informação da conta actualmente selecionada (${account})`,
-            confirmationText: (account: string) => `Se confirmares, todos os dados da conta actualmente selecionada (${account}) serão apagados.\n`
+            confirmationText: (account: string) =>
+                `Se confirmares, todos os dados da conta actualmente selecionada (${account}) serão apagados.\n`
                 + `Isto inclui o histórico do universo se não existir outra conta monitorizada nesse universo.`,
         },
         deleteUniverseHistory: {
             button: (server: string) => `Apagar o histórico do universo da conta actualmente selecionada (${server})`,
-            confirmationText: (server: string) => `Se confirmares, todo o histórico do universo da conta actualmente selecionada (${server}) será apagado.`,
+            confirmationText: (server: string) =>
+                `Se confirmares, todo o histórico do universo da conta actualmente selecionada (${server}) será apagado.`,
         },
         deleteEverything: {
             button: 'Apagar todos os dados',
-            confirmationText1: `Se confirmares, todos os dados serão apagados.\n`
+            confirmationText1:
+                `Se confirmares, todos os dados serão apagados.\n`
                 + 'Isto inclui to todos de todas as contas incluindo expedições, combates, reciclagem de campos de destroços, historico dos universos e mais.',
             confirmationText2: 'Confirma novamente que é para apagar todos os dados.',
         },
@@ -147,8 +156,10 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
     importExport: {
         export: {
             header: 'Exportar',
-            description: 'Aqui podes exportar os teus dados. Irá incluir dados relevantes de todas as tuas contas monitorizadas e os seus servidores.',
-            includeUniverseHistory: 'incluir o historico do universo no export (isto vai aumentar significativamente o tamanho do ficheiro assim como do tempo de importação!)',
+            description:
+                'Aqui podes exportar os teus dados. Irá incluir dados relevantes de todas as tuas contas monitorizadas e os seus servidores.',
+            includeUniverseHistory:
+                'incluir o historico do universo no export (isto vai aumentar significativamente o tamanho do ficheiro assim como do tempo de importação!)',
             button: 'Iniciar exportação',
             wait: 'Aguarda enquanto os dados são preparados para a exportação...',
 
@@ -170,59 +181,68 @@ export const pt_pt: RecursivePartial<SettingsTranslations> = {
 
         importCallbacks: {
             importingSettings: 'A importar as tuas definições',
-            importingBasicData: 'A importar a conta default e os dados do servidor',            
+            importingBasicData: 'A importar a conta default e os dados do servidor',
             importingUniverseHistories: (
-                serverIndex: number, 
-                serverTotal: number, 
-                entryIndex: number, 
+                serverIndex: number,
+                serverTotal: number,
+                entryIndex: number,
                 entryTotal: number,
             ) => {
                 const baseMessage = 'A importar historico dos universos';
 
-                return `${baseMessage} (servidor ${serverIndex + 1}/${serverTotal}, entrada ${entryIndex + 1}/${entryTotal})`;      
+                return `${baseMessage} (servidor ${serverIndex + 1}/${serverTotal}, entrada ${entryIndex + 1}/${entryTotal})`;
             },
             importingAccounts: (
-                accountIndex: number, 
-                totalAccounts: number, 
-                type: 'account' | 'combat-reports' | 'expeditions' | 'debris-fields' | 'lifeform-discoveries' | 'universe-specific-settings' | 'empire.data' | 'empire.planets' | 'empire.moons',
+                accountIndex: number,
+                totalAccounts: number,
+                type:
+                    | 'account'
+                    | 'combat-reports'
+                    | 'expeditions'
+                    | 'debris-fields'
+                    | 'lifeform-discoveries'
+                    | 'universe-specific-settings'
+                    | 'empire.data'
+                    | 'empire.planets'
+                    | 'empire.moons',
                 stepIndex: number,
                 stepTotal: number,
             ) => {
                 const baseMessage = `A importar contas`;
                 const accountProgress = `${accountIndex + 1}/${totalAccounts}`;
 
-                if(type == 'account') {
+                if (type == 'account') {
                     return `${baseMessage} (${accountProgress})`;
                 }
 
-                if(type == 'combat-reports') {
+                if (type == 'combat-reports') {
                     return `${baseMessage} (${accountProgress}, combate ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'expeditions') {
+                if (type == 'expeditions') {
                     return `${baseMessage} (${accountProgress}, expedição ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'debris-fields') {
+                if (type == 'debris-fields') {
                     return `${baseMessage} (${accountProgress}, campo de detritos ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'lifeform-discoveries') {
+                if (type == 'lifeform-discoveries') {
                     return `${baseMessage} (${accountProgress}, missão de descoberta de formas de vida ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'empire.data') {
+                if (type == 'empire.data') {
                     return `${baseMessage} (${accountProgress}, dados básicos do império)`;
                 }
 
-                if(type == 'empire.planets') {
+                if (type == 'empire.planets') {
                     return `${baseMessage} (${accountProgress}, planeta ${stepIndex + 1}/${stepTotal})`;
                 }
-                if(type == 'empire.moons') {
+                if (type == 'empire.moons') {
                     return `${baseMessage} (${accountProgress}, lua ${stepIndex + 1}/${stepTotal})`;
                 }
 
-                if(type == 'universe-specific-settings') {
+                if (type == 'universe-specific-settings') {
                     return `${baseMessage} (${accountProgress}, definições específicas do universo)`;
                 }
 

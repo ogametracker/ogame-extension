@@ -1,5 +1,5 @@
-import { ResourceType } from "../../../models/ogame/resources/ResourceType";
-import { ResourceTranslations } from "./types";
+import { ResourceType } from '../../../models/ogame/resources/ResourceType';
+import { ResourceTranslations } from './types';
 
 export const pt_pt: ResourceTranslations = {
     [ResourceType.metal]: 'Metal',

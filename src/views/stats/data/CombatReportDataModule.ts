@@ -1,19 +1,21 @@
-import { CombatReport } from '@/shared/models/combat-reports/CombatReport';
-import { MessageType } from '@/shared/messages/MessageType';
-import { NewCombatReportMessage } from '@/shared/messages/tracking/combat-reports';
-import { Message, MessageOgameMeta } from '@/shared/messages/Message';
+import { defineStore } from 'pinia';
+import { computed, onScopeDispose, ref } from 'vue';
+import { createReadiness, listenForMessages } from './lifecycle';
+import type { CombatReport } from '@ogame-tracker/shared/models/combat-reports/CombatReport';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import type { NewCombatReportMessage } from '@ogame-tracker/shared/messages/tracking/combat-reports';
+import type { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
 import { GlobalOgameMetaData } from './global';
-import { Component, Vue } from 'vue-property-decorator';
 import { startOfDay } from 'date-fns';
-import { ogameMetasEqual } from '@/shared/ogame-web/ogameMetasEqual';
-import { getPlayerDatabase } from '@/shared/db/access';
-import { ShipType } from '@/shared/models/ogame/ships/ShipType';
-import { CombatResultType, CombatResultTypes } from '@/shared/models/combat-reports/CombatResultType';
-import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-import { createRecord } from '@/shared/utils/createRecord';
-import { ShipTypes, ShipByTypes } from '@/shared/models/ogame/ships/ShipTypes';
-import { multiplyCost } from '@/shared/models/ogame/common/Cost';
-import { UniversesAndAccountsDataModule } from './UniversesAndAccountsDataModule';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { CombatResultType, CombatResultTypes } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { ShipTypes, ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { multiplyCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import { useUniversesAndAccountsStore } from './UniversesAndAccountsDataModule';
 
 export interface DailyCombatReportResult {
     date: number;
@@ -36,52 +38,42 @@ export interface DailyCombatReportResult {
         gained: Record<ResourceType, number>;
         lost: Record<ResourceType, number>;
         total: Record<ResourceType, number>;
-    }
+    };
 }
 
-@Component
-class CombatReportDataModuleClass extends Vue {
-    public dailyResults: Partial<Record<number, DailyCombatReportResult>> = {};
-    private internal_firstDate: number | null = null;
-    private internal_count = 0;
+export const useCombatReportStore = defineStore('combatReport', () => {
+    const { ready, resolveReady, rejectReady } = createReadiness();
 
-    private _ready!: Promise<void>;
-    private _resolveReady!: () => void;
+    const dailyResults = ref<Partial<Record<number, DailyCombatReportResult>>>({});
 
-    public get ready(): Promise<void> {
-        return this._ready;
+    const internal_firstDate = ref<number | null>(null);
+
+    const internal_count = ref(0);
+
+    const count = computed(() => {
+        return internal_count.value;
+    });
+
+    const dailyResultsArray = computed<DailyCombatReportResult[]>(() => {
+        return Object.values(dailyResults.value) as DailyCombatReportResult[];
+    });
+
+    async function initialize() {
+        initCommunication();
+        await loadData();
     }
 
-    public get count() {
-        return this.internal_count;
-    }
+    async function loadData() {
+        await useUniversesAndAccountsStore().ready;
 
-    public get dailyResultsArray(): DailyCombatReportResult[] {
-        return Object.values(this.dailyResults) as DailyCombatReportResult[];
-    }
-
-    private async created() {
-        this._ready = new Promise<void>(resolve => this._resolveReady = resolve);
-
-        this.initCommunication();
-        await this.loadData();
-    }
-
-    private async loadData() {
-        await this.$nextTick();
-        await UniversesAndAccountsDataModule.ready;
-
-        const la = UniversesAndAccountsDataModule.currentAccount.linkedAccounts ?? [];
+        const la = useUniversesAndAccountsStore().currentAccount.linkedAccounts ?? [];
         const linkedAccounts = la.map<MessageOgameMeta>(acc => ({
             playerId: acc.id,
             language: acc.serverLanguage,
             serverId: acc.serverId,
             userLanguage: 'doesnt-matter',
         }));
-        const accounts: MessageOgameMeta[] = [
-            GlobalOgameMetaData,
-            ...linkedAccounts,
-        ];
+        const accounts: MessageOgameMeta[] = [GlobalOgameMetaData, ...linkedAccounts];
 
         let minDate: number | null = null;
         for (const account of accounts) {
@@ -89,41 +81,38 @@ class CombatReportDataModuleClass extends Vue {
 
             const reports = await db.getAll('combatReports');
             reports.forEach(report => {
-                this.addCombatReportToDailyResult(report);
+                addCombatReportToDailyResult(report);
 
                 minDate = Math.min(minDate ?? Number.MAX_SAFE_INTEGER, report.date);
             });
-            this.internal_firstDate = minDate;
+            internal_firstDate.value = minDate;
         }
 
-        this._resolveReady();
+        resolveReady();
     }
 
-    private addTimeout: number | undefined = undefined;
-    private addCombatReports: CombatReport[] = [];
+    let addTimeout: number | undefined = undefined;
 
-    private addCombatReportToDailyResult_delayed(report: CombatReport) {
-        this.addCombatReports.push(report);
+    let addCombatReports: CombatReport[] = [];
 
-        clearTimeout(this.addTimeout);
-        this.addTimeout = setTimeout(() => {
-            const addCombats = this.addCombatReports;
-            this.addCombatReports = [];
-            addCombats.forEach(report => this.addCombatReportToDailyResult(report));
+    function addCombatReportToDailyResult_delayed(report: CombatReport) {
+        addCombatReports.push(report);
+
+        clearTimeout(addTimeout);
+        addTimeout = window.setTimeout(() => {
+            const addCombats = addCombatReports;
+            addCombatReports = [];
+            addCombats.forEach(report => addCombatReportToDailyResult(report));
         }, 500);
     }
 
-    private addCombatReportToDailyResult(report: CombatReport) {
-        this.internal_count++;
+    function addCombatReportToDailyResult(report: CombatReport) {
+        internal_count.value++;
 
         const day = startOfDay(report.date).getTime();
 
-        let dailyResult = this.dailyResults[day];
-        if (dailyResult == null) {
-            dailyResult = this.getNewDailyResult(day);
-            this.$set(this.dailyResults, day, dailyResult);
-        }
-
+        dailyResults.value[day] ??= getNewDailyResult(day);
+        const dailyResult = dailyResults.value[day];
 
         if (report.isExpedition) {
             dailyResult.results.onExpeditions[report.result]++;
@@ -131,14 +120,16 @@ class CombatReportDataModuleClass extends Vue {
             dailyResult.results.againstPlayers[report.result]++;
         }
 
-        const lostShips = report.isExpedition ? dailyResult.lostShips.onExpeditions : dailyResult.lostShips.againstPlayers;
+        const lostShips = report.isExpedition
+            ? dailyResult.lostShips.onExpeditions
+            : dailyResult.lostShips.againstPlayers;
         for (const ship of ShipTypes) {
             lostShips.ships[ship] += report.lostShips[ship];
 
             const shipData = ShipByTypes[ship];
             const resourceUnits = multiplyCost(shipData.cost, report.lostShips[ship]);
 
-            ResourceTypes.forEach(resource => lostShips.resourceUnits[resource] += resourceUnits[resource]);
+            ResourceTypes.forEach(resource => (lostShips.resourceUnits[resource] += resourceUnits[resource]));
         }
 
         for (const resource of ResourceTypes) {
@@ -154,7 +145,7 @@ class CombatReportDataModuleClass extends Vue {
         }
     }
 
-    private getNewDailyResult(date: number): DailyCombatReportResult {
+    function getNewDailyResult(date: number): DailyCombatReportResult {
         return {
             date,
             loot: {
@@ -179,11 +170,11 @@ class CombatReportDataModuleClass extends Vue {
         };
     }
 
-    private initCommunication() {
-        chrome.runtime.onMessage.addListener(message => this.onMessage(message));
+    function initCommunication() {
+        listenForMessages(onMessage);
     }
 
-    private onMessage(msg: Message) {
+    function onMessage(msg: Message) {
         const { type, ogameMeta } = msg;
         if (!ogameMetasEqual(ogameMeta, GlobalOgameMetaData)) {
             return;
@@ -192,20 +183,33 @@ class CombatReportDataModuleClass extends Vue {
         switch (type) {
             case MessageType.NewCombatReport: {
                 const { data } = msg as NewCombatReportMessage;
-                this.addCombatReportToDailyResult_delayed(data);
+                addCombatReportToDailyResult_delayed(data);
                 break;
             }
         }
     }
 
-    public get firstDay(): number {
-        return startOfDay(this.internal_firstDate ?? Date.now()).getTime();
-    }
+    const firstDay = computed<number>(() => {
+        return startOfDay(internal_firstDate.value ?? Date.now()).getTime();
+    });
 
-    public async clear(): Promise<void> {
+    async function clear(): Promise<void> {
         const db = await getPlayerDatabase(GlobalOgameMetaData);
         await db.clear('combatReports');
     }
-}
 
-export const CombatReportDataModule = new CombatReportDataModuleClass();
+    onScopeDispose(() => clearTimeout(addTimeout));
+
+    void initialize().catch(rejectReady);
+
+    return {
+        ready,
+        dailyResults,
+        internal_firstDate,
+        internal_count,
+        count,
+        dailyResultsArray,
+        firstDay,
+        clear,
+    };
+});

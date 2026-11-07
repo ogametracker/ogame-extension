@@ -1,14 +1,14 @@
-import { observerCallbacks } from "./main";
-import { ResearchType } from '../../shared/models/ogame/research/ResearchType';
-import { ResearchTypes } from '../../shared/models/ogame/research/ResearchTypes';
-import { _throw } from "../../shared/utils/_throw";
-import { parseIntSafe } from "../../shared/utils/parseNumbers";
-import { UpdateResearchLevelsMessage } from "../../shared/messages/tracking/empire";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { MessageType } from "../../shared/messages/MessageType";
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { createRecord } from "@/shared/utils/createRecord";
+import { observerCallbacks } from './main';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import { ResearchTypes } from '@ogame-tracker/shared/models/ogame/research/ResearchTypes';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { UpdateResearchLevelsMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
 export function trackResearchPage() {
     observerCallbacks.push({
@@ -17,7 +17,9 @@ export function trackResearchPage() {
             const researchLevels = createRecord(ResearchTypes, 0);
 
             ResearchTypes.forEach(research => {
-                const levelText = element.querySelector(`[data-technology="${research}"] .level`)?.getAttribute('data-value') ?? _throw(`did not find level of research '${ResearchType[research]}'`);
+                const levelText =
+                    element.querySelector(`[data-technology="${research}"] .level`)?.getAttribute('data-value')
+                    ?? _throw(`did not find level of research '${ResearchType[research]}'`);
                 const level = parseIntSafe(levelText, 10);
 
                 researchLevels[research] = level;

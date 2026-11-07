@@ -1,4 +1,4 @@
-import { ExpeditionEventCombatSize } from "./ExpeditionEvents";
+import { ExpeditionEventCombatSize } from './ExpeditionEvents';
 
 export enum ExpeditionEventSize {
     small = 'small',
@@ -11,7 +11,4 @@ export const ExpeditionEventSizes: ExpeditionEventSize[] = [
     ExpeditionEventSize.large,
 ];
 
-export const ExpeditionEventCombatSizes: ExpeditionEventCombatSize[] = [
-    ...ExpeditionEventSizes,
-    'fled-death-star',
-];
+export const ExpeditionEventCombatSizes: ExpeditionEventCombatSize[] = [...ExpeditionEventSizes, 'fled-death-star'];

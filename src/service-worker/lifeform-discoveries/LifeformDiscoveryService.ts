@@ -1,11 +1,15 @@
-import { Message } from '../../shared/messages/Message';
-import { MessageType } from '../../shared/messages/MessageType';
-import { _throw } from '../../shared/utils/_throw';
+import { Message } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
-import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { MessageTrackingErrorMessage } from '@/shared/messages/tracking/misc';
-import { serviceWorkerUuid } from '@/shared/uuid';
-import { LifeformDiscoveryMessage, NewLifeformDiscoveryMessage, TrackLifeformDiscoveryMessage } from '@/shared/messages/tracking/lifeform-discoveries';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
+import {
+    LifeformDiscoveryMessage,
+    NewLifeformDiscoveryMessage,
+    TrackLifeformDiscoveryMessage,
+} from '@ogame-tracker/shared/messages/tracking/lifeform-discoveries';
 import { LifeformDiscoveryModule } from './LifeformDiscoveryModule';
 
 export class LifeformDiscoveryService implements MessageService {

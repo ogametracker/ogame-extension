@@ -1,26 +1,34 @@
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { getLanguage } from "@/shared/i18n/getLanguage";
-import { MessageType } from "@/shared/messages/MessageType";
-import { BasicPlanetData, BasicPlanetDataMoon, BasicPlanetDataPlanet, UpdateActiveOfficersMessage, UpdateFleetsMessage, UpdateOwnedPlanetsMessage, UpdatePlayerClassMessage } from "@/shared/messages/tracking/empire";
-import { UpdateSelectedLifeformMessage } from "@/shared/messages/tracking/empire";
-import { PlayerOfficers } from "@/shared/models/empire/PlayerOfficers";
-import { PlayerClass } from "@/shared/models/ogame/classes/PlayerClass";
-import { Coordinates } from "@/shared/models/ogame/common/Coordinates";
-import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
-import { FleetMissionType } from "@/shared/models/ogame/fleets/FleetMissionType";
-import { Fleet } from "@/shared/models/ogame/fleets/types";
-import { ResourceType, ResourceTypes } from "@/shared/models/ogame/resources/ResourceType";
-import { NonStationaryShipTypes } from "@/shared/models/ogame/ships/ShipTypes";
-import { getOgameMeta } from "@/shared/ogame-web/getOgameMeta";
-import { createRecord } from "@/shared/utils/createRecord";
-import { parseCoordinates } from "@/shared/utils/parseCoordinates";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { _throw } from "@/shared/utils/_throw";
-import { empireTrackingUuid } from "@/shared/uuid";
-import { getActiveLifeform } from "./getActiveLifeform";
-import { observerCallbacks } from "./main";
-import i18nShips from '@/shared/i18n/ogame/ships';
-import i18nResources from '@/shared/i18n/ogame/resources';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { getLanguage } from '@ogame-tracker/shared/i18n/getLanguage';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import {
+    BasicPlanetData,
+    BasicPlanetDataMoon,
+    BasicPlanetDataPlanet,
+    UpdateActiveOfficersMessage,
+    UpdateFleetsMessage,
+    UpdateOwnedPlanetsMessage,
+    UpdatePlayerClassMessage,
+} from '@ogame-tracker/shared/messages/tracking/empire';
+import { UpdateSelectedLifeformMessage } from '@ogame-tracker/shared/messages/tracking/empire';
+import { PlayerOfficers } from '@ogame-tracker/shared/models/empire/PlayerOfficers';
+import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { PlanetType } from '@ogame-tracker/shared/models/ogame/common/PlanetType';
+import { FleetMissionType } from '@ogame-tracker/shared/models/ogame/fleets/FleetMissionType';
+import { Fleet } from '@ogame-tracker/shared/models/ogame/fleets/types';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { NonStationaryShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { parseCoordinates } from '@ogame-tracker/shared/utils/parseCoordinates';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { empireTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { getActiveLifeform } from './getActiveLifeform';
+import { observerCallbacks } from './main';
+import i18nShips from '@ogame-tracker/shared/i18n/ogame/ships';
+import i18nResources from '@ogame-tracker/shared/i18n/ogame/resources';
 
 export function trackOnIngamePages() {
     trackPlayerClass();
@@ -95,14 +103,19 @@ const maxTempRegex = /\d+\s*°C[^\d]*?(?<temp>-?\d+)\s*°C/;
 const nameRegex = /^<b>(?<name>.+) \[\d+:\d+:\d+\]/;
 
 function getPlanetData(planetElem: Element): BasicPlanetDataPlanet {
-    const planetLink = (planetElem.querySelector(':scope > a.planetlink') as HTMLAnchorElement | null)?.href ?? _throw('no planetlink found');
+    const planetLink =
+        (planetElem.querySelector(':scope > a.planetlink') as HTMLAnchorElement | null)?.href
+        ?? _throw('no planetlink found');
     const idText = planetLink.match(planetIdRegex)?.groups?.id ?? _throw('no planet id found in url');
     const id = parseIntSafe(idText, 10);
 
-    const coordsText = planetElem.querySelector(':scope > a.planetlink > .planet-koords')?.textContent ?? _throw('no planet coordinates found');
+    const coordsText =
+        planetElem.querySelector(':scope > a.planetlink > .planet-koords')?.textContent
+        ?? _throw('no planet coordinates found');
     const coordinates = parseCoordinates(coordsText);
 
-    const titleText = planetElem.querySelector(':scope > a.planetlink')?.getAttribute('title') ?? _throw('no planet title found');
+    const titleText =
+        planetElem.querySelector(':scope > a.planetlink')?.getAttribute('title') ?? _throw('no planet title found');
     const maxTempText = titleText.match(maxTempRegex)?.groups?.temp ?? _throw('no max temp found');
     const maxTemperature = parseIntSafe(maxTempText, 10);
 
@@ -146,11 +159,15 @@ function trackOfficers() {
     observerCallbacks.push({
         selector: '#officers',
         callback: element => {
-            const commander = element.querySelector('.commander')?.classList.contains('on') ?? _throw('no commander found');
+            const commander =
+                element.querySelector('.commander')?.classList.contains('on') ?? _throw('no commander found');
             const admiral = element.querySelector('.admiral')?.classList.contains('on') ?? _throw('no admiral found');
-            const engineer = element.querySelector('.engineer')?.classList.contains('on') ?? _throw('no engineer found');
-            const geologist = element.querySelector('.geologist')?.classList.contains('on') ?? _throw('no geologist found');
-            const technocrat = element.querySelector('.technocrat')?.classList.contains('on') ?? _throw('no technocrat found');
+            const engineer =
+                element.querySelector('.engineer')?.classList.contains('on') ?? _throw('no engineer found');
+            const geologist =
+                element.querySelector('.geologist')?.classList.contains('on') ?? _throw('no geologist found');
+            const technocrat =
+                element.querySelector('.technocrat')?.classList.contains('on') ?? _throw('no technocrat found');
 
             const officers: PlayerOfficers = {
                 commander,
@@ -177,7 +194,8 @@ function trackSelectedLifeform() {
     observerCallbacks.push({
         selector: '#lifeform', // is only on page for planets
         callback: element => {
-            const planetIdText = (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
+            const planetIdText =
+                (document.querySelector('meta[name="ogame-planet-id"]') as HTMLMetaElement | null)?.content
                 ?? _throw('no meta element found for ogame-planet-id');
             const planetId = parseIntSafe(planetIdText, 10);
 
@@ -217,7 +235,7 @@ function updateFleetTracking() {
 
     const meta = getOgameMeta();
     const language = getLanguage(meta.userLanguage);
-    if(language == null) {
+    if (language == null) {
         return;
     }
 
@@ -232,25 +250,39 @@ function updateFleetTracking() {
             return;
         }
 
-        const arrivalTime = parseIntSafe(row.getAttribute('data-arrival-time') ?? _throw('no arrival time found')) * 1_000;
+        const arrivalTime =
+            parseIntSafe(row.getAttribute('data-arrival-time') ?? _throw('no arrival time found')) * 1_000;
         const isReturnFlight = row.getAttribute('data-return-flight') == 'true';
-        const mission = parseIntSafe(row.getAttribute('data-mission-type') ?? _throw('no mission type found')) as FleetMissionType;
-        
-        if(mission == FleetMissionType.missileAttack) {
+        const mission = parseIntSafe(
+            row.getAttribute('data-mission-type') ?? _throw('no mission type found'),
+        ) as FleetMissionType;
+
+        if (mission == FleetMissionType.missileAttack) {
             return;
         }
 
-        const originCoordinatesText = row.querySelector('.coordsOrigin')?.textContent ?? _throw('no origin coordinates found');
-        const originCoordinatesType = getCoordinateType(row.querySelector('.originFleet') ?? _throw('no origin icon found'));
+        const originCoordinatesText =
+            row.querySelector('.coordsOrigin')?.textContent ?? _throw('no origin coordinates found');
+        const originCoordinatesType = getCoordinateType(
+            row.querySelector('.originFleet') ?? _throw('no origin icon found'),
+        );
         const originCoordinates = parseCoordinates(originCoordinatesText.trim(), originCoordinatesType);
 
-        const destinationCoordinatesText = row.querySelector('.destCoords')?.textContent ?? _throw('no origin coordinates found');
-        const destinationCoordinatesType = getCoordinateType(row.querySelector('.destFleet') ?? _throw('no dest icon found'));;
+        const destinationCoordinatesText =
+            row.querySelector('.destCoords')?.textContent ?? _throw('no origin coordinates found');
+        const destinationCoordinatesType = getCoordinateType(
+            row.querySelector('.destFleet') ?? _throw('no dest icon found'),
+        );
         const destinationCoordinates = parseCoordinates(destinationCoordinatesText.trim(), destinationCoordinatesType);
 
-        const tooltipElement = row.querySelector('[class*="icon_movement"] .tooltip, [class*="icon_movement_reserve"] .tooltip');
+        const tooltipElement = row.querySelector(
+            '[class*="icon_movement"] .tooltip, [class*="icon_movement_reserve"] .tooltip',
+        );
         // Checking for data-tooltip-title and title as OGLight is refactoring it to title
-        const tooltipHtml = tooltipElement?.getAttribute('data-tooltip-title') ?? tooltipElement?.getAttribute('title') ?? _throw('no tooltip found');
+        const tooltipHtml =
+            tooltipElement?.getAttribute('data-tooltip-title')
+            ?? tooltipElement?.getAttribute('title')
+            ?? _throw('no tooltip found');
 
         const tooltipTextElem = document.createElement('div');
         tooltipTextElem.innerHTML = tooltipHtml;
@@ -261,11 +293,11 @@ function updateFleetTracking() {
             const regex = new RegExp(`${name}:\\s*(?<count>[^\\s]+)`);
             const match = tooltipText.match(regex);
 
-            if(match?.groups == null) {
+            if (match?.groups == null) {
                 return 0;
             }
 
-            if(match.groups.count == '?') {
+            if (match.groups.count == '?') {
                 return 0;
             }
             const countText = match.groups.count.replace(/[^\d]/g, '');
@@ -276,7 +308,7 @@ function updateFleetTracking() {
             const regex = new RegExp(`${name}:\\s*(?<amount>[^\\s]+)`);
             const match = tooltipText.match(regex);
 
-            if(match?.groups == null) {
+            if (match?.groups == null) {
                 return 0;
             }
 
@@ -301,7 +333,7 @@ function updateFleetTracking() {
         trackedNewFleet = true;
     });
 
-    if(trackedNewFleet) {
+    if (trackedNewFleet) {
         const msg: UpdateFleetsMessage = {
             ogameMeta: getOgameMeta(),
             type: MessageType.UpdateFleets,

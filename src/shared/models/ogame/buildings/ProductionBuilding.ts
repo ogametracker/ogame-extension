@@ -1,5 +1,5 @@
-import { Cost } from "../common/Cost";
-import { Building } from "./Building";
+import { Cost } from '../common/Cost';
+import { Building } from './Building';
 
 export interface ProductionBuildingDependencies {
     planet: {

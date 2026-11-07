@@ -1,10 +1,9 @@
-import { Cost } from "../common/Cost";
-import { Ship } from "./Ship";
-import { ShipType } from "./ShipType";
+import { Cost } from '../common/Cost';
+import { Ship } from './Ship';
+import { ShipType } from './ShipType';
 
 class ReaperClass extends Ship {
-
-    public get type() { 
+    public get type() {
         return ShipType.reaper;
     }
 
@@ -13,12 +12,12 @@ class ReaperClass extends Ship {
             metal: 85_000,
             crystal: 55_000,
             deuterium: 20_000,
-            energy: 0,            
+            energy: 0,
         };
     }
 
     public baseHull(): number {
-         return 140_000;
+        return 140_000;
     }
 
     public baseShield(): number {
@@ -30,7 +29,7 @@ class ReaperClass extends Ship {
     }
 
     public baseSpeed(): number {
-         return 7_000;
+        return 7_000;
     }
 
     public baseCargoCapacity(): number {

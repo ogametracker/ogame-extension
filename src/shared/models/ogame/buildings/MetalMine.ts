@@ -1,9 +1,8 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
-import { ProductionBuilding, ProductionBuildingDependencies } from "./ProductionBuilding";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
+import { ProductionBuilding, ProductionBuildingDependencies } from './ProductionBuilding';
 
 class MetalMineClass extends ProductionBuilding {
-
     public get type() {
         return BuildingType.metalMine;
     }
@@ -11,11 +10,12 @@ class MetalMineClass extends ProductionBuilding {
     public getProduction(level: number, dependencies: ProductionBuildingDependencies): number {
         const boost = this.getProductionBoost(dependencies.planet.position);
         const baseProduction = 30 * dependencies.serverSettings.economySpeed * (1 + boost);
-        const mineProduction = Math.trunc(baseProduction * level * 1.1 ** level * dependencies.productionSettings.metalMine / 100);
-        
+        const mineProduction = Math.trunc(
+            (baseProduction * level * 1.1 ** level * dependencies.productionSettings.metalMine) / 100,
+        );
+
         return mineProduction;
     }
-
 
     private getProductionBoost(position: number) {
         switch (position) {
@@ -51,6 +51,5 @@ class MetalMineClass extends ProductionBuilding {
             energy: 0,
         };
     }
-
 }
 export const MetalMine = new MetalMineClass();

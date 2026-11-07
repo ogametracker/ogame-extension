@@ -1,5 +1,5 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { NotificationTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { NotificationTranslations } from './type';
 
 export const pt_pt: RecursivePartial<NotificationTranslations> = {
     combatTracking: {
@@ -24,10 +24,7 @@ export const pt_pt: RecursivePartial<NotificationTranslations> = {
     },
     expeditionTracking: {
         fleetLost: {
-            title: (value: string) =>
-                value == '1'
-                    ? `${value} frota perdida`
-                    : `${value} frotas perdidas`,
+            title: (value: string) => (value == '1' ? `${value} frota perdida` : `${value} frotas perdidas`),
             message: (value: string) =>
                 value == '1'
                     ? `${value} frota não retornou da expedição.`
@@ -35,9 +32,7 @@ export const pt_pt: RecursivePartial<NotificationTranslations> = {
         },
         result: {
             title: (value: string) =>
-                value == '1'
-                    ? `${value} nova expedição monitorizada`
-                    : `${value} novas expedições monitorizadas`,
+                value == '1' ? `${value} nova expedição monitorizada` : `${value} novas expedições monitorizadas`,
             summary: 'Resumo das descobertas',
             events: 'Eventos de Expedições',
         },
@@ -47,10 +42,10 @@ export const pt_pt: RecursivePartial<NotificationTranslations> = {
             value == '1'
                 ? `${value} nova descoberta de forma de vida monitorizada`
                 : `${value} novas descobertas de forma de vida monitorizadas`,
-        message: (value: string) => 
-        value == '1'
-            ? `${value} nova descoberta de forma de vida guardada.`
-            : `${value} novas descobertas de forma de vida guardadas.`,
+        message: (value: string) =>
+            value == '1'
+                ? `${value} nova descoberta de forma de vida guardada.`
+                : `${value} novas descobertas de forma de vida guardadas.`,
     },
 
     messageTrackingError: {

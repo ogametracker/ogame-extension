@@ -1,14 +1,18 @@
-import { TryActionResult } from "../../shared/TryActionResult";
-import { _log, _logError } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { RawDebrisFieldMessageData, TrackDebrisFieldReportMessage, TrackManualDebrisFieldReportMessage } from "../../shared/messages/tracking/debris-fields";
-import { DebrisFieldReport } from "../../shared/models/debris-field-reports/DebrisFieldReport";
-import { getPlayerDatabase } from "@/shared/db/access";
+import { TryActionResult } from '@ogame-tracker/shared/TryActionResult';
+import { _log, _logError } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import {
+    RawDebrisFieldMessageData,
+    TrackDebrisFieldReportMessage,
+    TrackManualDebrisFieldReportMessage,
+} from '@ogame-tracker/shared/messages/tracking/debris-fields';
+import { DebrisFieldReport } from '@ogame-tracker/shared/models/debris-field-reports/DebrisFieldReport';
+import { getPlayerDatabase } from '@ogame-tracker/shared/db/access';
 
 interface DebrisFieldReportResult {
     report: DebrisFieldReport;
     isAlreadyTracked: boolean;
-};
+}
 
 export class DebrisFieldReportModule {
     public async trackManualDebrisFieldReport(message: TrackManualDebrisFieldReportMessage): Promise<void> {
@@ -17,7 +21,9 @@ export class DebrisFieldReportModule {
         await db.put('debrisFieldReports', report);
     }
 
-    public async tryTrackDebrisFieldReport(message: TrackDebrisFieldReportMessage): Promise<TryActionResult<DebrisFieldReportResult>> {
+    public async tryTrackDebrisFieldReport(
+        message: TrackDebrisFieldReportMessage,
+    ): Promise<TryActionResult<DebrisFieldReportResult>> {
         const messageData = message.data;
         const db = await getPlayerDatabase(message.ogameMeta);
 
@@ -36,7 +42,7 @@ export class DebrisFieldReportModule {
         // otherwise parse and save result
         let report: DebrisFieldReport;
 
-        try {            
+        try {
             const parseResult = this.tryParseDebrisFieldReport(messageData);
 
             report = parseResult.report;
@@ -56,10 +62,10 @@ export class DebrisFieldReportModule {
         }
     }
 
-    private tryParseDebrisFieldReport(data: RawDebrisFieldMessageData): { success: true, report: DebrisFieldReport } {    
+    private tryParseDebrisFieldReport(data: RawDebrisFieldMessageData): { success: true; report: DebrisFieldReport } {
         const deuterium = data.resources.deuterium ?? undefined;
         const isExpeditionDebrisField = data.coords.system == 16;
-    
+
         return {
             success: true,
             report: {

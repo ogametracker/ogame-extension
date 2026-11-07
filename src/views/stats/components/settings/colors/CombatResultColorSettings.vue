@@ -1,55 +1,43 @@
 <template>
-    <color-settings-table
-        :header="$i18n.$t.extension.settings.colors.combatResults"
+    <ColorSettingsTable
+        :header="translations().extension.settings.colors.combatResults"
         :labels="labels"
         :keys="keys"
-        :value="colors"
-        @input="updateColors($event)"
+        :model-value="colors"
+        @update:model-value="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
 
-<script lang="ts">
-    import { CombatResultType } from '@/shared/models/combat-reports/CombatResultType';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import ColorSettingsTable from './ColorSettingsTable.vue';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { CombatResultType } from '@ogame-tracker/shared/models/combat-reports/CombatResultType';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ColorSettingsTable from './ColorSettingsTable.vue';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
 
-    @Component({
-        components: {
-            ColorSettingsTable,
+const settingsStore = useSettingsStore();
+
+const labels = computed<Record<CombatResultType, string>>(() => translations().extension.combats.combatResults);
+
+const keys: CombatResultType[] = [CombatResultType.won, CombatResultType.lost, CombatResultType.draw];
+
+const colors = computed(() => settingsStore.settings.colors.combatResults);
+
+function updateColors(value: Record<CombatResultType, string>) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        colors: {
+            ...settingsStore.settings.colors,
+            combatResults: value,
         },
-    })
-    export default class CombatResultColorSettings extends Vue {
-        private get labels(): Record<CombatResultType, string> {
-            return this.$i18n.$t.extension.combats.combatResults;
-        }
+    });
+}
 
-        private readonly keys: CombatResultType[] = [
-            CombatResultType.won,
-            CombatResultType.lost,
-            CombatResultType.draw,
-        ];
-
-        private get colors() {
-            return SettingsDataModule.settings.colors.combatResults;
-        }
-
-        private updateColors(value: Record<CombatResultType, string>) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    combatResults: value,
-                },
-            });
-        }
-
-        private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.combatResults;
-            this.updateColors(defaultColors);
-        }
-    }
+function resetColors() {
+    const defaultColors = getDefaultSettings(LanguageKey.de).colors.combatResults;
+    updateColors(defaultColors);
+}
 </script>

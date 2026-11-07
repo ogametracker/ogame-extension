@@ -1,8 +1,11 @@
-import { ExpeditionEventType, ExpeditionEventTypes } from "@/shared/models/expeditions/ExpeditionEventType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ExpeditionEventProbabilityBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
+import {
+    ExpeditionEventType,
+    ExpeditionEventTypes,
+} from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ExpeditionEventProbabilityBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
 
 class PsionicNetworkClass extends LifeformTechnology implements ExpeditionEventProbabilityBonusLifeformTechnology {
     public constructor() {
@@ -27,11 +30,10 @@ class PsionicNetworkClass extends LifeformTechnology implements ExpeditionEventP
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return ExpeditionEventTypes.filter(t => this.appliesTo(t))
-            .map<LifeformBonusType>(event => ({
-                type: LifeformBonusTypeId.ExpeditionEventProbabilityBonus,
-                event,
-            }));
+        return ExpeditionEventTypes.filter(t => this.appliesTo(t)).map<LifeformBonusType>(event => ({
+            type: LifeformBonusTypeId.ExpeditionEventProbabilityBonus,
+            event,
+        }));
     }
 
     public appliesTo(type: ExpeditionEventType): boolean {

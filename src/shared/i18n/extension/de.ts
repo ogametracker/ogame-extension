@@ -7,7 +7,7 @@ import { de as lifeformBuildings } from '../ogame/lifeforms/buildings/de';
 import { de as lifeformTechnologies } from '../ogame/lifeforms/technologies/de';
 import { de as premium } from '../ogame/premium/de';
 
-import { ExtensionTranslations } from "./type";
+import { ExtensionTranslations } from './type';
 import { de as settings } from './settings/de';
 import { de as resources } from './resources/de';
 import { de as common } from './common/de';

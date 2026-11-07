@@ -1,62 +1,55 @@
 <template>
-    <color-settings-table
-        :header="$i18n.$t.extension.settings.colors.resources"
+    <ColorSettingsTable
+        :header="translations().extension.settings.colors.resources"
         :labels="labels"
         :keys="keys"
-        :value="colors"
-        @input="updateColors($event)"
+        :model-value="colors"
+        @update:model-value="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
 
-<script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { ResourceType } from '@/shared/models/ogame/resources/ResourceType';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import ColorSettingsTable from './ColorSettingsTable.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ColorSettingsTable from './ColorSettingsTable.vue';
 
-    @Component({
-        components: {
-            ColorSettingsTable,
+const settingsStore = useSettingsStore();
+
+const labels = computed<Record<ResourceType | 'totalConverted', string>>(() => {
+    return {
+        [ResourceType.metal]: translations().extension.resources.metal,
+        [ResourceType.crystal]: translations().extension.resources.crystal,
+        [ResourceType.deuterium]: translations().extension.resources.deuterium,
+        totalConverted: `${translations().extension.common.resourceUnits} (${translations().extension.common.msu}/${translations().extension.common.dsu})`,
+    };
+});
+
+const keys: (ResourceType | 'totalConverted')[] = [
+    ResourceType.metal,
+    ResourceType.crystal,
+    ResourceType.deuterium,
+    'totalConverted',
+];
+
+const colors = computed(() => settingsStore.settings.colors.resources);
+
+function updateColors(value: Record<ResourceType | 'totalConverted', string>) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        colors: {
+            ...settingsStore.settings.colors,
+            resources: value,
         },
-    })
-    export default class ResourceColorSettings extends Vue {
+    });
+}
 
-        private get labels(): Record<ResourceType | 'totalConverted', string> {
-            return {
-                [ResourceType.metal]: this.$i18n.$t.extension.resources.metal,
-                [ResourceType.crystal]: this.$i18n.$t.extension.resources.crystal,
-                [ResourceType.deuterium]: this.$i18n.$t.extension.resources.deuterium,
-                totalConverted: `${this.$i18n.$t.extension.common.resourceUnits} (${this.$i18n.$t.extension.common.msu}/${this.$i18n.$t.extension.common.dsu})`,
-            };
-        }
-
-        private readonly keys: (ResourceType | 'totalConverted')[] = [
-            ResourceType.metal,
-            ResourceType.crystal,
-            ResourceType.deuterium,
-            'totalConverted',
-        ];
-
-        private get colors() {
-            return SettingsDataModule.settings.colors.resources;
-        }
-
-        private updateColors(value: Record<ResourceType | 'totalConverted', string>) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    resources: value,
-                },
-            });
-        }
-
-        private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.resources;
-            this.updateColors(defaultColors);
-        }
-    }
+function resetColors() {
+    const defaultColors = getDefaultSettings(LanguageKey.de).colors.resources;
+    updateColors(defaultColors);
+}
 </script>

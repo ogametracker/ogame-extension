@@ -1,9 +1,9 @@
-import { BuildingType } from "../../../buildings/BuildingType";
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { BuildingType } from '../../../buildings/BuildingType';
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { AnyBuildingCostAndTimeReductionLifeformBuilding, AnyBuildingType } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class MineralResearchCentreClass extends LifeformBuilding implements AnyBuildingCostAndTimeReductionLifeformBuilding {
     public constructor() {

@@ -1,7 +1,7 @@
 export interface DonateTranslations {
     header: string;
     subHeader: string;
-    
+
     crypto: {
         header: string;
     };

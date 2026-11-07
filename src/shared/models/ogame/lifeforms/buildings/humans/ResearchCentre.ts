@@ -1,9 +1,9 @@
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformTechnologyTypes } from "../../LifeformTechnologyType";
-import { LifeformTechnologyResearchBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformTechnologyTypes } from '../../LifeformTechnologyType';
+import { LifeformTechnologyResearchBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class ResearchCentreClass extends LifeformBuilding implements LifeformTechnologyResearchBuilding {
     public constructor() {

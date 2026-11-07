@@ -1,21 +1,21 @@
-import { RecursivePartial } from "@/shared/types/RecursivePartial";
-import { ExcelExportTranslations } from "./type";
+import { RecursivePartial } from '@ogame-tracker/shared/types/RecursivePartial';
+import { ExcelExportTranslations } from './type';
 
 export const fr: RecursivePartial<ExcelExportTranslations> = {
     header: 'Export Excel',
-    chooseBelowMessage: 'Choisissez ci-dessous les données que vous souhaitez inclure dans l\'exportation :',
+    chooseBelowMessage: "Choisissez ci-dessous les données que vous souhaitez inclure dans l'exportation :",
     groups: {
         expeditions: {
             header: 'Expéditions',
             rawData: 'Données brutes (chaque expédition suivie)',
-            dailyOverview: 'Vue d\'ensemble des résultats par jour',
-            dailyDepletion: 'Vue d\'ensemble de l\'épuisement du système par jour',
+            dailyOverview: "Vue d'ensemble des résultats par jour",
+            dailyDepletion: "Vue d'ensemble de l'épuisement du système par jour",
             dailyResources: 'Découvertes de ressources par jour',
             dailyResourceSizes: 'Tailles des découvertes de ressources par jour',
             dailyShips: 'Découvertes de vaisseaux par jour',
             dailyShipSizes: 'Tailles des découvertes de vaisseaux par jour',
-            dailyDarkMatter: 'Découvertes d\'Antimatière par jour',
-            dailyDarkMatterSizes: 'Tailles des découvertes de d\'Antimatière par jour',
+            dailyDarkMatter: "Découvertes d'Antimatière par jour",
+            dailyDarkMatterSizes: "Tailles des découvertes de d'Antimatière par jour",
         },
         combats: {
             header: 'Combats',
@@ -35,7 +35,7 @@ export const fr: RecursivePartial<ExcelExportTranslations> = {
             dailyExperience: 'Expérience gagnée par jour',
         },
     },
-    generateButton: 'Générer l\'export Excel',
+    generateButton: "Générer l'export Excel",
 
     expeditions: {
         prefix: 'EX',
@@ -98,7 +98,7 @@ export const fr: RecursivePartial<ExcelExportTranslations> = {
     lifeformDiscoveries: {
         prefix: 'LF',
 
-        sheets:{
+        sheets: {
             rawData: 'Données brutes',
             dailyExperience: 'Expérience quotidienne',
         },

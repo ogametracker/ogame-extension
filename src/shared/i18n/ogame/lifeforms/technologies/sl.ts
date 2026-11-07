@@ -1,5 +1,5 @@
-import { LifeformTechnologiesTranslations } from "./types";
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
+import { LifeformTechnologiesTranslations } from './types';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
 
 export const sl: LifeformTechnologiesTranslations = {
     [LifeformTechnologyType.intergalacticEnvoys]: 'Intergalactic Envoys',
@@ -38,7 +38,7 @@ export const sl: LifeformTechnologiesTranslations = {
     [LifeformTechnologyType.diamondEnergyTransmitter]: 'Diamond Energy Transmitter',
     [LifeformTechnologyType.obsidianShieldReinforcement]: 'Obsidian Shield Reinforcement',
     [LifeformTechnologyType.runeShields]: 'Rune Shields',
-    [LifeformTechnologyType.rocktalCollectorEnhancement]: 'Rock\'tal Collector Enhancement',
+    [LifeformTechnologyType.rocktalCollectorEnhancement]: "Rock'tal Collector Enhancement",
 
     [LifeformTechnologyType.catalyserTechnology]: 'Catalyser Technology',
     [LifeformTechnologyType.plasmaDrive]: 'Plasma Drive',

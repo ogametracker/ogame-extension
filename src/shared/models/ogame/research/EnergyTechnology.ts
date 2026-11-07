@@ -1,8 +1,7 @@
-import { Cost } from "../common/Cost";
-import { Research } from "./Research";
+import { Cost } from '../common/Cost';
+import { Research } from './Research';
 
 class EnergyTechnologyClass extends Research {
-
     public getCost(level: number): Cost {
         return {
             metal: 0,
@@ -11,6 +10,5 @@ class EnergyTechnologyClass extends Research {
             energy: 0,
         };
     }
-
 }
 export const EnergyTechnology = new EnergyTechnologyClass();

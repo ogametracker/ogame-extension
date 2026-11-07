@@ -1,33 +1,35 @@
 <template>
-    <loading-spinner v-if="loading" />
-    <tab-view v-else :tabs="tabs" root-route-name="debris-fields" />
+    <LoadingSpinner v-if="loading" />
+    <TabView v-else :tabs="tabs" root-route-name="debris-fields" />
 </template>
 
-<script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
-    import { Tab } from '@/views/stats/components/common/TabView.vue';
-import { DebrisFieldReportDataModule } from '../../data/DebrisFieldReportDataModule';
+<script setup lang="ts">
+import LoadingSpinner from '@stats/components/common/LoadingSpinner.vue';
+import TabView from '@stats/components/common/TabView.vue';
+import { computed, onMounted, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import type { Tab } from '@stats/components/common/TabView.vue';
+import { useDebrisFieldReportStore } from '../../data/DebrisFieldReportDataModule';
 
-    @Component({})
-    export default class Index extends Vue {
-        private loading = true;
+const debrisFieldReportStore = useDebrisFieldReportStore();
 
-        private async mounted() {
-            await DebrisFieldReportDataModule.ready;
-            this.loading = false;
-        }
+const loading = ref(true);
 
-        private get tabs(): Tab[] {
-            return [
-                {
-                    label: this.$i18n.$t.extension.common.chart,
-                    to: { name: 'debris-fields/chart' },
-                },
-                {
-                    label: this.$i18n.$t.extension.common.table,
-                    to: { name: 'debris-fields/table' },
-                },
-            ];
-        }
-    }
+const tabs = computed<Tab[]>(() => {
+    return [
+        {
+            label: translations().extension.common.chart,
+            to: { name: 'debris-fields/chart' },
+        },
+        {
+            label: translations().extension.common.table,
+            to: { name: 'debris-fields/table' },
+        },
+    ];
+});
+
+onMounted(async () => {
+    await debrisFieldReportStore.ready;
+    loading.value = false;
+});
 </script>

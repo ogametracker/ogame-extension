@@ -1,4 +1,4 @@
-import { PlayerClass } from "../classes/PlayerClass";
+import { PlayerClass } from '../classes/PlayerClass';
 
 export function getCrawlerProductionFactor(
     playerClass: PlayerClass,
@@ -10,6 +10,5 @@ export function getCrawlerProductionFactor(
         return 1;
     }
 
-    return 1 * (1 + crawlerProductionBonus)
-        + (collectorCrawlerProductionFactorBonus * (1 + collectorClassBonus));
+    return 1 * (1 + crawlerProductionBonus) + collectorCrawlerProductionFactorBonus * (1 + collectorClassBonus);
 }

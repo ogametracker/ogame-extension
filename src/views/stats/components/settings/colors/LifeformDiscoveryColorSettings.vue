@@ -1,64 +1,58 @@
 <template>
-    <color-settings-table
-        :header="$i18n.$t.extension.settings.colors.lifeformDiscoveries"
+    <ColorSettingsTable
+        :header="translations().extension.settings.colors.lifeformDiscoveries"
         :labels="labels"
         :keys="keys"
-        :value="colors"
-        @input="updateColors($event)"
+        :model-value="colors"
+        @update:model-value="updateColors($event)"
         @reset="resetColors()"
     />
 </template>
 
-<script lang="ts">
-    import { LanguageKey } from '@/shared/i18n/LanguageKey';
-    import { LifeformDiscoveryEventType } from '@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
-    import { getDefaultSettings } from '@/shared/models/settings/getDefaultSettings';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import ColorSettingsTable from './ColorSettingsTable.vue';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import { LanguageKey } from '@ogame-tracker/shared/i18n/LanguageKey';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { getDefaultSettings } from '@ogame-tracker/shared/models/settings/getDefaultSettings';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ColorSettingsTable from './ColorSettingsTable.vue';
 
-    @Component({
-        components: {
-            ColorSettingsTable,
+const settingsStore = useSettingsStore();
+
+const labels = computed<Record<LifeformDiscoveryEventType, string>>(() => {
+    return {
+        [LifeformDiscoveryEventType.nothing]: translations().extension.empire.lifeforms.eventTypes.nothing,
+        [LifeformDiscoveryEventType.lostShip]: translations().extension.empire.lifeforms.eventTypes.lostShip,
+        [LifeformDiscoveryEventType.newLifeformFound]: translations().extension.empire.lifeforms.lifeformFound,
+        [LifeformDiscoveryEventType.knownLifeformFound]: translations().extension.empire.lifeforms.lifeformFound,
+        [LifeformDiscoveryEventType.artifacts]: translations().extension.empire.lifeforms.eventTypes.artifacts,
+    };
+});
+
+const keys: LifeformDiscoveryEventType[] = [
+    LifeformDiscoveryEventType.nothing,
+    LifeformDiscoveryEventType.lostShip,
+    LifeformDiscoveryEventType.knownLifeformFound,
+];
+
+const colors = computed(() => settingsStore.settings.colors.lifeformDiscoveries.events);
+
+function updateColors(value: Record<LifeformDiscoveryEventType, string>) {
+    settingsStore.updateSettings({
+        ...settingsStore.settings,
+        colors: {
+            ...settingsStore.settings.colors,
+            lifeformDiscoveries: {
+                ...settingsStore.settings.colors.lifeformDiscoveries,
+                events: value,
+            },
         },
-    })
-    export default class LifeformDiscoveryColorSettings extends Vue {
+    });
+}
 
-        private get labels(): Record<Exclude<LifeformDiscoveryEventType, LifeformDiscoveryEventType.newLifeformFound>, string> {
-            return {
-                [LifeformDiscoveryEventType.nothing]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.nothing,
-                [LifeformDiscoveryEventType.lostShip]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.lostShip,
-                [LifeformDiscoveryEventType.knownLifeformFound]: this.$i18n.$t.extension.empire.lifeforms.lifeformFound,
-                [LifeformDiscoveryEventType.artifacts]: this.$i18n.$t.extension.empire.lifeforms.eventTypes.artifacts,
-            };
-        }
-
-        private readonly keys: LifeformDiscoveryEventType[] = [
-            LifeformDiscoveryEventType.nothing,
-            LifeformDiscoveryEventType.lostShip,
-            LifeformDiscoveryEventType.knownLifeformFound,
-        ];
-
-        private get colors() {
-            return SettingsDataModule.settings.colors.lifeformDiscoveries.events;
-        }
-
-        private updateColors(value: Record<LifeformDiscoveryEventType, string>) {
-            SettingsDataModule.updateSettings({
-                ...SettingsDataModule.settings,
-                colors: {
-                    ...SettingsDataModule.settings.colors,
-                    lifeformDiscoveries: {
-                        ...SettingsDataModule.settings.colors.lifeformDiscoveries,
-                        events: value,
-                    },
-                },
-            });
-        }
-
-        private resetColors() {
-            const defaultColors = getDefaultSettings(LanguageKey.de).colors.lifeformDiscoveries.events;
-            this.updateColors(defaultColors);
-        }
-    }
+function resetColors() {
+    const defaultColors = getDefaultSettings(LanguageKey.de).colors.lifeformDiscoveries.events;
+    updateColors(defaultColors);
+}
 </script>

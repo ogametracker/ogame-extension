@@ -1,12 +1,16 @@
-import { Message, MessageOgameMeta } from '../../shared/messages/Message';
-import { MessageType } from '../../shared/messages/MessageType';
-import { ExpeditionMessage, NewExpeditionMessage, TrackExpeditionMessage } from '../../shared/messages/tracking/expeditions';
-import { _throw } from '../../shared/utils/_throw';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import {
+    ExpeditionMessage,
+    NewExpeditionMessage,
+    TrackExpeditionMessage,
+} from '@ogame-tracker/shared/messages/tracking/expeditions';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
 import { ExpeditionModule } from './ExpeditionModule';
-import { broadcastMessage } from '../../shared/communication/broadcastMessage';
-import { MessageTrackingErrorMessage } from '@/shared/messages/tracking/misc';
-import { serviceWorkerUuid } from '@/shared/uuid';
+import { broadcastMessage } from '@ogame-tracker/shared/communication/broadcastMessage';
+import { MessageTrackingErrorMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { serviceWorkerUuid } from '@ogame-tracker/shared/uuid';
 
 export class ExpeditionService implements MessageService {
     private readonly expeditionModule = new ExpeditionModule();
@@ -15,7 +19,7 @@ export class ExpeditionService implements MessageService {
         if (message.type != MessageType.TrackExpedition) {
             return;
         }
-        
+
         const msg = message as TrackExpeditionMessage;
         const tryResult = await this.expeditionModule.tryTrackExpedition(msg);
 

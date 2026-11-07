@@ -1,4 +1,4 @@
-import { AmortizationItem } from "../empire/amortization/models";
+import { AmortizationItem } from '../empire/amortization/models';
 
 export interface UniverseSpecificSettings {
     universeHistory: {

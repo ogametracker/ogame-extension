@@ -1,9 +1,9 @@
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { LifeformTechnologyTypes } from "../../LifeformTechnologyType";
-import { LifeformTechnologyResearchBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { LifeformTechnologyTypes } from '../../LifeformTechnologyType';
+import { LifeformTechnologyResearchBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class RuneTechnologiumClass extends LifeformBuilding implements LifeformTechnologyResearchBuilding {
     public constructor() {
@@ -39,15 +39,15 @@ class RuneTechnologiumClass extends LifeformBuilding implements LifeformTechnolo
             },
         ]);
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.runeTechnologium;
     }
-    
+
     public getLifeformTechnologyResearchCostAndTimeReduction(level: number): CostAndTimeReduction {
         // yep
-        if(level == 1) {
-            return { cost: 0, time: 0};
+        if (level == 1) {
+            return { cost: 0, time: 0 };
         }
 
         const costReduction = 0.0025; // 0.25%

@@ -1,7 +1,7 @@
-import { CrawlerProductionPercentage } from "../../empire/CrawlerProductionPercentage";
-import { PlayerClass } from "../classes/PlayerClass";
-import { getCrawlerProductionFactor } from "./getCrawlerProductionFactor";
-import { getMaxActiveCrawlers } from "./getMaxActiveCrawlers";
+import { CrawlerProductionPercentage } from '../../empire/CrawlerProductionPercentage';
+import { PlayerClass } from '../classes/PlayerClass';
+import { getCrawlerProductionFactor } from './getCrawlerProductionFactor';
+import { getMaxActiveCrawlers } from './getMaxActiveCrawlers';
 
 export interface CrawlerBoostCalculationData {
     availableCrawlers: number;
@@ -14,7 +14,7 @@ export interface CrawlerBoostCalculationData {
     lifeformTechnologies: {
         collectorClassBonus: number;
         crawlerProductionBonus: number;
-    },
+    };
     serverSettings: {
         geologistActiveCrawlerFactorBonus: number;
         collectorCrawlerProductionFactorBonus: number;
@@ -42,10 +42,11 @@ export function getCrawlerBoost(data: CrawlerBoostCalculationData): number {
     );
 
     const potentialCrawlerBoost =
-        data.serverSettings.crawlerProductionFactorPerUnit
-        * crawlerCount
-        * crawlerProductivity
-        * data.crawlerProductionSetting / 100;
+        (data.serverSettings.crawlerProductionFactorPerUnit
+            * crawlerCount
+            * crawlerProductivity
+            * data.crawlerProductionSetting)
+        / 100;
 
     return Math.min(potentialCrawlerBoost, data.serverSettings.crawlerMaxProductionFactor);
 }

@@ -1,10 +1,10 @@
-import { ResearchType } from "../../../research/ResearchType";
-import { ResearchTypes } from "../../../research/ResearchTypes";
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType, LifeformTechnologyTypes } from "../../LifeformTechnologyType";
-import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { ResearchType } from '../../../research/ResearchType';
+import { ResearchTypes } from '../../../research/ResearchTypes';
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType, LifeformTechnologyTypes } from '../../LifeformTechnologyType';
+import { ResearchCostAndTimeReductionLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class NeuroInterfaceClass extends LifeformTechnology implements ResearchCostAndTimeReductionLifeformTechnology {
     public constructor() {
@@ -29,7 +29,8 @@ class NeuroInterfaceClass extends LifeformTechnology implements ResearchCostAndT
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return [...ResearchTypes, ...LifeformTechnologyTypes].filter(t => this.appliesTo(t))
+        return [...ResearchTypes, ...LifeformTechnologyTypes]
+            .filter(t => this.appliesTo(t))
             .map<LifeformBonusType>(tech => ({
                 type: LifeformBonusTypeId.TechTimeReduction,
                 tech,
@@ -37,13 +38,13 @@ class NeuroInterfaceClass extends LifeformTechnology implements ResearchCostAndT
     }
 
     public appliesTo(research: LifeformTechnologyType | ResearchType): boolean {
-        return [
-            ...ResearchTypes,
-            ...LifeformTechnologyTypes,
-        ].includes(research);
+        return [...ResearchTypes, ...LifeformTechnologyTypes].includes(research);
     }
 
-    public getResearchCostAndTimeReduction(research: LifeformTechnologyType | ResearchType, level: number): CostAndTimeReduction {
+    public getResearchCostAndTimeReduction(
+        research: LifeformTechnologyType | ResearchType,
+        level: number,
+    ): CostAndTimeReduction {
         if (!this.appliesTo(research)) {
             return { cost: 0, time: 0 };
         }

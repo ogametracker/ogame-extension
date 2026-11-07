@@ -1,4 +1,4 @@
-import { DebrisFieldsTranslations } from "./type";
+import { DebrisFieldsTranslations } from './type';
 
 export const de: DebrisFieldsTranslations = {
     header: 'Trümmerfelder',

@@ -1,11 +1,11 @@
-import { OgameRawExpeditionDepletionLevel } from '@/shared/models/ogame/messages/OgameRawExpeditionDepletionLevel';
+import { OgameRawExpeditionDepletionLevel } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionDepletionLevel';
 import { ExpeditionEvent, ExpeditionFindableShipType } from '../../models/expeditions/ExpeditionEvents';
 import { Message } from '../Message';
 import { MessageType } from '../MessageType';
-import { OgameRawExpeditionResultType } from '@/shared/models/ogame/messages/OgameRawExpeditionResultType';
-import { OgameRawExpeditionSize } from '@/shared/models/ogame/messages/OgameRawExpeditionSize';
-import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-import { ItemHash } from '@/shared/models/ogame/items/ItemHash';
+import { OgameRawExpeditionResultType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionResultType';
+import { OgameRawExpeditionSize } from '@ogame-tracker/shared/models/ogame/messages/OgameRawExpeditionSize';
+import { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import { ItemHash } from '@ogame-tracker/shared/models/ogame/items/ItemHash';
 
 export interface RawExpeditionMessageData {
     id: number;

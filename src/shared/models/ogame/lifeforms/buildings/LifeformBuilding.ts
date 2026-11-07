@@ -1,8 +1,7 @@
-import { Cost } from "../../common/Cost";
-import { CostAndIncreaseFactor } from "../common-interfaces";
-import { LifeformBonusType } from "../LifeformBonusType";
-import { LifeformBuildingType } from "../LifeformBuildingType";
-
+import { Cost } from '../../common/Cost';
+import { CostAndIncreaseFactor } from '../common-interfaces';
+import { LifeformBonusType } from '../LifeformBonusType';
+import { LifeformBuildingType } from '../LifeformBuildingType';
 
 interface LifeformBuildingConstructionParams {
     metal: CostAndIncreaseFactor;

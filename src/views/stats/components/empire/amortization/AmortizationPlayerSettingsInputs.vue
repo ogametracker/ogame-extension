@@ -1,11 +1,11 @@
 <template>
     <div class="player-settings">
         <template v-if="!productionMode">
-            <conversion-rate-settings class="conversion-rate-settings" />
+            <ConversionRateSettings class="conversion-rate-settings" />
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.optimizeForResources" />
+            <span v-text="translations().extension.empire.amortization.settings.playerSettings.optimizeForResources" />
             <span class="gap">
-                <o-resource
+                <OResource
                     v-for="resource in resources"
                     :key="resource"
                     class="toggleable-resource"
@@ -16,20 +16,20 @@
             </span>
         </template>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.officers" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.officers" />
         <span class="gap">
-            <o-officer
+            <OOfficer
                 v-for="(active, officer) in settings.officers"
                 :key="officer"
-                :officer="officer"
+                :officer="OOfficerType[officer]"
                 :disabled="!active"
                 @click="settings.officers[officer] = !settings.officers[officer]"
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.playerClass" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.playerClass" />
         <span class="gap">
-            <o-player-class
+            <OPlayerClass
                 v-for="playerClass in playerClasses"
                 :key="playerClass"
                 :player-class="playerClass"
@@ -38,9 +38,9 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.allianceClass" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.allianceClass" />
         <span class="gap">
-            <o-alliance-class
+            <OAllianceClass
                 v-for="allyClass in allianceClasses"
                 :key="allyClass"
                 :alliance-class="allyClass"
@@ -49,149 +49,167 @@
             />
         </span>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.plasmaTechnology])" />
+        <span
+            v-text="
+                translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(
+                    translations().ogame.research[ResearchType.plasmaTechnology],
+                )
+            "
+        />
         <span>
-            <o-research :research="ResearchType.plasmaTechnology" />
+            <OResearch :research="ResearchType.plasmaTechnology" />
             <input type="number" v-model.number="settings.levelPlasmaTechnology" min="0" max="50" step="1" />
         </span>
 
         <template v-if="!productionMode">
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.currentLevelOf($i18n.$t.ogame.research[ResearchType.astrophysics])" />
+            <span
+                v-text="
+                    translations().extension.empire.amortization.settings.playerSettings.currentLevelOf(
+                        translations().ogame.research[ResearchType.astrophysics],
+                    )
+                "
+            />
             <span>
-                <o-research :research="ResearchType.astrophysics" />
+                <OResearch :research="ResearchType.astrophysics" />
                 <input type="number" :value="settings.levelAstrophysics" disabled />
             </span>
 
-            <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
+            <span v-text="translations().extension.empire.amortization.settings.playerSettings.unusedRaidColonySlots" />
             <span>
-                <input type="number" v-model.number="settings.numberOfUnusedRaidColonySlots" :min="0" :max="100" step="1" />
+                <input
+                    type="number"
+                    v-model.number="settings.numberOfUnusedRaidColonySlots"
+                    :min="0"
+                    :max="100"
+                    step="1"
+                />
             </span>
         </template>
 
-        <span v-text="$i18n.$t.extension.empire.amortization.settings.playerSettings.lifeformLevels" />
+        <span v-text="translations().extension.empire.amortization.settings.playerSettings.lifeformLevels" />
         <span class="lifeform-level-grid">
             <span v-for="lifeform in LifeformTypes" :key="lifeform" style="display: contents">
-                <o-lifeform :lifeform="lifeform" />
+                <OLifeform :lifeform="lifeform" />
                 <input type="number" v-model.number="settings.lifeformLevels[lifeform]" min="0" step="1" />
             </span>
         </span>
     </div>
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { AllianceClass, SelectableAllianceClasses } from '@/shared/models/ogame/classes/AllianceClass';
-    import { PlayerClass, SelectablePlayerClasses } from '@/shared/models/ogame/classes/PlayerClass';
-    import { Component, Prop, Vue, VModel } from 'vue-property-decorator';
-    import ConversionRateSettings from '@/views/stats/components/settings/ConversionRateSettings.vue';
-    import { ResearchType } from '@/shared/models/ogame/research/ResearchType';
-    import { AmortizationPlayerSettings } from '@/shared/models/empire/amortization/AmortizationPlayerSettings';
-    import { ResourceType, ResourceTypes } from '@/shared/models/ogame/resources/ResourceType';
-    import { ValidLifeformType, ValidLifeformTypes } from '@/shared/models/ogame/lifeforms/LifeformType';
+<script setup lang="ts">
+import OAllianceClass from '@stats/components/ogame/OAllianceClass.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
+import OOfficer, { OOfficerType } from '@stats/components/ogame/OOfficer.vue';
+import OPlayerClass from '@stats/components/ogame/OPlayerClass.vue';
+import OResearch from '@stats/components/ogame/OResearch.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
+import { translations } from '@stats/i18n';
+import type { PropType } from 'vue';
+import { AllianceClass, SelectableAllianceClasses } from '@ogame-tracker/shared/models/ogame/classes/AllianceClass';
+import { PlayerClass, SelectablePlayerClasses } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
+import ConversionRateSettings from '@stats/components/settings/ConversionRateSettings.vue';
+import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
+import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlayerSettings';
+import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ValidLifeformTypes } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
-    @Component({
-        components: {
-            ConversionRateSettings,
-        },
-    })
-    export default class AmortizationPlayerSettingsInputs extends Vue {
+defineProps({
+    productionMode: { required: false, type: Boolean, default: () => false },
+});
 
-        @VModel({ required: true, type: Object as PropType<AmortizationPlayerSettings> })
-        private settings!: AmortizationPlayerSettings;
+const settings = defineModel<AmortizationPlayerSettings>({
+    required: true,
+    type: Object as PropType<AmortizationPlayerSettings>,
+});
 
-        @Prop({ required: false, type: Boolean, default: () => false })
-        private productionMode!: boolean;
+const resources = ResourceTypes;
 
-        private readonly resources = ResourceTypes;
-        private readonly ResearchType = ResearchType;
-        private readonly playerClasses = SelectablePlayerClasses;
-        private readonly allianceClasses = SelectableAllianceClasses;
-        private readonly LifeformTypes = ValidLifeformTypes;
+const playerClasses = SelectablePlayerClasses;
 
+const allianceClasses = SelectableAllianceClasses;
 
-        private togglePlayerClass(playerClass: PlayerClass): void {
-            if (this.settings.playerClass == playerClass) {
-                this.settings.playerClass = PlayerClass.none;
-                return;
-            }
+const LifeformTypes = ValidLifeformTypes;
 
-            this.settings.playerClass = playerClass;
-        }
+function togglePlayerClass(playerClass: PlayerClass): void {
+    if (settings.value.playerClass == playerClass) {
+        settings.value.playerClass = PlayerClass.none;
+        return;
+    }
 
-        private toggleAllianceClass(allianceClass: AllianceClass): void {
-            if (this.settings.allianceClass == allianceClass) {
-                this.settings.allianceClass = AllianceClass.none;
-                return;
-            }
+    settings.value.playerClass = playerClass;
+}
 
-            this.settings.allianceClass = allianceClass;
-        }
+function toggleAllianceClass(allianceClass: AllianceClass): void {
+    if (settings.value.allianceClass == allianceClass) {
+        settings.value.allianceClass = AllianceClass.none;
+        return;
+    }
 
-        private toggleOptimizeForResource(resource: ResourceType) {
-            if (this.settings.optimizeForResources.includes(resource)) {
-                this.settings.optimizeForResources = this.settings.optimizeForResources.filter(r => r != resource);
-            }
-            else {
-                this.settings.optimizeForResources.push(resource);
-            }
+    settings.value.allianceClass = allianceClass;
+}
+
+function toggleOptimizeForResource(resource: ResourceType) {
+    if (settings.value.optimizeForResources.includes(resource)) {
+        settings.value.optimizeForResources = settings.value.optimizeForResources.filter(r => r != resource);
+    } else {
+        settings.value.optimizeForResources.push(resource);
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.player-settings {
+    display: grid;
+    grid-template-columns: minmax(auto, 150px) 1fr;
+    align-items: center;
+    gap: 8px 16px;
+
+    > * {
+        display: flex;
+
+        &:nth-of-type(2n + 1) {
+            justify-self: flex-end;
+            text-align: right;
         }
     }
-</script>
-<style lang="scss" scoped>
-    .player-settings {
-        display: grid;
-        grid-template-columns: minmax(auto, 150px) 1fr;
-        align-items: center;
-        gap: 8px 16px;
+
+    input[type='number'] {
+        width: 60px;
+    }
+
+    .o-officer,
+    .o-player-class,
+    .o-alliance-class,
+    .toggleable-resource {
+        cursor: pointer;
+    }
+
+    .gap {
+        column-gap: 8px;
 
         > * {
             display: flex;
-
-            &:nth-of-type(2n + 1) {
-                justify-self: flex-end;
-                text-align: right;
-            }
-        }
-
-        input[type="number"] {
-            width: 60px;
-        }
-
-        .o-officer,
-        .o-player-class,
-        .o-alliance-class,
-        .toggleable-resource {
-            cursor: pointer;
-        }
-
-        .gap {
-            column-gap: 8px;
-
-            > * {
-                display: flex;
-            }
         }
     }
+}
 
-    .conversion-rate-settings {
-        display: contents;
+.conversion-rate-settings {
+    display: contents;
 
-        &::v-deep {
-            .fake-table-header {
-                background: none;
-                justify-content: end;
-                padding-right: 0;
-            }
-            .fake-table-body {
-                padding-left: 0;
-            }
-        }
+    :deep(.fake-table-header) {
+        background: none;
+        justify-content: end;
+        padding-right: 0;
     }
-
-    .lifeform-level-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        row-gap: 4px;
-        align-items: stretch;
+    :deep(.fake-table-body) {
+        padding-left: 0;
     }
+}
+
+.lifeform-level-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    align-items: stretch;
+}
 </style>

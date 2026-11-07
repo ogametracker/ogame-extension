@@ -1,54 +1,34 @@
-import { PlanetActiveItems } from "../../empire/PlanetActiveItems";
-import { ItemHash } from "../items/ItemHash";
-import { ResourceType } from "../resources/ResourceType";
+import type { PlanetActiveItems } from '../../empire/PlanetActiveItems';
+import { Items, type ItemId } from '../items/Items.generated';
+import type { ResourceType } from '../resources/ResourceType';
 
 export function getItemBonus(resource: ResourceType, activeItems: PlanetActiveItems): number {
     const now = Date.now();
+    let singleResourceBonus = Infinity;
+    let allResourceBonus = Infinity;
 
-    const items10 = {
-        [ResourceType.metal]: [ItemHash.metalBooster_bronze_1day, ItemHash.metalBooster_bronze_7days],
-        [ResourceType.crystal]: [ItemHash.crystalBooster_bronze_1day, ItemHash.crystalBooster_bronze_7days],
-        [ResourceType.deuterium]: [ItemHash.deuteriumBooster_bronze_1day, ItemHash.deuteriumBooster_bronze_7days],
-    }[resource];
-    const items20 = {
-        [ResourceType.metal]: [ItemHash.metalBooster_silver_7days, ItemHash.metalBooster_silver_30days, ItemHash.metalBooster_silver_90days],
-        [ResourceType.crystal]: [ItemHash.crystalBooster_silver_7days, ItemHash.crystalBooster_silver_30days, ItemHash.crystalBooster_silver_90days],
-        [ResourceType.deuterium]: [ItemHash.deuteriumBooster_silver_7days, ItemHash.deuteriumBooster_silver_30days, ItemHash.deuteriumBooster_silver_90days],
-    }[resource];
-    const items30 = {
-        [ResourceType.metal]: [ItemHash.metalBooster_gold_7days, ItemHash.metalBooster_gold_30days, ItemHash.metalBooster_gold_90days],
-        [ResourceType.crystal]: [ItemHash.crystalBooster_gold_7days, ItemHash.crystalBooster_gold_30days, ItemHash.crystalBooster_gold_90days],
-        [ResourceType.deuterium]: [ItemHash.deuteriumBooster_gold_7days, ItemHash.deuteriumBooster_gold_30days, ItemHash.deuteriumBooster_gold_90days],
-    }[resource];
-    const items40 = {
-        [ResourceType.metal]: [ItemHash.metalBooster_platinum_7days, ItemHash.metalBooster_platinum_30days, ItemHash.metalBooster_platinum_90days],
-        [ResourceType.crystal]: [ItemHash.crystalBooster_platinum_7days, ItemHash.crystalBooster_platinum_30days, ItemHash.crystalBooster_platinum_90days],
-        [ResourceType.deuterium]: [ItemHash.deuteriumBooster_platinum_7days, ItemHash.deuteriumBooster_platinum_30days, ItemHash.deuteriumBooster_platinum_90days],
-    }[resource];
+    for (const id of Object.keys(activeItems) as ItemId[]) {
+        const effect = Items[id]?.effect;
+        const bonuses = effect?.type === 'resourceProductionBonus' ? effect.value : undefined;
+        const bonus = bonuses?.[resource];
+        if (bonuses == null || bonus == null || !isItemActive(now, activeItems[id])) {
+            continue;
+        }
 
-    if (items10.some(hash => isItemActive(now, activeItems[hash]))) {
-        return 0.1;
-    }
-    if (items20.some(hash => isItemActive(now, activeItems[hash]))) {
-        return 0.2;
-    }
-    if (items30.some(hash => isItemActive(now, activeItems[hash]))) {
-        return 0.3;
-    }
-    if (items40.some(hash => isItemActive(now, activeItems[hash]))) {
-        return 0.4;
+        // Preserve the existing precedence when a snapshot contains overlapping boosts.
+        if (Object.keys(bonuses).length === 1) {
+            singleResourceBonus = Math.min(singleResourceBonus, bonus);
+        } else {
+            allResourceBonus = Math.min(allResourceBonus, bonus);
+        }
     }
 
-    return 0;
+    if (Number.isFinite(singleResourceBonus)) {
+        return singleResourceBonus;
+    }
+    return Number.isFinite(allResourceBonus) ? allResourceBonus : 0;
 }
 
-export function isItemActive(now: number, itemExpiration?: number | 'permanent') {
-    if(itemExpiration == null) {
-        return false;
-    }
-    if(itemExpiration == 'permanent') {
-        return true;
-    }
-
-    return itemExpiration > now;
+export function isItemActive(now: number, itemExpiration?: number | 'permanent'): boolean {
+    return itemExpiration === 'permanent' || (itemExpiration != null && itemExpiration > now);
 }

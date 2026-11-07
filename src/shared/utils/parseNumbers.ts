@@ -1,6 +1,6 @@
 export function parseIntSafe(text: string, radix = 10): number {
     const value = parseInt(text, radix);
-    if(isNaN(value)) {
+    if (isNaN(value)) {
         throw new Error(`'${text}' is not a valid integer value`);
     }
 
@@ -9,7 +9,7 @@ export function parseIntSafe(text: string, radix = 10): number {
 
 export function parseFloatSafe(text: string): number {
     const value = parseFloat(text);
-    if(isNaN(value)) {
+    if (isNaN(value)) {
         throw new Error(`'${text}' is not a valid integer value`);
     }
 

@@ -1,5 +1,5 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
 
 export abstract class Building {
     public abstract getCost(level: number): Cost;

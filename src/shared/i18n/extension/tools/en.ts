@@ -1,9 +1,9 @@
-import { ToolsTranslations } from "./type";
+import { ToolsTranslations } from './type';
 
 export const en: ToolsTranslations = {
     signatureGenerator: {
         header: 'Signature Generator',
-        
+
         averagePerHour: '⌀/hour',
         totalPerHour: 'per hour',
         totalPerDay: 'per day',

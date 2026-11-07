@@ -1,5 +1,5 @@
-import { DBSchema } from "idb";
-import { Settings } from "../../models/settings/Settings";
+import { DBSchema } from 'idb';
+import { Settings } from '../../models/settings/Settings';
 
 export interface DbLinkedAccount {
     serverId: number;
@@ -14,13 +14,12 @@ export interface DbAccount {
     name: string;
 
     linkedAccounts?: DbLinkedAccount[];
-};
+}
 export interface DbServer {
     id: number;
     name: string;
     language: string;
-};
-
+}
 
 export interface OgameTrackerGlobalDbSchema extends DBSchema {
     settings: {
@@ -37,7 +36,7 @@ export interface OgameTrackerGlobalDbSchema extends DBSchema {
     };
 
     servers: {
-        key: [number, string],
+        key: [number, string];
         value: DbServer;
     };
 }

@@ -1,168 +1,153 @@
 <template>
-    <div class="nav-list" :style="{ overflow: showsAnyMenu ? 'visible' : null }">
-        <floating-menu
+    <div class="nav-list" :style="{ overflow: showsAnyMenu ? 'visible' : undefined }">
+        <FloatingMenu
             v-for="(item, i) in items"
             :key="i"
-            :value="rootRouteName != null && showMenu[i] == true"
-            @input="$set(showMenu, i, $event)"
+            :model-value="rootRouteName != null && showMenu[i] == true"
+            @update:model-value="showMenu[i] = $event"
             class="nav-list_floating-menu"
         >
             <template #activator>
                 <component
-                    :is="item.to != null ? 'router-link' : 'a'"
+                    :is="item.to != null ? RouterLink : 'a'"
                     class="nav-list-item"
                     :class="item.class"
-                    v-bind="
-                        item.href != null
-                        ? { href: item.href }
-                        : { to: item.to }
-                    "
+                    v-bind="item.href != null ? { href: item.href } : { to: item.to }"
                     :target="item.target"
                     active-class="nav-list-item-active"
-                    ref="links"
+                    @contextmenu="openDefaultMenu(i, $event)"
                 >
                     <span v-text="item.label" />
                     <span v-if="isDefaultRoute(item.to)" class="nav-list-item-home-icon mdi mdi-home" />
                 </component>
             </template>
 
-            <set-default-route-button
-                v-if="rootRouteName != null"
-                :label="$i18n.$t.extension.settings.setDefaultSubRoute"
+            <SetDefaultRouteButton
+                v-if="rootRouteName != null && item.to != null"
+                :label="translations().extension.settings.setDefaultSubRoute"
                 :rootRouteName="rootRouteName"
                 :routeName="item.to.name"
-                @click="$set(showMenu, i, false)"
+                @click="showMenu[i] = false"
             />
-        </floating-menu>
+        </FloatingMenu>
     </div>
 </template>
 
 <script lang="ts">
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { RawLocation } from 'vue-router';
-    import SetDefaultRouteButton from "@stats/components/settings/SetDefaultRouteButton.vue";
-    import { SettingsDataModule } from '../../data/SettingsDataModule';
+import type { RouteLocationRaw } from 'vue-router';
 
-    export type ListNavItem = {
-        label: string;
-        class?: string;
-    } & (
-            { to: RawLocation & { name: string } }
-            | {
-                href: string;
-                target?: string;
-            }
-        );
-
-    @Component({
-        components: {
-            SetDefaultRouteButton,
-        },
-    })
-    export default class ListNav extends Vue {
-        @Prop({ required: true, type: Array as PropType<ListNavItem[]> })
-        private items!: ListNavItem[];
-
-        @Prop({ required: false, type: String, default: () => null })
-        private rootRouteName!: string | null;
-
-        private showMenu: Record<number, boolean> = {};
-
-        private get showsAnyMenu() {
-            return Object.values(this.showMenu).some(b => b);
-        }
-
-        private get defaultRouteName() {
-            const routes = this.$router.getRoutes();
-            const rootRoute = routes.find(route => route.name == this.rootRouteName);
-
-            if (rootRoute?.redirect instanceof Object) {
-                return rootRoute.redirect.name;
-            }
-
-            throw new Error('route without default route!');
-        }
-
-        private async mounted() {
-            await this.$nextTick();
-            (this.$refs.links as (Vue | HTMLElement)[]).forEach((component, i) => {
-                const element = component instanceof HTMLElement ? component : component.$el;
-                element.addEventListener('contextmenu', e => {
-                    e.preventDefault();
-
-                    Object.keys(this.showMenu).forEach(key => this.showMenu[parseInt(key)] = false);
-                    this.$set(this.showMenu, i, true);
-                });
-            });
-        }
-
-        private isDefaultRoute(to: { name: string }): boolean {
-            if (this.rootRouteName == null) {
-                return false;
-            }
-
-            const defaultRoute = SettingsDataModule.settings.defaultRoutes[this.rootRouteName] ?? this.defaultRouteName;
-            return defaultRoute == to.name;
-        }
-    }
+export type ListNavItem = {
+    label: string;
+    class?: string;
+} & (
+    | { to: RouteLocationRaw & { name: string }; href?: never; target?: never }
+    | {
+          to?: never;
+          href: string;
+          target?: string;
+      }
+);
 </script>
+
+<script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import { RouterLink } from 'vue-router';
+import { computed, ref } from 'vue';
+import { getDefaultRouteName } from '@stats/router';
+import { translations } from '@stats/i18n';
+import type { PropType } from 'vue';
+import SetDefaultRouteButton from '@stats/components/settings/SetDefaultRouteButton.vue';
+import { useSettingsStore } from '../../data/SettingsDataModule';
+
+const props = defineProps({
+    items: { required: true, type: Array as PropType<ListNavItem[]> },
+    rootRouteName: { required: false, type: String as PropType<string | null>, default: () => null },
+});
+
+const settingsStore = useSettingsStore();
+
+const showMenu = ref<Record<number, boolean>>({});
+
+const showsAnyMenu = computed(() => Object.values(showMenu.value).some(b => b));
+
+const defaultRouteName = computed(() =>
+    props.rootRouteName == null ? undefined : getDefaultRouteName(props.rootRouteName),
+);
+
+function isDefaultRoute(to?: { name: string }): boolean {
+    if (props.rootRouteName == null) {
+        return false;
+    }
+
+    const defaultRoute = settingsStore.settings.defaultRoutes[props.rootRouteName] ?? defaultRouteName.value;
+    return defaultRoute === to?.name;
+}
+
+function openDefaultMenu(index: number, event: MouseEvent) {
+    if (props.rootRouteName == null) {
+        return;
+    }
+    event.preventDefault();
+    showMenu.value = { [index]: true };
+}
+</script>
+
 <style lang="scss" scoped>
-    .nav-list {
-        display: flex;
-        flex-direction: column;
-        min-width: 125px;
-        gap: 2px;
-        max-height: 100%;
-        overflow: auto;
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 125px;
+    gap: 2px;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.nav-list-item {
+    padding: 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    min-width: 140px;
+    cursor: pointer;
+
+    background: linear-gradient(to right, rgba(var(--color), 0.25) 30%, rgba(var(--color), 0.15));
+
+    &:hover {
+        background: linear-gradient(to right, rgba(var(--color), 0.5) 30%, rgba(var(--color), 0.3));
     }
 
-    .nav-list-item {
-        padding: 12px;
-        border-radius: 4px;
-        text-decoration: none;
-        min-width: 140px;
-        cursor: pointer;
-
-        background: linear-gradient(to right, rgba(var(--color), 0.25) 30%, rgba(var(--color), 0.15));
-
-        &:hover {
-            background: linear-gradient(to right, rgba(var(--color), 0.5) 30%, rgba(var(--color), 0.3));
-        }
-
-        + .nav-list-item {
-            margin-top: 2px;
-        }
-
-        &-home-icon {
-            position: absolute;
-            bottom: 0;
-            left: 2px;
-            font-size: 12px;
-            opacity: 0.5;
-        }
+    + .nav-list-item {
+        margin-top: 2px;
     }
 
-    .nav-list-item-active,
-    .nav-list-item-active:hover {
-        background: linear-gradient(to right, rgba(var(--color), 0.8) 30%, rgba(var(--color), 0.6));
+    &-home-icon {
+        position: absolute;
+        bottom: 0;
+        left: 2px;
+        font-size: 12px;
+        opacity: 0.5;
+    }
+}
 
-        .nav-list-item-home-icon {
-            opacity: 1;
-        }
+.nav-list-item-active,
+.nav-list-item-active:hover {
+    background: linear-gradient(to right, rgba(var(--color), 0.8) 30%, rgba(var(--color), 0.6));
+
+    .nav-list-item-home-icon {
+        opacity: 1;
+    }
+}
+
+.nav-list_floating-menu {
+    display: flex !important;
+
+    > .nav-list-item {
+        width: 100%;
     }
 
-    .nav-list_floating-menu {
-        display: flex !important;
-
-        > .nav-list-item {
-            width: 100%;
-        }
-
-        &::v-deep .floating-menu {
-            left: 50%;
-            top: 50%;
-            z-index: 0;
-        }
+    &:deep(.floating-menu) {
+        left: 50%;
+        top: 50%;
+        z-index: 0;
     }
+}
 </style>

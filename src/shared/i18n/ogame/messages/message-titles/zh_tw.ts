@@ -1,4 +1,4 @@
-import { MessageTitles } from "./types";
+import { MessageTitles } from './types';
 
 export const zh_tw: MessageTitles = {
     expedition: '遠征探險結果',

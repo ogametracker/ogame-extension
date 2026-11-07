@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <stats-chart
+        <StatsChart
             :firstDay="firstDay"
             :itemsPerDay="exposPerDay"
             :datasets="datasets"
@@ -10,66 +10,60 @@
             no-tooltip-footer
         />
 
-        <floating-menu v-model="showSettings" left>
+        <FloatingMenu v-model="showSettings" left>
             <template #activator>
                 <button @click="showSettings = !showSettings">
                     <span class="mdi mdi-cog" />
                 </button>
             </template>
 
-            <expedition-event-color-settings />
-        </floating-menu>
+            <ExpeditionEventColorSettings />
+        </FloatingMenu>
     </div>
 </template>
 
-<script lang="ts">
-    import { ExpeditionEvent, ExpeditionEventDarkMatter } from '@/shared/models/expeditions/ExpeditionEvents';
-    import { ExpeditionEventType } from '@/shared/models/expeditions/ExpeditionEventType';
-    import { Component, Vue } from 'vue-property-decorator';
-    import StatsChart, { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
-    import { DailyExpeditionResult, ExpeditionDataModule } from '@/views/stats/data/ExpeditionDataModule';
-    import { SettingsDataModule } from '@/views/stats/data/SettingsDataModule';
-    import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
+<script setup lang="ts">
+import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
+import { computed, ref } from 'vue';
+import { translations } from '@stats/i18n';
+import StatsChart from '@stats/components/stats/StatsChart.vue';
+import type { StatsChartDataset } from '@stats/components/stats/StatsChart.vue';
+import { useExpeditionStore } from '@stats/data/ExpeditionDataModule';
+import type { DailyExpeditionResult } from '@stats/data/ExpeditionDataModule';
+import { useSettingsStore } from '@stats/data/SettingsDataModule';
+import ExpeditionEventColorSettings from '@stats/components/settings/colors/ExpeditionEventColorSettings.vue';
 
-    @Component({
-        components: {
-            StatsChart,
-            ExpeditionEventColorSettings,
+const settingsStore = useSettingsStore();
+
+const expeditionStore = useExpeditionStore();
+
+const showSettings = ref(false);
+
+const color = computed(() => settingsStore.settings.colors.expeditions.events.darkMatter);
+
+const datasets = computed<StatsChartDataset<DailyExpeditionResult>[]>(() => {
+    return [
+        {
+            key: 'dark-matter',
+            label: translations().ogame.premium.darkMatter,
+            color: color.value,
+            filled: true,
+            getValue: (result: DailyExpeditionResult) => result.findings.darkMatter,
+            showAverage: true,
         },
-    })
-    export default class Charts extends Vue {
+    ];
+});
 
-        private showSettings = false;
+const firstDay = computed(() => expeditionStore.firstDay);
 
-        private get color() {
-            return SettingsDataModule.settings.colors.expeditions.events.darkMatter;
-        }
-
-        private get datasets(): StatsChartDataset<DailyExpeditionResult>[] {
-            return [{
-                key: 'dark-matter',
-                label: this.$i18n.$t.ogame.premium.darkMatter,
-                color: this.color,
-                filled: true,
-                getValue: (result: DailyExpeditionResult) => result.findings.darkMatter,
-                showAverage: true,
-            }];
-        }
-
-        private get firstDay() {
-            return ExpeditionDataModule.firstDay;
-        }
-
-        private get exposPerDay() {
-            return ExpeditionDataModule.dailyResults;
-        }
-    }
+const exposPerDay = computed(() => expeditionStore.dailyResults);
 </script>
+
 <style lang="scss" scoped>
-    .chart-container {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: start;
-        height: 100%;
-    }
+.chart-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    height: 100%;
+}
 </style>

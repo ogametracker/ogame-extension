@@ -1,9 +1,9 @@
-import { Cost } from "../../../common/Cost";
-import { ResourceType } from "../../../resources/ResourceType";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformBuildingType } from "../../LifeformBuildingType";
-import { ResourceProductionBonusLifeformBuilding } from "../interfaces";
-import { LifeformBuilding } from "../LifeformBuilding";
+import { Cost } from '../../../common/Cost';
+import { ResourceType } from '../../../resources/ResourceType';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformBuildingType } from '../../LifeformBuildingType';
+import { ResourceProductionBonusLifeformBuilding } from '../interfaces';
+import { LifeformBuilding } from '../LifeformBuilding';
 
 class HighEnergySmeltingClass extends LifeformBuilding implements ResourceProductionBonusLifeformBuilding {
     public constructor() {
@@ -30,7 +30,7 @@ class HighEnergySmeltingClass extends LifeformBuilding implements ResourceProduc
     public get bonuses(): LifeformBonusType[] {
         return [{ type: LifeformBonusTypeId.ResourceProductionBonus }];
     }
-    
+
     public get type(): LifeformBuildingType {
         return LifeformBuildingType.highEnergySmelting;
     }

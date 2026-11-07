@@ -1,5 +1,5 @@
-import { Coordinates } from "../common/Coordinates";
-import { ShipType } from "../ships/ShipType";
+import { Coordinates } from '../common/Coordinates';
+import { ShipType } from '../ships/ShipType';
 
 export type OgameCombatReport = {
     coordinates: Coordinates;
@@ -12,4 +12,4 @@ export type OgameCombatReport = {
     loot: Record<'metal' | 'crystal' | 'deuterium', number>;
     debris: Record<'metal' | 'crystal' | 'deuterium', number>;
     playerLosses: Record<ShipType, number>;
-}
+};

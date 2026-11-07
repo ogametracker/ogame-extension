@@ -1,11 +1,11 @@
-import { BuildingType } from "@/shared/models/ogame/buildings/BuildingType";
-import { Cost } from "@/shared/models/ogame/common/Cost";
-import { LifeformBuildingType } from "@/shared/models/ogame/lifeforms/LifeformBuildingType";
-import { LifeformTechnologyType } from "@/shared/models/ogame/lifeforms/LifeformTechnologyType";
-import { EmpireProductionPlanetState } from "@/shared/models/ogame/resource-production/types";
-import { ResourceType } from "@/shared/models/ogame/resources/ResourceType";
-import { AmortizationExpeditionResultsPlanetState } from "./AmortizationExpeditionResultsBreakdown";
-import { AmortizationPlanetState } from "./AmortizationItemGenerator";
+import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
+import { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
+import { LifeformBuildingType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import { LifeformTechnologyType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { EmpireProductionPlanetState } from '@ogame-tracker/shared/models/ogame/resource-production/types';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { AmortizationExpeditionResultsPlanetState } from './AmortizationExpeditionResultsBreakdown';
+import { AmortizationPlanetState } from './AmortizationItemGenerator';
 
 export type MineBuildingType = BuildingType.metalMine | BuildingType.crystalMine | BuildingType.deuteriumSynthesizer;
 
@@ -20,7 +20,6 @@ export interface LifeformTechnologyLevels {
     technology: LifeformTechnologyType;
     levels: { from: number; to: number };
 }
-
 
 export interface BaseAmortizationItem {
     cost: Cost;

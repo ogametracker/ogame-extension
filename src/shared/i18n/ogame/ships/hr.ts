@@ -1,7 +1,7 @@
-import { ShipType } from "../../../models/ogame/ships/ShipType";
-import { ShipTranslations } from "./types";
+import { ShipType } from '../../../models/ogame/ships/ShipType';
+import { ShipTranslations } from './types';
 
-export const hr: ShipTranslations =  {
+export const hr: ShipTranslations = {
     [ShipType.lightFighter]: 'Mali lovac',
     [ShipType.heavyFighter]: 'Veliki lovac',
     [ShipType.cruiser]: 'Krstarica',
@@ -20,20 +20,3 @@ export const hr: ShipTranslations =  {
     [ShipType.crawler]: 'Puzavac',
     [ShipType.solarSatellite]: 'Solarni satelit',
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,5 @@
 <template>
-    <grid-table :columns="columns" :items="items" class="lifeform-table" sticky="100%">
+    <GridTable :columns="columns" :items="items" class="lifeform-table" sticky="100%">
         <template #cell-planet="{ value }">
             <span v-text="value.name" />
             &nbsp;
@@ -7,226 +7,252 @@
         </template>
 
         <template #cell-lifeform="{ value }">
-            <span v-text="$i18n.$t.ogame.lifeforms[value]" class="mr-2" />
-            <o-lifeform :lifeform="value" size="48px" />
+            <span v-text="translations().ogame.lifeforms[value]" class="mr-2" />
+            <OLifeform :lifeform="value" size="48px" />
         </template>
 
-        <template #cell-buildings="{ value, item }">
+        <template #cell-buildings="{ item }">
             <div class="building-levels">
-                <span v-for="building in value" :key="building">
-                    <o-lifeform-building :building="building" :disabled="item.buildingLevels[building] == 0" />
-                    <span v-text="item.buildingLevels[building]" :class="{ fade: item.buildingLevels[building] == 0 }" />
+                <span v-for="building in item.buildings" :key="building">
+                    <OLifeformBuilding :building="building" :disabled="item.buildingLevels[building] == 0" />
+                    <span
+                        v-text="item.buildingLevels[building]"
+                        :class="{ fade: item.buildingLevels[building] == 0 }"
+                    />
                 </span>
             </div>
         </template>
 
-        <template #cell-lifeformTechsTier1="{ value, item }">
+        <template #cell-lifeformTechsTier1="{ item }">
             <div class="lifeform-tech-table">
-                <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
-                    <span v-else :key="`icon-${i}`" />
+                <template v-for="(tech, i) in item.lifeformTechsTier1" :key="i">
+                    <OLifeformTechnology
+                        v-if="tech != null"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                    />
+                    <span v-else />
                 </template>
                 <span
-                    v-for="(tech, i) in value"
+                    v-for="(tech, i) in item.lifeformTechsTier1"
                     :key="`level-${i}`"
-                    v-text="item.lifeformTechnologies[tech]"
-                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                    v-text="tech == null ? undefined : item.lifeformTechnologies[tech]"
+                    :class="{ fade: tech != null && item.lifeformTechnologies[tech] == 0 }"
                 />
             </div>
         </template>
-        <template #cell-lifeformTechsTier2="{ value, item }">
+        <template #cell-lifeformTechsTier2="{ item }">
             <div class="lifeform-tech-table">
-                <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
-                    <span v-else :key="`icon-${i}`" />
+                <template v-for="(tech, i) in item.lifeformTechsTier2" :key="i">
+                    <OLifeformTechnology
+                        v-if="tech != null"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                    />
+                    <span v-else />
                 </template>
                 <span
-                    v-for="(tech, i) in value"
+                    v-for="(tech, i) in item.lifeformTechsTier2"
                     :key="`level-${i}`"
-                    v-text="item.lifeformTechnologies[tech]"
-                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                    v-text="tech == null ? undefined : item.lifeformTechnologies[tech]"
+                    :class="{ fade: tech != null && item.lifeformTechnologies[tech] == 0 }"
                 />
             </div>
         </template>
-        <template #cell-lifeformTechsTier3="{ value, item }">
+        <template #cell-lifeformTechsTier3="{ item }">
             <div class="lifeform-tech-table">
-                <template v-for="(tech, i) in value">
-                    <o-lifeform-technology v-if="tech != null" :key="`icon-${i}`" :technology="tech" :disabled="item.lifeformTechnologies[tech] == 0" />
-                    <span v-else :key="`icon-${i}`" />
+                <template v-for="(tech, i) in item.lifeformTechsTier3" :key="i">
+                    <OLifeformTechnology
+                        v-if="tech != null"
+                        :technology="tech"
+                        :disabled="item.lifeformTechnologies[tech] == 0"
+                    />
+                    <span v-else />
                 </template>
                 <span
-                    v-for="(tech, i) in value"
+                    v-for="(tech, i) in item.lifeformTechsTier3"
                     :key="`level-${i}`"
-                    v-text="item.lifeformTechnologies[tech]"
-                    :class="{ fade: item.lifeformTechnologies[tech] == 0 }"
+                    v-text="tech == null ? undefined : item.lifeformTechnologies[tech]"
+                    :class="{ fade: tech != null && item.lifeformTechnologies[tech] == 0 }"
                 />
             </div>
         </template>
-    </grid-table>
+    </GridTable>
 </template>
 
-<script lang="ts">
-    import { PlanetData } from '@/shared/models/empire/PlanetData';
-    import { Coordinates } from '@/shared/models/ogame/common/Coordinates';
-    import { LifeformBuildingType, LifeformBuildingTypesByLifeform } from '@/shared/models/ogame/lifeforms/LifeformBuildingType';
-    import { LifeformTechnologySlots, LifeformTechnologyType } from '@/shared/models/ogame/lifeforms/LifeformTechnologyType';
-    import { LifeformType } from '@/shared/models/ogame/lifeforms/LifeformType';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { GridTableColumn } from '@stats/components/common/GridTable.vue';
-    import { EmpireDataModule } from '@stats/data/EmpireDataModule';
+<script setup lang="ts">
+import GridTable from '@stats/components/common/GridTable.vue';
+import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
+import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
+import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
+import { computed } from 'vue';
+import { translations } from '@stats/i18n';
+import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
+import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
+import {
+    LifeformBuildingType,
+    LifeformBuildingTypesByLifeform,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBuildingType';
+import {
+    LifeformTechnologySlots,
+    LifeformTechnologyType,
+} from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformTechnologyType';
+import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
+import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
+import { useEmpireStore } from '@stats/data/EmpireDataModule';
 
-    interface PlanetLifeformItem {
-        planet: {
-            name: string;
-            coordinates: string;
+interface PlanetLifeformItem {
+    planet: {
+        name: string;
+        coordinates: string;
+    };
+    lifeform: LifeformType;
+    buildings: LifeformBuildingType[];
+    buildingLevels: Record<LifeformBuildingType, number>;
+    lifeformTechsTier1: (LifeformTechnologyType | null)[];
+    lifeformTechsTier2: (LifeformTechnologyType | null)[];
+    lifeformTechsTier3: (LifeformTechnologyType | null)[];
+
+    lifeformTechnologies: Record<LifeformTechnologyType, number>;
+}
+
+const empireStore = useEmpireStore();
+
+const columns = computed<GridTableColumn<keyof PlanetLifeformItem>[]>(() => {
+    return [
+        {
+            key: 'planet',
+            label: translations().extension.empire.lifeforms.planet,
+            size: '200px',
+        },
+        {
+            key: 'lifeform',
+            label: translations().extension.empire.lifeforms.lifeform,
+            size: '1fr',
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'left-text',
+            class: 'left-text',
+        },
+        {
+            key: 'buildings',
+            label: translations().extension.empire.lifeforms.buildings,
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'center-text',
+        },
+        {
+            key: 'lifeformTechsTier1',
+            label: `${translations().extension.empire.lifeforms.technologies} (${translations().extension.empire.lifeforms.tier} 1)`,
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'center-text',
+        },
+        {
+            key: 'lifeformTechsTier2',
+            label: `${translations().extension.empire.lifeforms.technologies} (${translations().extension.empire.lifeforms.tier} 2)`,
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'center-text',
+        },
+        {
+            key: 'lifeformTechsTier3',
+            label: `${translations().extension.empire.lifeforms.technologies} (${translations().extension.empire.lifeforms.tier} 3)`,
+            style: {
+                'justify-items': 'start',
+            },
+            headerClass: 'center-text',
+        },
+    ];
+});
+
+const items = computed<PlanetLifeformItem[]>(() => {
+    const player = empireStore.empire;
+
+    const planets = player.planetOrder
+        .map(planetId => player.planets[planetId])
+        .filter(planet => !planet.isMoon) as PlanetData[];
+
+    const lifeformExperience: Partial<Record<LifeformType, number>> = player.lifeformExperience;
+
+    return planets.map<PlanetLifeformItem>(planet => {
+        const lfExp = lifeformExperience[planet.activeLifeform] ?? 0;
+
+        const result: PlanetLifeformItem = {
+            planet: {
+                name: planet.name,
+                coordinates: formatCoordinates(planet.coordinates),
+            },
+            lifeform: planet.activeLifeform,
+            buildings: LifeformBuildingTypesByLifeform[planet.activeLifeform],
+            buildingLevels: planet.lifeformBuildings,
+            lifeformTechsTier1: Array.from({ length: 6 }).map(
+                (_, i) =>
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6)
+                    ?? null,
+            ),
+            lifeformTechsTier2: Array.from({ length: 6 }).map(
+                (_, i) =>
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 1 * 6)
+                    ?? null,
+            ),
+            lifeformTechsTier3: Array.from({ length: 6 }).map(
+                (_, i) =>
+                    planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 2 * 6)
+                    ?? null,
+            ),
+            lifeformTechnologies: planet.lifeformTechnologies,
         };
-        lifeform: LifeformType;
-        buildings: LifeformBuildingType[];
-        buildingLevels: Record<LifeformBuildingType, number>;
-        lifeformTechsTier1: (LifeformTechnologyType | null)[];
-        lifeformTechsTier2: (LifeformTechnologyType | null)[];
-        lifeformTechsTier3: (LifeformTechnologyType | null)[];
+        return result;
+    });
+});
 
-        lifeformTechnologies: Record<LifeformTechnologyType, number>;
-    }
-
-    @Component({})
-    export default class Overview extends Vue {
-
-        private get columns(): GridTableColumn<keyof PlanetLifeformItem>[] {
-            return [
-                {
-                    key: 'planet',
-                    label: this.$i18n.$t.extension.empire.lifeforms.planet,
-                    size: '200px',
-                },
-                {
-                    key: 'lifeform',
-                    label: this.$i18n.$t.extension.empire.lifeforms.lifeform,
-                    size: '1fr',
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'left-text',
-                    class: 'left-text',
-                },
-                {
-                    key: 'buildings',
-                    label: this.$i18n.$t.extension.empire.lifeforms.buildings,
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'center-text',
-                },
-                {
-                    key: 'lifeformTechsTier1',
-                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 1)`,
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'center-text',
-                },
-                {
-                    key: 'lifeformTechsTier2',
-                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 2)`,
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'center-text',
-                },
-                {
-                    key: 'lifeformTechsTier3',
-                    label: `${this.$i18n.$t.extension.empire.lifeforms.technologies} (${this.$i18n.$t.extension.empire.lifeforms.tier} 3)`,
-                    style: {
-                        'justify-items': 'start',
-                    },
-                    headerClass: 'center-text',
-                },
-            ];
-        }
-
-        private get items(): PlanetLifeformItem[] {
-            const player = EmpireDataModule.empire;
-
-            const planets = player.planetOrder
-                .map(planetId => player.planets[planetId])
-                .filter(planet => !planet.isMoon) as PlanetData[];
-
-            const lifeformExperience: Partial<Record<LifeformType, number>> = player.lifeformExperience;
-
-            return planets.map<PlanetLifeformItem>(planet => {
-                const lfExp = lifeformExperience[planet.activeLifeform] ?? 0;
-
-                const result: PlanetLifeformItem = {
-                    planet: {
-                        name: planet.name,
-                        coordinates: this.formatCoordinates(planet.coordinates),
-                    },
-                    lifeform: planet.activeLifeform,
-                    buildings: LifeformBuildingTypesByLifeform[planet.activeLifeform],
-                    buildingLevels: planet.lifeformBuildings,
-                    lifeformTechsTier1: Array.from({ length: 6 }).map(
-                        (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 0 * 6)
-                            ?? null
-                    ),
-                    lifeformTechsTier2: Array.from({ length: 6 }).map(
-                        (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 1 * 6)
-                            ?? null
-                    ),
-                    lifeformTechsTier3: Array.from({ length: 6 }).map(
-                        (_, i) => planet.activeLifeformTechnologies.find(tech => LifeformTechnologySlots[tech] == i + 1 + 2 * 6)
-                            ?? null
-                    ),
-                    lifeformTechnologies: planet.lifeformTechnologies,
-                };
-                return result;
-            });
-        }
-
-        private formatCoordinates(coords: Coordinates) {
-            return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
-        }
-    }
+function formatCoordinates(coords: Coordinates) {
+    return `[${coords.galaxy}:${coords.system}:${coords.position}]`;
+}
 </script>
+
 <style lang="scss" scoped>
-    .lifeform-tech-table {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        column-gap: 4px;
-        justify-items: center;
+.lifeform-tech-table {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    column-gap: 4px;
+    justify-items: center;
+}
+
+.lifeform-table {
+    max-height: 100%;
+
+    :deep(.left-text) {
+        text-align: left;
+        justify-content: start;
     }
 
-    .lifeform-table {
-        max-height: 100%;
+    :deep(.center-text) {
+        text-align: center;
+        justify-content: center;
+    }
 
-        &::v-deep {
-            .left-text {
-                text-align: left;
-                justify-content: start;
-            }
+    :deep(.building-levels) {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 4px;
 
-            .center-text {
-                text-align: center;
-                justify-content: center;
-            }
-
-            .building-levels {
-                display: grid;
-                grid-template-columns: repeat(12, 1fr);
-                gap: 4px;
-
-                > span {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                }
-            }
-
-            .fade {
-                opacity: 0.1;
-            }
+        > span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
     }
+
+    :deep(.fade) {
+        opacity: 0.1;
+    }
+}
 </style>

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "allowArbitraryExtensions": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "types": ["chrome", "node"],
+        "lib": ["esnext", "dom", "dom.iterable"]
+    },
+    "include": ["**/*.ts", "vite.config.mts"],
+    "exclude": ["**/node_modules", "**/dist"]
+}

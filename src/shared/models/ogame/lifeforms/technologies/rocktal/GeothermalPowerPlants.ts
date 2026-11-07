@@ -1,8 +1,8 @@
-import { Cost } from "../../../common/Cost";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ResourceProductionBonusLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { Cost } from '../../../common/Cost';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ResourceProductionBonusLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class GeothermalPowerPlantsClass extends LifeformTechnology implements ResourceProductionBonusLifeformTechnology {
     public constructor() {
@@ -29,7 +29,7 @@ class GeothermalPowerPlantsClass extends LifeformTechnology implements ResourceP
     public get bonuses(): LifeformBonusType[] {
         return [{ type: LifeformBonusTypeId.ResourceProductionBonus }];
     }
-    
+
     public get type(): LifeformTechnologyType {
         return LifeformTechnologyType.geothermalPowerPlants;
     }

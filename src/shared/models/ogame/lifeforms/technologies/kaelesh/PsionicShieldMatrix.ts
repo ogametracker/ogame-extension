@@ -1,10 +1,10 @@
-import { ResearchType } from "../../../research/ResearchType";
-import { ResearchTypes } from "../../../research/ResearchTypes";
-import { CostAndTimeReduction } from "../../common-interfaces";
-import { LifeformBonusType, LifeformBonusTypeId } from "../../LifeformBonusType";
-import { LifeformTechnologyType } from "../../LifeformTechnologyType";
-import { ResearchCostAndTimeReductionLifeformTechnology } from "../interfaces";
-import { LifeformTechnology } from "../LifeformTechnology";
+import { ResearchType } from '../../../research/ResearchType';
+import { ResearchTypes } from '../../../research/ResearchTypes';
+import { CostAndTimeReduction } from '../../common-interfaces';
+import { LifeformBonusType, LifeformBonusTypeId } from '../../LifeformBonusType';
+import { LifeformTechnologyType } from '../../LifeformTechnologyType';
+import { ResearchCostAndTimeReductionLifeformTechnology } from '../interfaces';
+import { LifeformTechnology } from '../LifeformTechnology';
 
 class PsionicShieldMatrixClass extends LifeformTechnology implements ResearchCostAndTimeReductionLifeformTechnology {
     public constructor() {
@@ -29,24 +29,26 @@ class PsionicShieldMatrixClass extends LifeformTechnology implements ResearchCos
     }
 
     public get bonuses(): LifeformBonusType[] {
-        return ResearchTypes.filter(t => this.appliesTo(t))
-            .flatMap<LifeformBonusType>(tech => [
-                {
-                    type: LifeformBonusTypeId.TechCostReduction,
-                    tech,
-                },
-                {
-                    type: LifeformBonusTypeId.TechTimeReduction,
-                    tech,
-                }
-            ]);
+        return ResearchTypes.filter(t => this.appliesTo(t)).flatMap<LifeformBonusType>(tech => [
+            {
+                type: LifeformBonusTypeId.TechCostReduction,
+                tech,
+            },
+            {
+                type: LifeformBonusTypeId.TechTimeReduction,
+                tech,
+            },
+        ]);
     }
 
     public appliesTo(research: LifeformTechnologyType | ResearchType): boolean {
         return research == ResearchType.shieldingTechnology;
     }
 
-    public getResearchCostAndTimeReduction(research: LifeformTechnologyType | ResearchType, level: number): CostAndTimeReduction {
+    public getResearchCostAndTimeReduction(
+        research: LifeformTechnologyType | ResearchType,
+        level: number,
+    ): CostAndTimeReduction {
         if (!this.appliesTo(research)) {
             return { cost: 0, time: 0 };
         }

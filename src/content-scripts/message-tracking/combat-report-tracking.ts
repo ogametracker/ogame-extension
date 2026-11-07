@@ -1,27 +1,37 @@
-import { isSupportedLanguage } from "../../shared/i18n/isSupportedLanguage";
-import { Message, MessageOgameMeta } from "../../shared/messages/Message";
-import { MessageType } from "../../shared/messages/MessageType";
-import { CombatReportMessage, CombatReportUnknownMessage, RequestSingleCombatReportMessage, TrackCombatReportMessage } from "../../shared/messages/tracking/combat-reports";
-import { OgameCombatReport } from "../../shared/models/ogame/combats/OgameCombatReport";
-import { ResourceType } from "../../shared/models/ogame/resources/ResourceType";
-import { getOgameMeta } from "../../shared/ogame-web/getOgameMeta";
-import { _logDebug, _logWarning } from "../../shared/utils/_log";
-import { _throw } from "../../shared/utils/_throw";
-import { addOrSetCustomMessageContent, cssClasses, formatNumber } from "./utils";
-import { ogameMetasEqual } from '../../shared/ogame-web/ogameMetasEqual';
-import { sendMessage } from "@/shared/communication/sendMessage";
-import { CombatReport } from "@/shared/models/combat-reports/CombatReport";
-import { messageTrackingUuid } from "@/shared/uuid";
-import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from "@/shared/messages/tracking/misc";
-import { v4 } from "uuid";
-import { CombatTrackingNotificationMessage, CombatTrackingNotificationMessageData, MessageTrackingErrorNotificationMessage, NotificationType } from "@/shared/messages/notifications";
-import { OgameRawMessageType } from "@/shared/models/ogame/messages/OgameRawMessageType";
-import { getMessageAttributes } from "@/shared/utils/getMessageAttributes";
-import { parseIntSafe } from "@/shared/utils/parseNumbers";
-import { createRecord } from "@/shared/utils/createRecord";
-import { ShipTypes } from "@/shared/models/ogame/ships/ShipTypes";
-import { ShipType } from "@/shared/models/ogame/ships/ShipType";
-import { PlanetType } from "@/shared/models/ogame/common/PlanetType";
+import { isSupportedLanguage } from '@ogame-tracker/shared/i18n/isSupportedLanguage';
+import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
+import {
+    CombatReportMessage,
+    CombatReportUnknownMessage,
+    RequestSingleCombatReportMessage,
+    TrackCombatReportMessage,
+} from '@ogame-tracker/shared/messages/tracking/combat-reports';
+import { OgameCombatReport } from '@ogame-tracker/shared/models/ogame/combats/OgameCombatReport';
+import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { getOgameMeta } from '@ogame-tracker/shared/ogame-web/getOgameMeta';
+import { _logDebug, _logWarning } from '@ogame-tracker/shared/utils/_log';
+import { _throw } from '@ogame-tracker/shared/utils/_throw';
+import { addOrSetCustomMessageContent, cssClasses, formatNumber } from './utils';
+import { ogameMetasEqual } from '@ogame-tracker/shared/ogame-web/ogameMetasEqual';
+import { sendMessage } from '@ogame-tracker/shared/communication/sendMessage';
+import { CombatReport } from '@ogame-tracker/shared/models/combat-reports/CombatReport';
+import { messageTrackingUuid } from '@ogame-tracker/shared/uuid';
+import { MessageTrackingErrorMessage, WillNotBeTrackedMessage } from '@ogame-tracker/shared/messages/tracking/misc';
+import { v4 } from 'uuid';
+import {
+    CombatTrackingNotificationMessage,
+    CombatTrackingNotificationMessageData,
+    MessageTrackingErrorNotificationMessage,
+    NotificationType,
+} from '@ogame-tracker/shared/messages/notifications';
+import { OgameRawMessageType } from '@ogame-tracker/shared/models/ogame/messages/OgameRawMessageType';
+import { getMessageAttributes } from '@ogame-tracker/shared/utils/getMessageAttributes';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { ShipTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
+import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
+import { PlanetType } from '@ogame-tracker/shared/models/ogame/common/PlanetType';
 
 const notificationIds = {
     result: v4(),
@@ -102,7 +112,9 @@ function onMessage(message: Message<MessageType, any>) {
             shouldTrackResolvers[msg.data.id]?.(false);
             delete shouldTrackResolvers[msg.data.id];
 
-            const li = document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
+            const li =
+                document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
             li.classList.add(cssClasses.messages.processed);
             li.classList.add(cssClasses.messages.ignored);
@@ -122,7 +134,9 @@ function onMessage(message: Message<MessageType, any>) {
             shouldTrackResolvers[combatReport.id]?.(false);
             delete shouldTrackResolvers[combatReport.id];
 
-            const li = document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`) ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
+            const li =
+                document.querySelector(`.msg[data-msg-id="${msg.data.id}"]`)
+                ?? _throw(`failed to find combat report with id '${msg.data.id}'`);
             li.classList.add(cssClasses.messages.combatReport);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
@@ -133,32 +147,50 @@ function onMessage(message: Message<MessageType, any>) {
             if (Object.values(combatReport.loot).some(amount => amount != 0)) {
                 html = `
                     <div class="ogame-tracker-combat-report--loot-table">
-                        ${[ResourceType.metal, ResourceType.crystal, ResourceType.deuterium].map(resource => `
+                        ${[ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
+                            .map(
+                                resource => `
                             <div class="ogame-tracker-resource ${resource}"></div>
-                            <div class="${combatReport.loot[resource] < 0
-/*                              */ ? 'ogame-tracker-combat-report--negative-loot'
-/*                              */ : combatReport.loot[resource] == 0
-/*                                  */ ? 'ogame-tracker-combat-report--no-loot'
-/*                                  */ : ''
-/*                          */}">
+                            <div class="${
+                                combatReport.loot[resource] < 0
+                                    ? /*                              */ 'ogame-tracker-combat-report--negative-loot'
+                                    : /*                              */ combatReport.loot[resource] == 0
+                                      ? /*                                  */ 'ogame-tracker-combat-report--no-loot'
+                                      : /*                                  */ ''
+                                /*                          */
+                            }">
                                 ${formatNumber(combatReport.loot[resource])}
                             </div>
-                        `).join('')}
+                        `,
+                            )
+                            .join('')}
                     </div>`;
             }
             if (combatReport.debrisField.metal > 0 || combatReport.debrisField.crystal > 0) {
                 html += `
                     <div class="ogame-tracker-combat-report--debris-field-table">
                         <span class="ogti ogti-debris-field"></span>
-                        ${([ResourceType.metal, ResourceType.crystal, ResourceType.deuterium] as (keyof CombatReport['debrisField'])[]).map(resource => `
+                        ${(
+                            [
+                                ResourceType.metal,
+                                ResourceType.crystal,
+                                ResourceType.deuterium,
+                            ] as (keyof CombatReport['debrisField'])[]
+                        )
+                            .map(
+                                resource => `
                             <div class="ogame-tracker-resource ${resource}"></div>
-                            <div class="${(combatReport.debrisField[resource] ?? 0) == 0
-/*                              */ ? 'ogame-tracker-combat-report--no-loot'
-/*                              */ : ''
-/*                          */}">
+                            <div class="${
+                                (combatReport.debrisField[resource] ?? 0) == 0
+                                    ? /*                              */ 'ogame-tracker-combat-report--no-loot'
+                                    : /*                              */ ''
+                                /*                          */
+                            }">
                                 ${formatNumber(combatReport.debrisField[resource] ?? 0)}
                             </div>
-                        `).join('')}
+                        `,
+                            )
+                            .join('')}
                     </div>
                 `;
             }
@@ -178,7 +210,9 @@ function onMessage(message: Message<MessageType, any>) {
                 break;
             }
 
-            const li = document.querySelector(`.msg[data-msg-id="${id}"]`) ?? _throw(`failed to find combat report message with id '${id}'`);
+            const li =
+                document.querySelector(`.msg[data-msg-id="${id}"]`)
+                ?? _throw(`failed to find combat report message with id '${id}'`);
 
             li.classList.remove(cssClasses.messages.waitingToBeProcessed);
             li.classList.add(cssClasses.messages.error);
@@ -197,12 +231,12 @@ export const combatTracking = {
     messageType: OgameRawMessageType.combatReport,
     track: trackCombatReports,
     onInit: () => retryLoadCombats(),
-}
+};
 
 async function trackCombatReports(msgs: Element[]) {
     const messages = msgs.filter(elem => elem.querySelector('.msg_actions a.txt_link') != null); // ignore combat reports of intergalactic missiles or 1-round combats without proper report
 
-    // add base css class to prevent multiple loads of the same combat report 
+    // add base css class to prevent multiple loads of the same combat report
     messages.forEach(msg => msg.classList.add(cssClasses.messages.base));
 
     const ogameMeta = getOgameMeta();
@@ -228,14 +262,14 @@ async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attem
         // mark message as "waiting for result"
         msg.classList.add(cssClasses.messages.waitingToBeProcessed);
         addOrSetCustomMessageContent(msg, `<div class="ogame-tracker-loader"></div>`);
-        
+
         const element = msg.querySelector('.rawMessageData') ?? _throw(`Cannot find rawMessageData element`);
         const { timestamp: date } = getMessageAttributes(element, {
             timestamp: {
                 optional: false,
-                conversion: value => parseIntSafe(value, 10) * 1000, 
+                conversion: value => parseIntSafe(value, 10) * 1000,
             },
-        }); 
+        });
 
         if (isNaN(date)) {
             _throw('Message timestamp is NaN');
@@ -263,8 +297,7 @@ async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attem
         sendMessage(workerMessage);
 
         waitingForCombats[id] = true;
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
 
         msg.classList.add(cssClasses.messages.base, cssClasses.messages.error);
@@ -276,32 +309,32 @@ async function loadCombatReport(msg: Element, ogameMeta: MessageOgameMeta, attem
     }
 }
 
-function parseCombatReportData(element: Element): OgameCombatReport { 
+function parseCombatReportData(element: Element): OgameCombatReport {
     const { playerId } = getOgameMeta();
 
-    const { 
+    const {
         defenderspaceobject: rawDefenderInfo,
         combatrounds: rawCombatRounds,
         result: rawResult,
         fleets: rawFleets,
-     } = getMessageAttributes(element, {
+    } = getMessageAttributes(element, {
         defenderspaceobject: {
             optional: false,
-            conversion: json => JSON.parse(json), 
+            conversion: json => JSON.parse(json),
         },
         result: {
             optional: false,
-            conversion: json => JSON.parse(json), 
+            conversion: json => JSON.parse(json),
         },
         combatrounds: {
             optional: false,
-            conversion: json => JSON.parse(json), 
+            conversion: json => JSON.parse(json),
         },
         fleets: {
             optional: false,
-            conversion: json => JSON.parse(json), 
+            conversion: json => JSON.parse(json),
         },
-    }); 
+    });
 
     const playerFleets = rawFleets.filter((f: any) => f.player?.id == playerId);
     const lastCombatRound = rawCombatRounds[rawCombatRounds.length - 1] ?? { fleets: [] };
@@ -309,12 +342,15 @@ function parseCombatReportData(element: Element): OgameCombatReport {
     const playerFleetIds = playerFleets.map((f: any) => f.fleetId);
     const playerLossesPerFleet: Record<ShipType, number>[] = lastCombatRound.fleets
         .filter((f: any) => playerFleetIds.includes(f.fleetId))
-        .map((f: any) => createRecord(ShipTypes, (ship: ShipType) => f.technologies.find((t: any) => t.technologyId == ship)?.destroyedTotal ?? 0));
+        .map((f: any) =>
+            createRecord(
+                ShipTypes,
+                (ship: ShipType) => f.technologies.find((t: any) => t.technologyId == ship)?.destroyedTotal ?? 0,
+            ),
+        );
 
     const playerLosses = createRecord(ShipTypes, ship => {
-        return playerLossesPerFleet
-            .map(fleet => fleet[ship])
-            .reduce((acc, cur) => acc + cur, 0);
+        return playerLossesPerFleet.map(fleet => fleet[ship]).reduce((acc, cur) => acc + cur, 0);
     });
 
     const isEspionageCombat = rawFleets
@@ -381,14 +417,14 @@ function shouldTrackCombatReport(id: number, ogameMeta: MessageOgameMeta) {
     });
 }
 
-
 function updateCombatResults(msg: CombatReportMessage) {
     delete waitingForCombats[msg.data.id];
     combatTrackingResult.count++;
 
     const resources = msg.data.loot;
-    [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium]
-        .forEach(resource => combatTrackingResult.resources[resource] += resources[resource]);
+    [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium].forEach(
+        resource => (combatTrackingResult.resources[resource] += resources[resource]),
+    );
 
     sendNotificationMessages();
 }

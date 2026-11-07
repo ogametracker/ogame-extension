@@ -8,88 +8,89 @@
             'o-item--hide-grade': hideItemGrade,
         }"
         :style="{
-            'background-image': `url(/img/ogame/items/${fullItem.image}.png)`,
+            'background-image': `url(${imageUrl})`,
             'font-size': size,
         }"
-        v-on="$listeners"
-        v-bind="{ ...$attrs, ...$props }"
     />
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { PropType } from 'vue';
-    import { ItemHash, ItemHashes } from '@/shared/models/ogame/items/ItemHash';
-    import { Items } from '@/shared/models/ogame/items/Items';
-    import { Item } from '@/shared/models/ogame/items/Item';
+import type { ItemImageServer } from '@ogame-tracker/shared/models/ogame/items/getItemImageUrl';
+import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
 
-    @Component({})
-    export default class OItem extends Vue {
-
-        @Prop({
-            required: true,
-            type: String as PropType<ItemHash>,
-            validator: (value: string) => (ItemHashes as string[]).includes(value)
-        })
-        private item!: ItemHash;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private hideItemGrade!: boolean;
-
-        @Prop({ required: false, type: String, default: '32px' })
-        private size!: string;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private disabled!: boolean;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private fade!: boolean;
-
-        @Prop({ required: false, type: Boolean, default: false })
-        private showTooltip!: boolean; //TODO: item tooltip
-
-
-        private get fullItem(): Item {
-            return Items[this.item];
-        }
+// the extension pages showing items are opened for one account and carry its server in the url
+function getServerFromLocation(): ItemImageServer | undefined {
+    const params = new URLSearchParams(location.search);
+    const serverId = params.get('server');
+    const language = params.get('language');
+    if (serverId == null || language == null) {
+        return undefined;
     }
+
+    return { serverId: parseIntSafe(serverId, 10), language };
+}
+const server = getServerFromLocation();
 </script>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import { getItem } from '@ogame-tracker/shared/models/ogame/items/ItemLookup';
+import { ItemGrade } from '@ogame-tracker/shared/models/ogame/items/ItemGrade';
+import { Items } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { getItemImageUrl } from '@ogame-tracker/shared/models/ogame/items/getItemImageUrl';
+
+const props = defineProps({
+    item: {
+        required: true,
+        type: String,
+    },
+    hideItemGrade: { required: false, type: Boolean, default: false },
+    size: { required: false, type: String, default: '32px' },
+    disabled: { required: false, type: Boolean, default: false },
+    fade: { required: false, type: Boolean, default: false },
+    showTooltip: { required: false, type: Boolean, default: false },
+});
+
+const fullItem = computed(() => getItem(props.item) ?? { ...Items.detroid_30minutes, grade: ItemGrade.none });
+const imageUrl = computed(() => getItemImageUrl(fullItem.value, server));
+</script>
+
 <style lang="scss" scoped>
-    $ogame-item-grades: (
-        none: #2374ba,
-        bronze: #834b2d,
-        silver: #8d939c,
-        gold: #ffb84a,
-        platinum: #7e3d8e,
-    );
+$ogame-item-grades: (
+    'none': #2374ba,
+    'bronze': #834b2d,
+    'silver': #8d939c,
+    'gold': #ffb84a,
+    'platinum': #7e3d8e,
+);
 
-    .o-item {
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        background-size: cover;
-        background-position: center;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: -moz-crisp-edges;
-        border-radius: 4px;
+.o-item {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -moz-crisp-edges;
+    border-radius: 4px;
 
-        border: 2px solid transparent;
+    border: 2px solid transparent;
 
-        &--hide-grade {
-            border: none;
-        }
-
-        &--disabled {
-            filter: grayscale(1) brightness(0.7) contrast(1.2);
-        }
-        &--fade {
-            opacity: 0.3;
-        }
+    &--hide-grade {
+        border: none;
     }
 
-    @each $grade, $color in $ogame-item-grades {
-        .o-item--grade-#{$grade} {
-            border-color: $color;
-        }
+    &--disabled {
+        filter: grayscale(1) brightness(0.7) contrast(1.2);
     }
+    &--fade {
+        opacity: 0.3;
+    }
+}
+
+@each $grade, $color in $ogame-item-grades {
+    .o-item--grade-#{$grade} {
+        border-color: $color;
+    }
+}
 </style>

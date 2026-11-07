@@ -1,15 +1,14 @@
-import { Cost } from "../common/Cost";
-import { BuildingType } from "./BuildingType";
-import { StorageBuilding } from "./StorageBuilding";
+import { Cost } from '../common/Cost';
+import { BuildingType } from './BuildingType';
+import { StorageBuilding } from './StorageBuilding';
 
 class CrystalStorageClass extends StorageBuilding {
-
     public get type() {
         return BuildingType.crystalStorage;
     }
 
     public getStorage(level: number): number {
-        return Math.floor(2.5 * Math.E ** (20 * level / 33)) * 5_000;
+        return Math.floor(2.5 * Math.E ** ((20 * level) / 33)) * 5_000;
     }
 
     public getDenPercentage(level: number): number {

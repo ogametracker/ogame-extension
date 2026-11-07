@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "moduleResolution": "bundler",
+        "allowArbitraryExtensions": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "types": ["chrome", "vite/client"],
+        "lib": ["esnext", "dom", "dom.iterable"],
+        "paths": {
+            "@stats/*": ["./*"],
+            "vue": ["./node_modules/vue"]
+        },
+        "noEmit": true
+    },
+    "include": ["**/*.ts", "**/*.vue", "_build-hook.mts", "vite.config.mts"],
+    "exclude": ["**/node_modules", "**/dist"]
+}

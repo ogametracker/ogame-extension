@@ -4,8 +4,4 @@ export enum ResourceType {
     deuterium = 'deuterium',
 }
 
-export const ResourceTypes = [
-    ResourceType.metal,
-    ResourceType.crystal,
-    ResourceType.deuterium,
-];
+export const ResourceTypes = [ResourceType.metal, ResourceType.crystal, ResourceType.deuterium];

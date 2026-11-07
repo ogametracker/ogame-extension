@@ -1,3 +1,3 @@
-import { LifeformType } from "@/shared/models/ogame/lifeforms/LifeformType";
+import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 
 export type LifeformTranslations = Record<LifeformType, string>;

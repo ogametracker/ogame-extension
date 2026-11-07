@@ -1,6 +1,6 @@
-import { LifeformDiscoveryEventArtifactFindingSize } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize";
-import { LifeformDiscoveryEventType } from "@/shared/models/lifeform-discoveries/LifeformDiscoveryEventType";
-import { EmpireTranslations } from "./type";
+import { LifeformDiscoveryEventArtifactFindingSize } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventArtifactFindingSize';
+import { LifeformDiscoveryEventType } from '@ogame-tracker/shared/models/lifeform-discoveries/LifeformDiscoveryEventType';
+import { EmpireTranslations } from './type';
 
 export const de: EmpireTranslations = {
     header: 'Imperium',
@@ -21,7 +21,8 @@ export const de: EmpireTranslations = {
         totalPerDay: 'gesamt pro Tag',
         totalPerWeek: 'gesamt pro Woche',
         activeProductionSettings: 'aktive Produktionseinstellungen',
-        messageProduction100: 'Die angezeigten Werte beziehen sich auf einen Produktionsfaktor von 100% und berücksichtigen einen Energiemangel nicht.',
+        messageProduction100:
+            'Die angezeigten Werte beziehen sich auf einen Produktionsfaktor von 100% und berücksichtigen einen Energiemangel nicht.',
 
         mines: {
             crawlersAvailable: 'verfügbar',
@@ -59,7 +60,8 @@ export const de: EmpireTranslations = {
             groupSelectedItems: 'Gewählte Elemente gruppieren',
             showOriginalItems: 'All Elemente einzeln anzeigen',
 
-            levelsOnPlanets: (levels, planets) => `${levels} ${levels == 1 ? 'Stufe' : 'Stufen'} auf ${planets} Planeten`,
+            levelsOnPlanets: (levels, planets) =>
+                `${levels} ${levels == 1 ? 'Stufe' : 'Stufen'} auf ${planets} Planeten`,
         },
 
         settings: {
@@ -71,13 +73,15 @@ export const de: EmpireTranslations = {
 
                 mines: 'Minen',
                 expeditions: 'Expeditionen',
-                expeditionsRequirement: 'Hinweis: Benötigt Wahl von Lebensform-Expeditionsbonusforschungen, Lebensform-Forschungsbonusgebäuden, und/oder Astrophysik',
+                expeditionsRequirement:
+                    'Hinweis: Benötigt Wahl von Lebensform-Expeditionsbonusforschungen, Lebensform-Forschungsbonusgebäuden, und/oder Astrophysik',
                 lifeformProductionBonusBuildings: 'Lebensform-Produktionsbonusgebäude',
                 lifeformTechnologyBoostBuildings: 'Lebensform-Forschungsbonusgebäude',
                 lifeformProductionBonusTechnologies: 'Lebensform-Produktionsbonusforschungen',
                 lifeformExpeditionBonusTechnologies: 'Lebensform-Expeditionsbonusforschungen',
                 astrophysicsAndColony: 'Astrophysik und neue Kolonien',
-                astrophysicsPerformanceNote: 'Hinweis: Rechenintensiv, hat starken Einfluss auf Berechnungsgeschwindigkeit',
+                astrophysicsPerformanceNote:
+                    'Hinweis: Rechenintensiv, hat starken Einfluss auf Berechnungsgeschwindigkeit',
             },
             playerSettings: {
                 header: 'Allgemeine Einstellungen',
@@ -99,7 +103,8 @@ export const de: EmpireTranslations = {
 
                 global: {
                     deselectItems: 'Alle Items abwählen',
-                    ignoreInactiveLifeformTechnologySlots: 'Inaktive Lebensform-Technologie-Slots für alle Planeten ignorieren',
+                    ignoreInactiveLifeformTechnologySlots:
+                        'Inaktive Lebensform-Technologie-Slots für alle Planeten ignorieren',
                     deselectAllPlanets: 'Alle Planeten abwählen',
                 },
 
@@ -124,7 +129,9 @@ export const de: EmpireTranslations = {
             expeditionSettings: {
                 header: 'Expeditionseinstellungen',
                 averageWavesPerDay: '⌀ Wellen pro Tag',
-                items: 'Slot-Items',
+                slotItems: 'Slot-Items',
+                resourceFindItems: 'Rohstoffbonus-Items',
+                improvedChanceItems: 'Expeditions-Computer',
                 averageExpeditionsPerDay: '⌀ Expeditionen pro Tag',
                 shipUnitFactors: 'Faktoren für Schiffseinheiten',
                 topPlayerScore: 'Punkte Platz 1',
@@ -134,14 +141,16 @@ export const de: EmpireTranslations = {
         info: {
             generatingItems: 'Berechne nächste Einträge',
 
-            slowCalculation: 'Die Amortisationsberechnung ist leider etwas langsam geworden, seitdem Lebensformen und deren Gebäude und Technologien berücksichtigt werden. Die Performance wird weiterhin untersucht und wird hoffentlich in der Zukunft verbessert.',
+            slowCalculation:
+                'Die Amortisationsberechnung ist leider etwas langsam geworden, seitdem Lebensformen und deren Gebäude und Technologien berücksichtigt werden. Die Performance wird weiterhin untersucht und wird hoffentlich in der Zukunft verbessert.',
             ctrlClick: 'Strg + Klick auf eine Checkbox, um alle Elemente bis zum gewählten Element an-/abzuwählen.',
         },
 
         saveLoad: {
             saveButton: 'Amortisationsergebnisse speichern',
             loadButton: (date: string) => `Speicherstand laden (${date})`,
-            loadedSave: (date: string, hiddenItems: string) => `Speicherstand wird angezeigt (${date}) - ${hiddenItems} ausgeblendete Zeilen`,
+            loadedSave: (date: string, hiddenItems: string) =>
+                `Speicherstand wird angezeigt (${date}) - ${hiddenItems} ausgeblendete Zeilen`,
             abandonedPlanet: 'Aufgegebener Planet',
         },
 
@@ -199,7 +208,8 @@ export const de: EmpireTranslations = {
                 research: 'Forschung',
                 bonus: 'Bonus',
                 lifeformBuildingsBoost: `Lebensformgebäude-Boost`,
-                lifeformLevelBoost: (lifeform: string, boost: string) => `Lebensform-Level-Boost (${lifeform}: ${boost})`,
+                lifeformLevelBoost: (lifeform: string, boost: string) =>
+                    `Lebensform-Level-Boost (${lifeform}: ${boost})`,
                 bugBoost: 'durch Bugs verursachter Boost',
             },
             production: {

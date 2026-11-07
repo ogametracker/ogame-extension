@@ -1,41 +1,36 @@
 <template>
     <div class="page">
-        <list-nav
-            :items="navItems"
-            :root-route-name="rootRouteName"
-        />
+        <ListNav :items="navItems" :root-route-name="rootRouteName" />
 
         <div class="page-content">
-            <router-view />
+            <RouterView />
         </div>
     </div>
 </template>
 
-<script lang="ts">
-    import { PropType } from 'vue';
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { ListNavItem } from './ListNav.vue';
+<script setup lang="ts">
+import ListNav from '@stats/components/common/ListNav.vue';
+import { RouterView } from 'vue-router';
+import type { PropType } from 'vue';
+import type { ListNavItem } from './ListNav.vue';
 
-    @Component({})
-    export default class Page extends Vue {
-        @Prop({ required: true, type: Array as PropType<ListNavItem[]> })
-        private navItems!: ListNavItem[];
-
-        @Prop({ required: false, type: String, default: () => null })
-        private rootRouteName!: string | null;
-    }
+defineProps({
+    navItems: { required: true, type: Array as PropType<ListNavItem[]> },
+    rootRouteName: { required: false, type: String as PropType<string | null>, default: () => null },
+});
 </script>
-<style lang="scss" scoped>
-    .page {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        height: 100%;
-        column-gap: 16px;
-    }
 
-    .page-content {
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-    }
+<style lang="scss" scoped>
+.page {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 100%;
+    column-gap: 16px;
+}
+
+.page-content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
 </style>
