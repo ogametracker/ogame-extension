@@ -68,8 +68,6 @@ import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
 import { useEmpireStore } from '@stats/data/EmpireDataModule';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 
-type SupplyBuilding = PlanetSupplyBuildingType;
-
 interface PlanetEmpireItem {
     planet: {
         name: string;
@@ -106,6 +104,7 @@ const columns = computed<GridTableColumn<keyof PlanetEmpireItem>[]>(() => {
             style: {
                 'justify-items': 'start',
             },
+            size: '1fr',
             headerClass: 'left-text',
             class: 'left-text',
         },
