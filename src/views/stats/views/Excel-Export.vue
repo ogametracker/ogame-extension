@@ -132,7 +132,7 @@ import { ExcelExport as Export } from '@stats/models/excel-export';
 import type { ExcelExportOptions } from '@stats/models/excel-export';
 import { format } from 'date-fns';
 
-const exportOptions: ExcelExportOptions = {
+const exportOptions = ref<ExcelExportOptions>({
     expeditions: {
         rawData: false,
         overviewPerDay: false,
@@ -168,7 +168,7 @@ const exportOptions: ExcelExportOptions = {
         rawData: false,
         experiencePerDay: false,
     },
-};
+});
 
 const isExporting = ref(false);
 
@@ -187,7 +187,7 @@ const isAnyOptionSet = computed(() => {
 
 async function generateExport() {
     isExporting.value = true;
-    await Export.create(exportOptions, `OGame Tracker ${format(Date.now(), 'yyyy-MM-dd_HH-mm-ss')}.xlsx`);
+    await Export.create(exportOptions.value, `OGame Tracker ${format(Date.now(), 'yyyy-MM-dd_HH-mm-ss')}.xlsx`);
     isExporting.value = false;
 }
 </script>

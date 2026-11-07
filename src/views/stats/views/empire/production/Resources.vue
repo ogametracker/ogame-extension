@@ -436,12 +436,12 @@ const empire = computed<LocalPlayerData>(() => {
     return localEmpire;
 });
 
-const resourcePackageAmounts = {
+const resourcePackageAmounts = ref({
     all: 0,
     metal: 0,
     crystal: 0,
     deuterium: 0,
-};
+});
 
 const conversionModeText = computed(() => {
     return settingsStore.settings.conversionRates.mode == 'msu'
@@ -615,9 +615,11 @@ const footerItems = computed<ProductionItem[]>(() => {
         deuterium: deuteriumPerHour,
     });
 
-    const metalPackages = metalPerHour * 24 * (resourcePackageAmounts.all + resourcePackageAmounts.metal);
-    const crystalPackages = crystalPerHour * 24 * (resourcePackageAmounts.all + resourcePackageAmounts.crystal);
-    const deuteriumPackages = deuteriumPerHour * 24 * (resourcePackageAmounts.all + resourcePackageAmounts.deuterium);
+    const metalPackages = metalPerHour * 24 * (resourcePackageAmounts.value.all + resourcePackageAmounts.value.metal);
+    const crystalPackages =
+        crystalPerHour * 24 * (resourcePackageAmounts.value.all + resourcePackageAmounts.value.crystal);
+    const deuteriumPackages =
+        deuteriumPerHour * 24 * (resourcePackageAmounts.value.all + resourcePackageAmounts.value.deuterium);
 
     return [
         {

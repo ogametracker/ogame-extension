@@ -91,22 +91,22 @@
 <script setup lang="ts">
 import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import type { ResourceConversionMode } from '@ogame-tracker/shared/models/settings/Settings';
 import { useSettingsStore } from '../../data/SettingsDataModule';
 
 const settingsStore = useSettingsStore();
 
-const msu = {
+const msu = ref({
     crystal: 2,
     deuterium: 3,
-};
+});
 
-const dsu = {
+const dsu = ref({
     metal: 3,
     crystal: 2,
-};
+});
 
 const msuRates = computed(() => settingsStore.settings.conversionRates.msu);
 
@@ -126,8 +126,8 @@ function setConversionMode(mode: ResourceConversionMode) {
 
 function onMsuRatesChanged() {
     const { crystal, deuterium } = msuRates.value;
-    msu.crystal = crystal;
-    msu.deuterium = deuterium;
+    msu.value.crystal = crystal;
+    msu.value.deuterium = deuterium;
 }
 
 function updateMsuConversionRates() {
@@ -135,15 +135,15 @@ function updateMsuConversionRates() {
         ...settingsStore.settings,
         conversionRates: {
             ...settingsStore.settings.conversionRates,
-            msu: msu,
+            msu: msu.value,
         },
     });
 }
 
 function onDsuRatesChanged() {
     const { crystal, metal } = dsuRates.value;
-    dsu.crystal = crystal;
-    dsu.metal = metal;
+    dsu.value.crystal = crystal;
+    dsu.value.metal = metal;
 }
 
 function updateDsuConversionRates() {
@@ -151,7 +151,7 @@ function updateDsuConversionRates() {
         ...settingsStore.settings,
         conversionRates: {
             ...settingsStore.settings.conversionRates,
-            dsu: dsu,
+            dsu: dsu.value,
         },
     });
 }
