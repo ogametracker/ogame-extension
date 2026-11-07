@@ -7,16 +7,16 @@
             'small-fraction': smallFraction,
         }"
     >
-        <span v-if="prefix != ''" v-text="prefix" />
+        <span v-if="prefix != ''" class="prefix" v-text="prefix" />
 
-        <span v-text="formatNumber(integerValue, format)" />
+        <span class="integer" v-text="formatNumber(integerValue, format)" />
         <span
             v-if="digits > 0"
             class="fraction"
             v-text="formatNumber(decimalValue, fractionNumberFormat).substring(1)"
         />
 
-        <span v-if="suffix != ''" v-text="suffix" />
+        <span v-if="suffix != ''" class="suffix" v-text="suffix" />
     </span>
 </template>
 
@@ -60,6 +60,13 @@ const integerValue = computed(() => {
 <style lang="scss" scoped>
 .decimal-number {
     --small-fraction-size: 0.65em;
+
+    .prefix,
+    .integer,
+    .fraction,
+    .suffix {
+        all: unset;
+    }
 
     &.fade-value {
         color: rgba(white, 0.1);
