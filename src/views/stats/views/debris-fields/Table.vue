@@ -76,7 +76,7 @@ const items = computed<RangedStatsTableItem<DailyDebrisFieldReportResult>[]>(() 
     if (separate.value) {
         return ResourceTypes.map(resource => ({
             label: translations().extension.resources[resource],
-            items: (['normal', 'expedition', 'total'] as ('normal' | 'expedition' | 'total')[]).map(key => ({
+            items: (['normal', 'expedition', 'total'] as const).map(key => ({
                 label: {
                     normal: `${translations().extension.debrisFields.position} 1-15`,
                     expedition: `${translations().extension.debrisFields.position} 16`,

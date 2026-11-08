@@ -64,7 +64,7 @@ export class DebrisFieldReportModule {
 
     private tryParseDebrisFieldReport(data: RawDebrisFieldMessageData): { success: true; report: DebrisFieldReport } {
         const deuterium = data.resources.deuterium ?? undefined;
-        const isExpeditionDebrisField = data.coords.system == 16;
+        const isExpeditionDebrisField = data.coords.position == 16;
 
         return {
             success: true,
