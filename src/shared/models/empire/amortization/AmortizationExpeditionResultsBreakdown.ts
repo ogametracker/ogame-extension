@@ -11,8 +11,6 @@ import { ExpeditionFindableShipTypes } from '../../expeditions/ExpeditionEvents'
 import { ShipByTypes } from '../../ogame/ships/ShipTypes';
 import { Reaper } from '../../ogame/ships/Reaper';
 import { LifeformTechnologyType } from '../../ogame/lifeforms/LifeformTechnologyType';
-import { Items, type ItemId } from '../../ogame/items/Items.generated';
-import { getExpeditionItemFindBonus } from '../../ogame/expeditions/getExpeditionItemFindBonus';
 
 export interface AmortizationExpeditionResultsPlanetState {
     id: number;
@@ -82,7 +80,8 @@ export interface AmortizationExpeditionResultsBreakdownOptions {
     astrophysicsLevel: number;
     itemBonusSlots: number;
 
-    expeditionBoostItems: ItemId[];
+    improvedChancesItemActive: boolean;
+    itemResourceBoost: number;
 
     fleetFindsResourceFactors: Record<ResourceType, number>;
     serverSettings: {
@@ -163,10 +162,7 @@ export class AmortizationExpeditionResultsBreakdown {
             [ExpeditionEventType.fleet]: 0,
         };
 
-        ExpeditionEventTypes.forEach(type => {
-            const boost = getExpeditionItemFindBonus(type, this.options.expeditionBoostItems);
-            result[type] += boost;
-        });
+        result.resources = this.options.itemResourceBoost / 100;
 
         return result;
     }
@@ -190,10 +186,7 @@ export class AmortizationExpeditionResultsBreakdown {
 
         const itemBonuses = this.#itemEventBonuses;
 
-        const improvedExpeditions = this.options.expeditionBoostItems.some(
-            id => Items[id].effect?.type == 'expeditionImprovedChances',
-        );
-        const eventProbabilities = improvedExpeditions
+        const eventProbabilities = this.options.improvedChancesItemActive
             ? eventTypeProbabilities.improved
             : eventTypeProbabilities.normal;
 

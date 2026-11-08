@@ -42,6 +42,7 @@ function getPlanetLifeformTechnologyCrawlerProductionBonusFactor(planet: PlanetD
 export function getProductionBreakdowns(
     empire: LocalPlayerData,
     lifeformExperience: Record<ValidLifeformType, number>,
+    itemProductionBoosts: Partial<Record<number, Record<ResourceType, number>>> = {},
 ): EmpireProductionBreakdowns {
     const planets = Object.values(empire.planets).filter(planet => !planet.isMoon) as PlanetData[];
 
@@ -67,6 +68,7 @@ export function getProductionBreakdowns(
     );
 
     planets.forEach(planet => {
+        const itemProductionBoost = itemProductionBoosts[planet.id];
         const levelMetalMine = planet.buildings[BuildingType.metalMine];
         const levelCrystalMine = planet.buildings[BuildingType.crystalMine];
         const levelDeuteriumSynthesizer = planet.buildings[BuildingType.deuteriumSynthesizer];
@@ -119,7 +121,10 @@ export function getProductionBreakdowns(
                 serverEconomySpeed: serverSettings.speed.economy,
             }),
             mineProduction: MetalMine.getProduction(levelMetalMine, productionBuildingDependencies),
-            itemBonusProductionFactor: getItemBonus(ResourceType.metal, planet.activeItems),
+            itemBonusProductionFactor:
+                itemProductionBoost != null
+                    ? itemProductionBoost.metal / 100
+                    : getItemBonus(ResourceType.metal, planet.activeItems),
             ...baseProductionConfig,
             lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.metal,
             lifeformTechnologyBonusProductionFactor: baseProductionConfig.lifeformTechnologyBonusProductionFactor.metal,
@@ -133,7 +138,10 @@ export function getProductionBreakdowns(
                 serverPositionBoost: serverSettings.resourceProduction.productionFactorBonus.crystal,
             }),
             mineProduction: CrystalMine.getProduction(levelCrystalMine, productionBuildingDependencies),
-            itemBonusProductionFactor: getItemBonus(ResourceType.crystal, planet.activeItems),
+            itemBonusProductionFactor:
+                itemProductionBoost != null
+                    ? itemProductionBoost.crystal / 100
+                    : getItemBonus(ResourceType.crystal, planet.activeItems),
             ...baseProductionConfig,
             lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.crystal,
             lifeformTechnologyBonusProductionFactor:
@@ -147,7 +155,10 @@ export function getProductionBreakdowns(
                 levelDeuteriumSynthesizer,
                 productionBuildingDependencies,
             ),
-            itemBonusProductionFactor: getItemBonus(ResourceType.deuterium, planet.activeItems),
+            itemBonusProductionFactor:
+                itemProductionBoost != null
+                    ? itemProductionBoost.deuterium / 100
+                    : getItemBonus(ResourceType.deuterium, planet.activeItems),
             ...baseProductionConfig,
             lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.deuterium,
             lifeformTechnologyBonusProductionFactor:

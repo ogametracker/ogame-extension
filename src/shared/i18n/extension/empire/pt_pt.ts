@@ -24,7 +24,7 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
             crawlersAvailable: 'disponivel',
             crawlersToReachLimit: count => `${count} rastejadores para bonús máximo`,
         },
-        items: 'Items Activos',
+        itemProductionBoost: 'Bónus de produção dos items',
         breakdown: {
             basicIncome: 'Produção Básica',
             mineProduction: 'Produção da Mina',
@@ -90,7 +90,7 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
                 header: 'Definições do Planeta',
 
                 global: {
-                    deselectItems: 'Desmarcar todos os items',
+                    resetItemProductionBoosts: 'Repor todos os bónus dos items',
                     ignoreInactiveLifeformTechnologySlots:
                         'Ignorar slots de tecnologias inactivas de forma de vida para todos os planetas',
                 },
@@ -98,7 +98,7 @@ export const pt_pt: RecursivePartial<EmpireTranslations> = {
                 includeInResult: 'Incluir no cálculo',
                 position: 'Posição',
                 maxTemperature: 'Temp. Max.',
-                activeItems: 'Items Activos',
+                itemProductionBoost: 'Bónus de produção dos items',
                 crawlers: {
                     title: 'Rastejadores',
                     percentage: '% Produção',

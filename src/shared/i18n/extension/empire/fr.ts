@@ -24,7 +24,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
             crawlersAvailable: 'disponibles',
             crawlersToReachLimit: count => `${count} foreuses pour le bonus maximum`,
         },
-        items: 'Objets actifs',
+        itemProductionBoost: 'Bonus de production des objets',
         breakdown: {
             basicIncome: 'Revenu de base',
             mineProduction: 'Production de mine',
@@ -94,7 +94,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 header: 'Paramètres de la planète',
 
                 global: {
-                    deselectItems: 'Désélectionner tous les éléments',
+                    resetItemProductionBoosts: 'Réinitialiser tous les bonus des objets',
                     ignoreInactiveLifeformTechnologySlots:
                         'Ignorer les emplacements inactifs des technologies forme de vie pour toutes les planètes',
                     deselectAllPlanets: 'Désélectionner toutes les planètes',
@@ -103,7 +103,7 @@ export const fr: RecursivePartial<EmpireTranslations> = {
                 includeInResult: 'Inclure dans le calcul',
                 position: 'Position',
                 maxTemperature: 'Température max',
-                activeItems: 'Objets actifs',
+                itemProductionBoost: 'Bonus de production des objets',
                 crawlers: {
                     title: 'Foreuses',
                     percentage: '% Production',

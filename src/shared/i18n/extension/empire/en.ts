@@ -28,7 +28,7 @@ export const en: EmpireTranslations = {
             crawlersAvailable: 'available',
             crawlersToReachLimit: count => `${count} crawlers for maximum bonus`,
         },
-        items: 'Active items',
+        itemProductionBoost: 'Item production boost',
         breakdown: {
             basicIncome: 'Basic Income',
             mineProduction: 'Mine Production',
@@ -101,7 +101,7 @@ export const en: EmpireTranslations = {
                 header: 'Planet Settings',
 
                 global: {
-                    deselectItems: 'Deselect all items',
+                    resetItemProductionBoosts: 'Reset all item boosts',
                     ignoreInactiveLifeformTechnologySlots: 'Ignore inactive lifeform technology slots for all planets',
                     deselectAllPlanets: 'Deselect all planets',
                 },
@@ -109,7 +109,7 @@ export const en: EmpireTranslations = {
                 includeInResult: 'Include in calculation',
                 position: 'Position',
                 maxTemperature: 'Max. Temperature',
-                activeItems: 'Active Items',
+                itemProductionBoost: 'Item production boost',
                 crawlers: {
                     title: 'Crawlers',
                     percentage: '% Production',

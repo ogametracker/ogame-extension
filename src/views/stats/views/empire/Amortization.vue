@@ -204,9 +204,9 @@
                                 <button
                                     v-text="
                                         translations().extension.empire.amortization.settings.planetSettings.global
-                                            .deselectItems
+                                            .resetItemProductionBoosts
                                     "
-                                    @click="deselectAllItems()"
+                                    @click="resetItemProductionBoosts()"
                                 />
                                 <button
                                     v-text="
@@ -674,6 +674,7 @@
 </template>
 
 <script setup lang="ts">
+import { getItemBonus } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
 import Checkbox from '@stats/components/common/Checkbox.vue';
 import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
 import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
@@ -691,7 +692,7 @@ import { AllianceClass } from '@ogame-tracker/shared/models/ogame/classes/Allian
 import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
 import { addCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
 import type { Cost } from '@ogame-tracker/shared/models/ogame/common/Cost';
-import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
+import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import AmortizationPlanetSettingsInputs from '../../components/empire/amortization/AmortizationPlanetSettingsInputs.vue';
@@ -751,6 +752,8 @@ import { startOfToday, subDays } from 'date-fns';
 import { AmortizationExpeditionResultsBreakdown } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
 import type { AmortizationExpeditionResultsBreakdownOptions } from '@ogame-tracker/shared/models/empire/amortization/AmortizationExpeditionResultsBreakdown';
 import { getItemSlotBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getItemSlotBonus';
+import { getExpeditionItemFindBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus';
+import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
 import { getPlanetExpeditionState, getPlanetState } from '@ogame-tracker/shared/models/empire/amortization/utils';
 
 type AmortizationViewItem = AmortizationItem & {
@@ -796,7 +799,8 @@ const expoBreakdown = shallowRef(
             admiral: false,
             astrophysicsLevel: 0,
             itemBonusSlots: 0,
-            expeditionBoostItems: [],
+            improvedChancesItemActive: false,
+            itemResourceBoost: 0,
             fleetFindsResourceFactors: createRecord(ResourceTypes, () => 0),
             planets: {},
             serverSettings: {
@@ -957,7 +961,7 @@ const astrophysicsSettings = ref<AmortizationPlanetSettings>({
     name: '',
     position: 8,
     maxTemperature: getAverageTemperature(8),
-    activeItems: [],
+    itemProductionBoost: createRecord(ResourceTypes, 0),
     crawlers: {
         percentage: 100,
         count: 0,
@@ -983,6 +987,7 @@ const includeSettings = ref<AmortizationGenerationSettings['include']>({
 const expeditionSettings = ref<AmortizationExpeditionSettings>({
     wavesPerDay: 8,
     items: [],
+    itemResourceBoost: 0,
     fleetUnitsFactors: {
         metal: 0.35,
         crystal: 0.35,
@@ -1116,7 +1121,10 @@ function initSettings() {
                     crystalMine: planet.buildings[BuildingType.crystalMine],
                     deuteriumSynthesizer: planet.buildings[BuildingType.deuteriumSynthesizer],
                 },
-                activeItems: Object.keys(planet.activeItems) as ItemId[],
+                itemProductionBoost: createRecord(
+                    ResourceTypes,
+                    resource => Math.round(getItemBonus(resource, planet.activeItems) * 10000) / 100,
+                ),
                 crawlers: {
                     percentage: planet.productionSettings[ShipType.crawler],
                     count: planet.ships[ShipType.crawler],
@@ -1150,6 +1158,8 @@ function initSettings() {
 
     const expoSlotItems = Object.keys(Object.values(localEmpire.planets)[0].activeItems) as ItemId[];
     const bonusExpoSlots = getItemSlotBonus(createRecord(expoSlotItems, _ => 'permanent' as const));
+    const itemResourceBoost =
+        Math.round(getExpeditionItemFindBonus(ExpeditionEventType.resources, expoSlotItems) * 10000) / 100;
 
     const days = Array.from({ length: 7 }).map((_, i) => subDays(startOfToday(), i + 1).getTime());
     const expoCounts = days
@@ -1173,7 +1183,10 @@ function initSettings() {
             admiral: playerSettings.value.officers.admiral,
             astrophysicsLevel: playerSettings.value.levelAstrophysics,
             itemBonusSlots: bonusExpoSlots,
-            expeditionBoostItems: expoSlotItems,
+            improvedChancesItemActive: expoSlotItems.some(
+                id => Items[id]?.effect?.type === 'expeditionImprovedChances',
+            ),
+            itemResourceBoost,
             fleetFindsResourceFactors: {
                 metal: settings.expeditionFoundShipsResourceUnits.factor,
                 crystal: settings.expeditionFoundShipsResourceUnits.factor,
@@ -1191,6 +1204,7 @@ function initSettings() {
 
     expeditionSettings.value = {
         items: expoSlotItems,
+        itemResourceBoost,
         wavesPerDay: avgWaves,
         fleetUnitsFactors: {
             metal: settings.expeditionFoundShipsResourceUnits.factor,
@@ -1499,8 +1513,8 @@ function showNormalItems() {
     groupedItems.value = {};
 }
 
-function deselectAllItems() {
-    planetSettingsSorted.value.forEach(p => (p.activeItems = []));
+function resetItemProductionBoosts() {
+    planetSettingsSorted.value.forEach(p => (p.itemProductionBoost = createRecord(ResourceTypes, 0)));
 }
 
 function ignoreAllInactiveSlots() {
