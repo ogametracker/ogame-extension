@@ -122,6 +122,7 @@
                         v-for="resource in ResourceTypes"
                         :key="resource"
                         :value="prodItem.itemProductionBoost[resource]"
+                        :digits="0"
                         suffix="%"
                     />
                 </div>
