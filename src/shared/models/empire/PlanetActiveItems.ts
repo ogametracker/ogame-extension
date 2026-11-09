@@ -12,10 +12,11 @@ export function setActiveItemExpiry<Key extends string>(
     key: Key,
     expiry: ItemExpiry,
 ): void {
-    const previous = items[key];
-    if (previous == null || expiry === 'permanent' || (typeof previous === 'number' && expiry > previous)) {
-        items[key] = expiry;
+    if (typeof expiry === 'number' && expiry < Date.now()) {
+        return;
     }
+
+    items[key] = expiry;
 }
 
 export function resolveActiveItems(hashes: ActiveItemHashes): PlanetActiveItems {

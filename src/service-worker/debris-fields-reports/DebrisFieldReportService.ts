@@ -1,4 +1,4 @@
-import { Message, MessageOgameMeta } from '@ogame-tracker/shared/messages/Message';
+import { Message } from '@ogame-tracker/shared/messages/Message';
 import { MessageType } from '@ogame-tracker/shared/messages/MessageType';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { MessageService } from '../MessageService';
