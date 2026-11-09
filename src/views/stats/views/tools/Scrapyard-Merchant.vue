@@ -1,7 +1,7 @@
 <template>
     <div class="scrapyard-merchant">
         <div>
-            <input type="number" min="35" max="75" step="1" :value="percentage" @input="setPercentage($event)" />
+            <input type="number" min="35" max="100" step="1" :value="percentage" @change="setPercentage($event)" />
             <span v-text="translations().extension.tools.scrapyardMerchant.percentage" />
         </div>
 
@@ -67,7 +67,7 @@ const percentage = ref(35);
 const percentageComputed = computed({
     get: () => percentage.value,
     set: (value: number) => {
-        percentage.value = Math.max(35, Math.min(75, Math.trunc(value)));
+        percentage.value = Math.max(35, Math.min(100, Math.trunc(value)));
     },
 });
 
@@ -133,11 +133,11 @@ const items = computed<(Ship | Defense)[]>(() => {
     return [...ShipTypes.map(type => ShipByTypes[type]), ...DefenseTypes.map(type => DefenseByTypes[type])];
 });
 
-async function setPercentage(event: InputEvent) {
+async function setPercentage(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = parseInt(input.value);
 
-    const localPercentage = isNaN(value) ? 0 : Math.max(35, Math.min(75, Math.trunc(value)));
+    const localPercentage = isNaN(value) ? 0 : Math.max(35, Math.min(100, Math.trunc(value)));
 
     percentage.value = value;
     await nextTick();
