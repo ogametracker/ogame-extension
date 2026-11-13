@@ -25,29 +25,20 @@
                 <input type="number" v-model.number="settings.maxTemperature" min="-130" max="260" step="1" />
             </span>
 
-            <span v-text="translations().extension.empire.amortization.settings.planetSettings.activeItems" />
-            <span class="item-grid">
-                <OItem
-                    v-for="item in boosterItems.metal"
-                    :key="item"
-                    :item="item"
-                    :disabled="item != activeBooster.metal"
-                    @click="toggleBooster(item, ResourceType.metal)"
-                />
-                <OItem
-                    v-for="item in boosterItems.crystal"
-                    :key="item"
-                    :item="item"
-                    :disabled="item != activeBooster.crystal"
-                    @click="toggleBooster(item, ResourceType.crystal)"
-                />
-                <OItem
-                    v-for="item in boosterItems.deuterium"
-                    :key="item"
-                    :item="item"
-                    :disabled="item != activeBooster.deuterium"
-                    @click="toggleBooster(item, ResourceType.deuterium)"
-                />
+            <span v-text="translations().extension.empire.amortization.settings.planetSettings.itemProductionBoost" />
+            <span class="item-boost-grid">
+                <label v-for="resource in ResourceTypes" :key="resource">
+                    <OResource :resource="resource" size="24px" />
+                    <input
+                        type="number"
+                        :value="settings.itemProductionBoost[resource]"
+                        @input="setItemProductionBoost(resource, $event)"
+                        min="0"
+                        step="any"
+                        :aria-label="translations().ogame.resources[resource]"
+                    />
+                    <span>%</span>
+                </label>
             </span>
 
             <span v-text="translations().extension.empire.amortization.settings.planetSettings.crawlers.title" />
@@ -189,14 +180,13 @@
 import Checkbox from '@stats/components/common/Checkbox.vue';
 import CheckboxButton from '@stats/components/common/CheckboxButton.vue';
 import OBuilding from '@stats/components/ogame/OBuilding.vue';
-import OItem from '@ogame-tracker/view-shared/components/ogame/OItem.vue';
+import OResource from '@ogame-tracker/view-shared/components/ogame/OResource.vue';
 import OLifeform from '@ogame-tracker/view-shared/components/ogame/OLifeform.vue';
 import OLifeformBuilding from '@stats/components/ogame/OLifeformBuilding.vue';
 import OLifeformTechnology from '@stats/components/ogame/OLifeformTechnology.vue';
 import { computed, ref, watch } from 'vue';
 import { translations } from '@stats/i18n';
 import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/BuildingType';
-import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import {
     AnyBuildingCostAndTimeReductionLifeformBuildings,
     LifeformTechnologyBonusLifeformBuildings,
@@ -221,7 +211,7 @@ import type { PropType } from 'vue';
 import { getAverageTemperature } from '@ogame-tracker/shared/models/ogame/resource-production/getAverageTemperature';
 import type { AmortizationPlanetSettings } from '@ogame-tracker/shared/models/empire/amortization/AmortizationPlanetSettings';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
-import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { ResourceTypes, type ResourceType } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
 
 const props = defineProps({
     planetData: { required: false, type: Object as PropType<PlanetData | null> },
@@ -296,38 +286,9 @@ function onAstrophysicsSettingsPlanetPositionChanged(newPosition: number) {
     settings.value.maxTemperature = getAverageTemperature(newPosition);
 }
 
-const boosterItems: Record<ResourceType, ItemId[]> = {
-    metal: [
-        'metalBooster_10percent_7days',
-        'metalBooster_20percent_7days',
-        'metalBooster_30percent_7days',
-        'metalBooster_40percent_7days',
-    ],
-    crystal: [
-        'crystalBooster_10percent_7days',
-        'crystalBooster_20percent_7days',
-        'crystalBooster_30percent_7days',
-        'crystalBooster_40percent_7days',
-    ],
-    deuterium: [
-        'deuteriumBooster_10percent_7days',
-        'deuteriumBooster_20percent_7days',
-        'deuteriumBooster_30percent_7days',
-        'deuteriumBooster_40percent_7days',
-    ],
-};
-
-function getBoosterOption(id: ItemId, resource: ResourceType): ItemId | undefined {
-    const effect = Items[id]?.effect;
-    const bonuses = effect?.type === 'resourceProductionBonus' ? effect.value : undefined;
-    const bonus = bonuses?.[resource];
-    if (bonuses == null || bonus == null || Object.keys(bonuses).length !== 1) {
-        return undefined;
-    }
-    return boosterItems[resource].find(option => {
-        const optionEffect = Items[option]?.effect;
-        return optionEffect?.type === 'resourceProductionBonus' && optionEffect.value[resource] === bonus;
-    });
+function setItemProductionBoost(resource: ResourceType, event: Event) {
+    const value = Number((event.target as HTMLInputElement).value);
+    settings.value.itemProductionBoost[resource] = Number.isFinite(value) ? Math.max(0, value) : 0;
 }
 
 const showLifeformSettings = ref(false);
@@ -335,24 +296,6 @@ const showLifeformSettings = ref(false);
 const isCrawlerOverloadEnabled = computed(
     () => serverSettingsStore.serverSettings.playerClasses.collector.crawlers.isOverloadEnabled,
 );
-
-const activeBooster = computed(() => {
-    const selected = (resource: ResourceType) =>
-        boosterItems[resource].find(option =>
-            settings.value.activeItems.some(id => getBoosterOption(id, resource) === option),
-        );
-
-    return {
-        metal: selected(ResourceType.metal),
-        crystal: selected(ResourceType.crystal),
-        deuterium: selected(ResourceType.deuterium),
-    };
-});
-
-function toggleBooster(item: ItemId, resource: ResourceType) {
-    const remaining = settings.value.activeItems.filter(id => getBoosterOption(id, resource) == null);
-    settings.value.activeItems = activeBooster.value[resource] === item ? remaining : [...remaining, item];
-}
 
 function toggleLifeform(lifeform: LifeformType) {
     if (settings.value.lifeform == lifeform) {
@@ -418,14 +361,14 @@ input[type='number'] {
     width: 60px;
 }
 
-.item-grid {
+.item-boost-grid {
     display: grid;
-    grid-template-columns: repeat(4, auto);
-    width: max-content;
     gap: 4px;
 
-    > .o-item {
-        cursor: pointer;
+    > label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 }
 

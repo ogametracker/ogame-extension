@@ -26,7 +26,7 @@ export interface EmpireTranslations {
             crawlersAvailable: string;
             crawlersToReachLimit: (count: string) => string;
         };
-        items: string;
+        itemProductionBoost: string;
         breakdown: {
             basicIncome: string;
             mineProduction: string;
@@ -97,7 +97,7 @@ export interface EmpireTranslations {
                 header: string;
 
                 global: {
-                    deselectItems: string;
+                    resetItemProductionBoosts: string;
                     ignoreInactiveLifeformTechnologySlots: string;
                     deselectAllPlanets: string;
                 };
@@ -105,7 +105,7 @@ export interface EmpireTranslations {
                 includeInResult: string;
                 position: string;
                 maxTemperature: string;
-                activeItems: string;
+                itemProductionBoost: string;
                 crawlers: {
                     title: string;
                     percentage: string;

@@ -58,7 +58,6 @@
             sticky="100%"
             :footerItems="footerItems"
             class="resources-production-table"
-            :style="`--item-count: ${maxItemCount}`"
             v-show="!showProductionSettings"
         >
             <template #header-metal>
@@ -76,7 +75,7 @@
             </template>
 
             <template #header-productionSettings>
-                <div class="production-settings-mini-table">
+                <div class="production-settings-mini-table production-settings-mini-table--header">
                     <span class="header" v-text="translations().extension.empire.production.activeProductionSettings" />
                     <OBuilding :building="BuildingType.metalMine" />
                     <OBuilding :building="BuildingType.crystalMine" />
@@ -86,9 +85,10 @@
                     <OShip :ship="ShipType.solarSatellite" />
                     <OShip :ship="ShipType.crawler" />
                     <span
-                        style="grid-column: auto / span 4"
-                        v-text="translations().extension.empire.production.items"
+                        class="item-boost-header"
+                        v-text="translations().extension.empire.production.itemProductionBoost"
                     />
+                    <OResource v-for="resource in ResourceTypes" :key="resource" :resource="resource" size="24px" />
                 </div>
             </template>
 
@@ -118,10 +118,13 @@
                     <span v-text="settings.solarSatellite" />
                     <span v-text="settings.crawler" />
 
-                    <template v-for="(item, i) in getActiveItems(prodItem)" :key="i">
-                        <span v-if="item == null" />
-                        <OItem v-else :item="item" size="24px" />
-                    </template>
+                    <DecimalNumber
+                        v-for="resource in ResourceTypes"
+                        :key="resource"
+                        :value="prodItem.itemProductionBoost[resource]"
+                        :digits="0"
+                        suffix="%"
+                    />
                 </div>
             </template>
 
@@ -273,6 +276,7 @@
 
 <script setup lang="ts">
 import { ResourceType, ResourceTypes } from '@ogame-tracker/shared/models/ogame/resources/ResourceType';
+import { getItemBonus } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
 import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
 import FloatingMenu from '@stats/components/common/FloatingMenu.vue';
 import GridTable from '@stats/components/common/GridTable.vue';
@@ -288,7 +292,6 @@ import { BuildingType } from '@ogame-tracker/shared/models/ogame/buildings/Build
 import type { Coordinates } from '@ogame-tracker/shared/models/ogame/common/Coordinates';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
 import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
-import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import { useSettingsStore } from '@stats/data/SettingsDataModule';
 import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
 import type { CrawlerProductionPercentage } from '@ogame-tracker/shared/models/empire/CrawlerProductionPercentage';
@@ -327,7 +330,7 @@ interface ProductionItem {
     totalConverted: number;
 
     productionSettings: ProductionSettingsItem;
-    activeItems: ItemId[];
+    itemProductionBoost: Record<ResourceType, number>;
 
     isResourcePackageRow?: boolean;
 }
@@ -414,7 +417,6 @@ const empire = computed<LocalPlayerData>(() => {
         const planet = localEmpire.planets[ps.id] as PlanetData;
         planet.maxTemperature = ps.maxTemperature;
         planet.coordinates.position = ps.position;
-        planet.activeItems = createRecord(ps.activeItems, 'permanent');
         planet.buildings[BuildingType.metalMine] = ps.mines?.metalMine ?? _throw('no metal mine level');
         planet.buildings[BuildingType.crystalMine] = ps.mines?.crystalMine ?? _throw('no crystal mine level');
         planet.buildings[BuildingType.deuteriumSynthesizer] =
@@ -461,7 +463,10 @@ function getPlanetSettings(): AmortizationPlanetSettings[] {
         position: planet.coordinates.position,
         coordinates: planet.coordinates,
         maxTemperature: planet.maxTemperature,
-        activeItems: Object.keys(planet.activeItems) as ItemId[],
+        itemProductionBoost: createRecord(
+            ResourceTypes,
+            resource => Math.round(getItemBonus(resource, planet.activeItems) * 10000) / 100,
+        ),
         lifeform: planet.activeLifeform,
         activeLifeformTechnologies: [...planet.activeLifeformTechnologies],
         lifeformBuildingLevels: { ...planet.lifeformBuildings },
@@ -512,16 +517,16 @@ const columns = computed<GridTableColumn<keyof ProductionItem | 'breakdown'>[]>(
     return result;
 });
 
-const maxItemCount = computed(() =>
-    items.value.reduce((max, item) => Math.max(max, item.activeItems.length), -Infinity),
-);
-
 const productionBreakdowns = computed(() => {
     const lifeformExperience = createRecord(ValidLifeformTypes, lf =>
         getLifeformExperienceNeededForLevel(playerSettings.value.lifeformLevels[lf]),
     );
 
-    return getProductionBreakdowns(empire.value, lifeformExperience);
+    return getProductionBreakdowns(
+        empire.value,
+        lifeformExperience,
+        Object.fromEntries(planetSettings.value.map(settings => [settings.id, settings.itemProductionBoost])),
+    );
 });
 
 const fusionReactorConsumptions = computed<Record<number, number>>(() => {
@@ -594,7 +599,7 @@ const items = computed<ProductionItem[]>(() => {
                 crawler: settings.crawlers.percentage,
             },
 
-            activeItems: settings.activeItems,
+            itemProductionBoost: settings.itemProductionBoost,
         };
     });
 });
@@ -636,7 +641,7 @@ const footerItems = computed<ProductionItem[]>(() => {
             totalConverted: totalConvertedPerHour / planets.value.length,
 
             productionSettings: null!,
-            activeItems: [],
+            itemProductionBoost: createRecord(ResourceTypes, 0),
         },
         {
             planet: {
@@ -652,7 +657,7 @@ const footerItems = computed<ProductionItem[]>(() => {
             totalConverted: totalConvertedPerHour,
 
             productionSettings: null!,
-            activeItems: [],
+            itemProductionBoost: createRecord(ResourceTypes, 0),
         },
         {
             planet: {
@@ -668,7 +673,7 @@ const footerItems = computed<ProductionItem[]>(() => {
             totalConverted: totalConvertedPerHour * 24,
 
             productionSettings: null!,
-            activeItems: [],
+            itemProductionBoost: createRecord(ResourceTypes, 0),
         },
         {
             planet: {
@@ -684,7 +689,7 @@ const footerItems = computed<ProductionItem[]>(() => {
             totalConverted: totalConvertedPerHour * 24 * 7,
 
             productionSettings: null!,
-            activeItems: [],
+            itemProductionBoost: createRecord(ResourceTypes, 0),
         },
         {
             isResourcePackageRow: true,
@@ -705,7 +710,7 @@ const footerItems = computed<ProductionItem[]>(() => {
             }),
 
             productionSettings: null!,
-            activeItems: [],
+            itemProductionBoost: createRecord(ResourceTypes, 0),
         },
     ];
 });
@@ -731,22 +736,6 @@ const planets = computed<PlanetData[]>(() => {
             (a, b) => empireStore.empire.planetOrder.indexOf(a.id) - empire.value.planetOrder.indexOf(b.id),
         ) as PlanetData[];
 });
-
-function getActiveItems(item: ProductionItem): (ItemId | null)[] {
-    const resourceItems = ResourceTypes.map(
-        resource =>
-            item.activeItems.find(id => {
-                const effect = Items[id]?.effect;
-                return (
-                    effect?.type === 'resourceProductionBonus'
-                    && effect.value[resource] != null
-                    && Object.keys(effect.value).length === 1
-                );
-            }) ?? null,
-    );
-    const energyItem = item.activeItems.find(id => Items[id]?.effect?.type === 'energyProductionBonus');
-    return [...resourceItems, energyItem ?? null];
-}
 
 watch(() => playerSettings.value.playerClass, onPlayerClassSelectionChanged);
 
@@ -788,14 +777,23 @@ onMounted(() => {
 
 .production-settings-mini-table {
     display: grid;
-    grid-template-columns: repeat(7, 1fr) repeat(4, 24px);
+    grid-template-columns: repeat(7, 1fr) repeat(3, minmax(48px, auto));
     width: 100%;
     justify-items: center;
     align-items: center;
     gap: 8px;
 
+    &--header > :not(.header):not(.item-boost-header) {
+        grid-row: 3;
+    }
+
+    > .item-boost-header {
+        grid-row: 2;
+        grid-column: 8 / -1;
+    }
+
     > .header {
-        grid-column: 1 / span 11;
+        grid-column: 1 / -1;
     }
     > * {
         padding: 0 4px;
