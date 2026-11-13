@@ -24,15 +24,19 @@
             </span>
 
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.resourceFindItems" />
-            <span class="item-grid">
-                <OItem
-                    v-for="item in resourceBonusItems"
-                    :key="item"
-                    :item="item"
-                    :disabled="!settings.items.includes(item)"
-                    @click="toggleResourceFindBonusItem(item)"
+            <label class="item-resource-boost">
+                <input
+                    type="number"
+                    :value="settings.itemResourceBoost"
+                    @input="setItemResourceBoost($event)"
+                    min="0"
+                    step="any"
+                    :aria-label="
+                        translations().extension.empire.amortization.settings.expeditionSettings.resourceFindItems
+                    "
                 />
-            </span>
+                <span>%</span>
+            </label>
 
             <span
                 v-text="translations().extension.empire.amortization.settings.expeditionSettings.improvedChanceItems"
@@ -139,16 +143,6 @@ const slotItems: ItemId[] = [
     'expeditionslots_3slots_7days',
 ];
 
-const resourceBonusItems: ItemId[] = [
-    'expedition_resourceBoost_10percent_7days',
-    'expedition_resourceBoost_15percent_7days',
-    'expedition_resourceBoost_20percent_7days',
-    'expedition_resourceBoost_25percent_7days',
-    'expedition_resourceBoost_30percent_7days',
-    'expedition_resourceBoost_35percent_7days',
-    'expedition_resourceBoost_40percent_7days',
-];
-
 const chanceBonusItems: ItemId[] = ['expedition_improvedChances_7days'];
 
 function onSettingsChanged() {
@@ -175,6 +169,10 @@ function onSettingsChanged() {
         createRecord(settings.value.items, _ => 'permanent' as const),
     );
     props.breakdown.options.fleetFindsResourceFactors = settings.value.fleetUnitsFactors;
+    props.breakdown.options.itemResourceBoost = settings.value.itemResourceBoost;
+    props.breakdown.options.improvedChancesItemActive = settings.value.items.some(
+        id => Items[id]?.effect?.type === 'expeditionImprovedChances',
+    );
     props.breakdown.options.serverSettings = settings.value.serverSettings;
 
     if (topScores.value[settings.value.serverSettings.topScore] == null) {
@@ -200,21 +198,9 @@ function toggleItem(item: ItemId) {
     }
 }
 
-function toggleResourceFindBonusItem(item: ItemId) {
-    if (!toggleItem(item)) {
-        return;
-    }
-
-    for (const itemId of resourceBonusItems) {
-        if (itemId == item) {
-            continue;
-        }
-
-        const index = settings.value.items.indexOf(itemId);
-        if (index >= 0) {
-            settings.value.items.splice(index, 1);
-        }
-    }
+function setItemResourceBoost(event: Event) {
+    const value = Number((event.target as HTMLInputElement).value);
+    settings.value.itemResourceBoost = Number.isFinite(value) ? Math.max(0, value) : 0;
 }
 
 watch(() => settings.value, onSettingsChanged, { immediate: true, deep: true });
@@ -259,6 +245,12 @@ input[type='number'] {
 
 .topScore {
     width: 100%;
+}
+
+.item-resource-boost {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .item-grid {

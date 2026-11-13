@@ -8,7 +8,6 @@ import {
     ProductionBuildingDependencies,
 } from '@ogame-tracker/shared/models/ogame/buildings/ProductionBuilding';
 import { addCost, Cost, multiplyCost, multiplyCostInt, subCost } from '@ogame-tracker/shared/models/ogame/common/Cost';
-import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import {
     AnyBuildingCostAndTimeReductionLifeformBuilding,
     AnyBuildingType,
@@ -49,7 +48,6 @@ import { Astrophysics } from '@ogame-tracker/shared/models/ogame/research/Astrop
 import { PlasmaTechnology } from '@ogame-tracker/shared/models/ogame/research/PlasmaTechnology';
 import { ResearchType } from '@ogame-tracker/shared/models/ogame/research/ResearchType';
 import { getCrystalBaseProduction } from '@ogame-tracker/shared/models/ogame/resource-production/getCrystalProduction';
-import { getItemBonus } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
 import { getMetalBaseProduction } from '@ogame-tracker/shared/models/ogame/resource-production/getMetalProduction';
 import {
     EmpireProductionBreakdown,
@@ -64,6 +62,7 @@ import { _throw } from '@ogame-tracker/shared/utils/_throw';
 import { ExpeditionEventType, ExpeditionEventTypes } from '../../expeditions/ExpeditionEventType';
 import { PlayerClass } from '../../ogame/classes/PlayerClass';
 import { getItemSlotBonus } from '../../ogame/expeditions/getItemSlotBonus';
+import { Items } from '../../ogame/items/Items.generated';
 import { LifeformBuilding } from '../../ogame/lifeforms/buildings/LifeformBuilding';
 import { getTechnologyBonusFactor } from '../../ogame/lifeforms/utils';
 import { AmortizationAstrophysicsSettings } from './AmortizationAstrophysicsSettings';
@@ -289,7 +288,7 @@ export class AmortizationItemGenerator {
                     serverEconomySpeed: this.#serverSettings.speed.economy,
                 }),
                 mineProduction: MetalMine.getProduction(levelMetalMine, planetState.productionBuildingDependencies),
-                itemBonusProductionFactor: getItemBonus(ResourceType.metal, planetState.data.activeItems),
+                itemBonusProductionFactor: _.itemProductionBoost.metal / 100,
                 ...baseProductionConfig,
                 lifeformBuildingBonusProductionFactor: baseProductionConfig.lifeformBuildingBonusProductionFactor.metal,
                 lifeformTechnologyBonusProductionFactor:
@@ -303,7 +302,7 @@ export class AmortizationItemGenerator {
                     serverPositionBoost: this.#serverSettings.resourceProduction.productionFactorBonus.crystal,
                 }),
                 mineProduction: CrystalMine.getProduction(levelCrystalMine, planetState.productionBuildingDependencies),
-                itemBonusProductionFactor: getItemBonus(ResourceType.crystal, planetState.data.activeItems),
+                itemBonusProductionFactor: _.itemProductionBoost.crystal / 100,
                 ...baseProductionConfig,
                 lifeformBuildingBonusProductionFactor:
                     baseProductionConfig.lifeformBuildingBonusProductionFactor.crystal,
@@ -317,7 +316,7 @@ export class AmortizationItemGenerator {
                     levelDeuteriumSynthesizer,
                     planetState.productionBuildingDependencies,
                 ),
-                itemBonusProductionFactor: getItemBonus(ResourceType.deuterium, planetState.data.activeItems),
+                itemBonusProductionFactor: _.itemProductionBoost.deuterium / 100,
                 ...baseProductionConfig,
                 lifeformBuildingBonusProductionFactor:
                     baseProductionConfig.lifeformBuildingBonusProductionFactor.deuterium,
@@ -405,7 +404,10 @@ export class AmortizationItemGenerator {
             astrophysicsLevel: researchLevels[ResearchType.astrophysics],
             fleetFindsResourceFactors: this.#settings.expeditions.fleetUnitsFactors,
             itemBonusSlots: getItemSlotBonus(globalActiveItems),
-            expeditionBoostItems: this.#settings.expeditions.items,
+            improvedChancesItemActive: this.#settings.expeditions.items.some(
+                id => Items[id]?.effect?.type === 'expeditionImprovedChances',
+            ),
+            itemResourceBoost: this.#settings.expeditions.itemResourceBoost,
             playerClass: this.#settings.player.playerClass,
             serverSettings: {
                 discovererExpeditionSlotBonus: this.#serverSettings.playerClasses.discoverer.bonusExpeditionSlots,
@@ -731,11 +733,6 @@ export class AmortizationItemGenerator {
 
         const planetSettings = this.#settings.astrophysics;
         const position = planetSettings.position;
-        const items = planetSettings.activeItems.reduce<Partial<Record<ItemId, 'permanent'>>>((acc, cur) => {
-            acc[cur] = 'permanent';
-            return acc;
-        }, {});
-
         const lifeformExperienceBonus = createRecord(LifeformTypes, lf =>
             lf == LifeformType.none ? 0 : getLifeformLevelTechnologyBonus(this.#lifeformExperience[lf]),
         );
@@ -763,7 +760,7 @@ export class AmortizationItemGenerator {
                     serverEconomySpeed: this.#serverSettings.speed.economy,
                 }),
                 mineProduction: 0,
-                itemBonusProductionFactor: getItemBonus(ResourceType.metal, items),
+                itemBonusProductionFactor: planetSettings.itemProductionBoost.metal / 100,
                 ...baseProductionConfig,
             },
             crystal: {
@@ -773,13 +770,13 @@ export class AmortizationItemGenerator {
                     serverPositionBoost: this.#serverSettings.resourceProduction.productionFactorBonus.crystal,
                 }),
                 mineProduction: 0,
-                itemBonusProductionFactor: getItemBonus(ResourceType.crystal, items),
+                itemBonusProductionFactor: planetSettings.itemProductionBoost.crystal / 100,
                 ...baseProductionConfig,
             },
             deuterium: {
                 baseProduction: 0,
                 mineProduction: 0,
-                itemBonusProductionFactor: getItemBonus(ResourceType.deuterium, items),
+                itemBonusProductionFactor: planetSettings.itemProductionBoost.deuterium / 100,
                 ...baseProductionConfig,
             },
         };
