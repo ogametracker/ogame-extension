@@ -182,7 +182,7 @@ const isAnyOptionSet = computed(() => {
         });
     };
 
-    return isSet(exportOptions);
+    return isSet(exportOptions.value);
 });
 
 async function generateExport() {
