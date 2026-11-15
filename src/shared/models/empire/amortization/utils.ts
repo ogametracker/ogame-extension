@@ -1,5 +1,5 @@
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
-import { ExpeditionEventTypes } from '../../expeditions/ExpeditionEventType';
+import { getActiveLifeformTechnologyLevels } from '../../expeditions/getExpeditionLifeformBonuses';
 import { PlayerClass } from '../../ogame/classes/PlayerClass';
 import { AmortizationPlanetState } from './AmortizationItemGenerator';
 import { AmortizationExpeditionResultsPlanetState } from './AmortizationExpeditionResultsBreakdown';
@@ -46,32 +46,12 @@ export const $mineBuildingTypes: MineBuildingType[] = [
 export function getPlanetExpeditionState(
     planetState: AmortizationPlanetState,
 ): AmortizationExpeditionResultsPlanetState {
-    const state: AmortizationExpeditionResultsPlanetState = {
+    return {
         id: planetState.data.id,
         lifeformExperienceBoost: planetState.lifeformExperienceBoost,
-        lifeformTechnologyBoost: planetState.lifeformTechnologyBoost,
-        discovererClassBonusFactor: getPlanetDiscovererClassBonusFactor(planetState),
-        lifeformTechnologyExpeditionBonusFactor: getLifeformTechnologyExpeditionBonusFactor(planetState),
+        lifeformTechnologyBoost: getPlanetLifeformTechnologyBoost(planetState),
+        activeTechnologyLevels: getActiveLifeformTechnologyLevels(planetState.data),
     };
-    return state;
-}
-
-export function getPlanetDiscovererClassBonusFactor(planetState: AmortizationPlanetState) {
-    return planetState.discovererClassBonusTechnologies.reduce(
-        (total, tech) =>
-            total + tech.getClassBonus(PlayerClass.discoverer, planetState.data.lifeformTechnologies[tech.type] ?? 0),
-        0,
-    );
-}
-
-export function getLifeformTechnologyExpeditionBonusFactor(planetState: AmortizationPlanetState) {
-    return createRecord(ExpeditionEventTypes, eventType =>
-        planetState.lifeformExpeditionBonusTechnologies.reduce(
-            (total, tech) =>
-                total + tech.getExpeditionBonus(eventType, planetState.data.lifeformTechnologies[tech.type] ?? 0),
-            0,
-        ),
-    );
 }
 
 export function getPlanetLifeformTechnologyBoost(

@@ -62,12 +62,13 @@ import type { GridTableColumn } from '@stats/components/common/GridTable.vue';
 import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
 import { getLifeformBonusLimit } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusLimits';
 import { LifeformBonusTypeId } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformBonusType';
+import { getLifeformTechnologyBonusBreakdown } from '@ogame-tracker/shared/models/ogame/lifeforms/utils';
+import { getDiscovererExpeditionFactor } from '@ogame-tracker/shared/models/expeditions/getExpeditionFindAmounts';
 
 type ClassBonusBreakdown = {
     base: number;
     level: number;
     buildings: number;
-    buildingsBoost: number;
     total: number;
 };
 
@@ -172,7 +173,11 @@ function getDiscovererClassBonusesRows(classBonus: number): ClassBonusValues[] {
             label: translations().extension.empire.lifeforms.researchBonuses.playerClasses.discoverer
                 .increasedExpeditionFinds,
             base: serverSettings.value.playerClasses.discoverer.expeditions.outcomeFactorBonus,
-            actual: serverSettings.value.playerClasses.discoverer.expeditions.outcomeFactorBonus * (1 + classBonus * 3), //TODO: fix formula when discoverer bonus formula fixed
+            actual:
+                getDiscovererExpeditionFactor(
+                    serverSettings.value.playerClasses.discoverer.expeditions.outcomeFactorBonus,
+                    classBonus,
+                ) - 1,
             isPercentage: true,
         },
         {
@@ -323,27 +328,15 @@ function getPlanetBonus(tech: ClassBonusLifeformTechnology, planet: PlanetData):
             base: 0,
             level: 0,
             buildings: 0,
-            buildingsBoost: 0,
             total: 0,
         };
     }
 
-    const buildingsBoost = Math.min(
+    return getLifeformTechnologyBonusBreakdown(
+        tech.getClassBonus(playerClass.value, planet.lifeformTechnologies[tech.type]),
         getPlanetLifeformTechnologyBoost(planet)[tech.type],
-        getLifeformBonusLimit({ type: LifeformBonusTypeId.LifeformResearchBonusBoost }) ?? Number.MAX_SAFE_INTEGER,
+        getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform]),
     );
-
-    const baseBonus = tech.getClassBonus(playerClass.value, planet.lifeformTechnologies[tech.type]);
-    const lifeformLevelBonus = baseBonus * getLifeformLevelTechnologyBonus(experience.value[planet.activeLifeform]);
-    const lifeformBuildingBonus = baseBonus * buildingsBoost;
-
-    return {
-        base: baseBonus,
-        level: lifeformLevelBonus,
-        buildings: lifeformBuildingBonus,
-        buildingsBoost,
-        total: baseBonus + lifeformLevelBonus + lifeformBuildingBonus,
-    };
 }
 
 onMounted(() => {

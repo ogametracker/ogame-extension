@@ -91,7 +91,7 @@
             <span v-text="translations().extension.empire.amortization.settings.expeditionSettings.topPlayerScore" />
             <span>
                 <select v-model.number.lazy="settings.serverSettings.topScore">
-                    <option v-for="(text, value) in topScores" :key="value" :value="value" v-text="text" />
+                    <option v-for="tier in topScores" :key="tier.score" :value="tier.score" v-text="tier.label" />
                 </select>
             </span>
         </div>
@@ -113,6 +113,7 @@ import type { AmortizationPlayerSettings } from '@ogame-tracker/shared/models/em
 import { getItemSlotBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getItemSlotBonus';
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { parseIntSafe } from '@ogame-tracker/shared/utils/parseNumbers';
+import { expeditionFindScoreTiers } from '@ogame-tracker/shared/models/expeditions/getExpeditionFindFactor';
 
 const props = defineProps({
     playerSettings: { required: true, type: Object as PropType<AmortizationPlayerSettings> },
@@ -124,18 +125,15 @@ const settings = defineModel<AmortizationExpeditionSettings>({
     type: Object as PropType<AmortizationExpeditionSettings>,
 });
 
-const topScores = computed<Record<number, string>>(() => {
-    return {
-        0: `< ${formatNumber(100_000)}`,
-        100_000: `< ${formatNumber(1_000_000)}`,
-        1_000_000: `< ${formatNumber(5_000_000)}`,
-        5_000_000: `< ${formatNumber(25_000_000)}`,
-        25_000_000: `< ${formatNumber(50_000_000)}`,
-        50_000_000: `< ${formatNumber(75_000_000)}`,
-        75_000_000: `< ${formatNumber(100_000_000)}`,
-        100_000_000: `≥ ${formatNumber(100_000_000)}`,
-    };
-});
+const topScores = computed(() =>
+    expeditionFindScoreTiers.map((tier, index) => {
+        const nextTier = expeditionFindScoreTiers[index + 1];
+        return {
+            score: tier.minScore,
+            label: nextTier == null ? `≥ ${formatNumber(tier.minScore)}` : `< ${formatNumber(nextTier.minScore)}`,
+        };
+    }),
+);
 
 const slotItems: ItemId[] = [
     'expeditionslots_1slot_7days',

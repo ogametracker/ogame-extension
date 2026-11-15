@@ -1,25 +1,26 @@
 import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { ExpeditionEventSize, ExpeditionEventSizes } from '../../expeditions/ExpeditionEventSize';
-import { ExpeditionEventType, ExpeditionEventTypes } from '../../expeditions/ExpeditionEventType';
+import { ExpeditionEventType } from '../../expeditions/ExpeditionEventType';
 import { PlayerClass } from '../../ogame/classes/PlayerClass';
-import { addCost, Cost, multiplyCost, multiplyCostComponentWise } from '../../ogame/common/Cost';
-import { getTechnologyBonusFactor } from '../../ogame/lifeforms/utils';
+import { addCost, Cost, multiplyCost } from '../../ogame/common/Cost';
 import { ResourceType, ResourceTypes } from '../../ogame/resources/ResourceType';
-import { getExpeditionFindFactor } from '../../expeditions/getExpeditionFindFactor';
+import {
+    getExpeditionFindAmounts,
+    getExpeditionFindFactors,
+    getExpeditionShipUnits,
+} from '../../expeditions/getExpeditionFindAmounts';
+import {
+    getDiscovererLifeformBonus,
+    getExpeditionLifeformBonuses,
+    type ExpeditionLifeformState,
+} from '../../expeditions/getExpeditionLifeformBonuses';
 import { findBaseAmounts } from '../../expeditions/findBaseAmounts';
 import { ExpeditionFindableShipTypes } from '../../expeditions/ExpeditionEvents';
 import { ShipByTypes } from '../../ogame/ships/ShipTypes';
 import { Reaper } from '../../ogame/ships/Reaper';
-import { LifeformTechnologyType } from '../../ogame/lifeforms/LifeformTechnologyType';
 
-export interface AmortizationExpeditionResultsPlanetState {
+export interface AmortizationExpeditionResultsPlanetState extends ExpeditionLifeformState {
     id: number;
-
-    lifeformTechnologyExpeditionBonusFactor: Record<ExpeditionEventType, number>;
-    discovererClassBonusFactor: number;
-
-    lifeformTechnologyBoost: Record<LifeformTechnologyType, number>;
-    lifeformExperienceBoost: number;
 }
 
 type ApplicableExpeditionEventType = ExpeditionEventType.resources | ExpeditionEventType.fleet;
@@ -39,11 +40,6 @@ const resourceProbabilities: Record<ResourceType, number> = {
     [ResourceType.crystal]: 2 / 6,
     [ResourceType.deuterium]: 1 / 6,
 };
-const resourceFactors: Record<ResourceType, number> = {
-    [ResourceType.metal]: 1,
-    [ResourceType.crystal]: 1 / 2,
-    [ResourceType.deuterium]: 1 / 3,
-};
 const eventSizeProbabilities: Record<ApplicableExpeditionEventType, Record<ExpeditionEventSize, number>> = {
     [ExpeditionEventType.resources]: {
         [ExpeditionEventSize.small]: 0.92_3,
@@ -58,15 +54,15 @@ const eventSizeProbabilities: Record<ApplicableExpeditionEventType, Record<Exped
 };
 
 const largestShip = Reaper;
-const largestShipUnits = largestShip.cost.metal + largestShip.cost.crystal;
+const largestShipUnits = getExpeditionShipUnits(largestShip.cost);
 const scaledCosts = ExpeditionFindableShipTypes.map(shipType => {
     const ship = ShipByTypes[shipType];
-    const units = ship.cost.metal + ship.cost.crystal;
+    const units = getExpeditionShipUnits(ship.cost);
     const costScaled = multiplyCost(ship.cost, largestShipUnits / units);
     return costScaled;
 });
 const scaledCostSum = addCost(...scaledCosts);
-const scaledUnitsSum = scaledCostSum.metal + scaledCostSum.crystal;
+const scaledUnitsSum = getExpeditionShipUnits(scaledCostSum);
 const fleetResourceFactors = {
     [ResourceType.metal]: scaledCostSum.metal / scaledUnitsSum,
     [ResourceType.crystal]: scaledCostSum.crystal / scaledUnitsSum,
@@ -100,11 +96,6 @@ export class AmortizationExpeditionResultsBreakdown {
         this.options = options;
     }
 
-    get #resourceFindFactor(): number {
-        const score = this.options.serverSettings.topScore;
-        return getExpeditionFindFactor(score);
-    }
-
     get slots(): number {
         const astroSlots = Math.floor(Math.sqrt(this.options.astrophysicsLevel));
         const classBonusSlots =
@@ -120,51 +111,7 @@ export class AmortizationExpeditionResultsBreakdown {
     }
 
     get #lifeformDiscovererClassBonus(): number {
-        let discovererClassBonus = 0;
-
-        Object.values(this.options.planets).forEach(planet => {
-            const techBonusFactor = getTechnologyBonusFactor(
-                planet.lifeformTechnologyBoost[LifeformTechnologyType.kaeleshDiscovererEnhancement],
-                planet.lifeformExperienceBoost,
-            );
-            discovererClassBonus += planet.discovererClassBonusFactor * techBonusFactor;
-        });
-
-        return discovererClassBonus;
-    }
-
-    get #lifeformExpeditionEventBonuses(): Record<ExpeditionEventType, number> {
-        const result: Record<ExpeditionEventType, number> = {
-            ...createRecord(ExpeditionEventTypes, 0),
-            [ExpeditionEventType.resources]: 0,
-            [ExpeditionEventType.fleet]: 0,
-        };
-
-        Object.values(this.options.planets).forEach(planet => {
-            // HACK: used sixth sense here but should probably check for every single expedition technology separately
-            const techBonusFactor = getTechnologyBonusFactor(
-                planet.lifeformTechnologyBoost[LifeformTechnologyType.sixthSense],
-                planet.lifeformExperienceBoost,
-            );
-
-            ExpeditionEventTypes.forEach(type => {
-                result[type] += planet.lifeformTechnologyExpeditionBonusFactor[type] * techBonusFactor;
-            });
-        });
-
-        return result;
-    }
-
-    get #itemEventBonuses(): Record<ExpeditionEventType, number> {
-        const result: Record<ExpeditionEventType, number> = {
-            ...createRecord(ExpeditionEventTypes, 0),
-            [ExpeditionEventType.resources]: 0,
-            [ExpeditionEventType.fleet]: 0,
-        };
-
-        result.resources = this.options.itemResourceBoost / 100;
-
-        return result;
+        return getDiscovererLifeformBonus(Object.values(this.options.planets));
     }
 
     get averageExpeditionFinds(): {
@@ -172,93 +119,54 @@ export class AmortizationExpeditionResultsBreakdown {
         fleet: Cost;
         total: Cost;
     } {
-        const scoreFactor = this.#resourceFindFactor;
-
-        const pathfinderFactor = 2;
-
-        const classFactor =
-            this.options.serverSettings.economySpeed
-            * (this.options.playerClass == PlayerClass.discoverer
-                ? (1 + this.options.serverSettings.discovererExpeditionBonus) * (1 + this.#lifeformDiscovererClassBonus)
-                : 1);
-
-        const eventBonuses = this.#lifeformExpeditionEventBonuses;
-
-        const itemBonuses = this.#itemEventBonuses;
-
+        const factors = getExpeditionFindFactors({
+            ...this.options.serverSettings,
+            playerClass: this.options.playerClass,
+            lifeformDiscovererBonus: this.#lifeformDiscovererClassBonus,
+        });
+        const bonuses = {
+            ...getExpeditionLifeformBonuses(Object.values(this.options.planets)),
+            item: this.options.itemResourceBoost,
+        };
         const eventProbabilities = this.options.improvedChancesItemActive
             ? eventTypeProbabilities.improved
             : eventTypeProbabilities.normal;
 
-        const averageResourceFindsBySize = createRecord(ExpeditionEventSizes, size => {
-            const sum = findBaseAmounts[size]
-                .map(baseAmount => {
-                    return multiplyCost(
-                        {
-                            energy: 0,
-                            ...createRecord(
-                                ResourceTypes,
-                                resource => baseAmount * resourceProbabilities[resource] * resourceFactors[resource],
-                            ),
-                        },
-                        scoreFactor
-                            * classFactor
-                            * pathfinderFactor
-                            * eventProbabilities.resources
-                            * (1 + eventBonuses.resources)
-                            * (1 + itemBonuses.resources),
-                    );
-                })
-                .reduce((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
+        const findsBySize = ExpeditionEventSizes.map(size => {
+            const finds = findBaseAmounts[size].map(base => getExpeditionFindAmounts(base, factors, bonuses));
+            const resourceWeight =
+                (eventProbabilities.resources * eventSizeProbabilities.resources[size]) / finds.length;
+            const fleetWeight = (eventProbabilities.fleet * eventSizeProbabilities.fleet[size]) / finds.length;
 
-            return multiplyCost(sum, 1 / findBaseAmounts[size].length);
-        });
-        const totalAvgResourceFind = addCost(
-            multiplyCost(averageResourceFindsBySize.small, eventSizeProbabilities.resources.small),
-            multiplyCost(averageResourceFindsBySize.medium, eventSizeProbabilities.resources.medium),
-            multiplyCost(averageResourceFindsBySize.large, eventSizeProbabilities.resources.large),
-        );
-
-        const averageFleetFindsBySize = createRecord(ExpeditionEventSizes, size => {
-            const sum = findBaseAmounts[size]
-                .map(baseAmount => {
-                    return multiplyCost(
-                        multiplyCostComponentWise(
-                            {
-                                energy: 0,
-                                ...createRecord(
-                                    ResourceTypes,
-                                    resource =>
-                                        baseAmount
-                                        * resourceFactors.crystal // baseline for found fleet units is the same as crystal finds
-                                        * fleetResourceFactors[resource],
-                                ),
-                            },
-                            { energy: 0, ...this.options.fleetFindsResourceFactors },
+            return {
+                resources: addCost(
+                    ...finds.map(find => ({
+                        energy: 0,
+                        ...createRecord(
+                            ResourceTypes,
+                            resource => find[resource] * resourceProbabilities[resource] * resourceWeight,
                         ),
-                        scoreFactor
-                            * classFactor
-                            * pathfinderFactor
-                            * eventProbabilities.fleet
-                            * (1 + eventBonuses.fleet)
-                            * (1 + itemBonuses.fleet),
-                    );
-                })
-                .reduce((acc, cur) => addCost(acc, cur), { metal: 0, crystal: 0, deuterium: 0, energy: 0 });
-
-            return multiplyCost(sum, 1 / findBaseAmounts[size].length);
+                    })),
+                ),
+                fleet: addCost(
+                    ...finds.map(find => ({
+                        energy: 0,
+                        ...createRecord(
+                            ResourceTypes,
+                            resource =>
+                                find.shipUnits
+                                * fleetResourceFactors[resource]
+                                * this.options.fleetFindsResourceFactors[resource]
+                                * fleetWeight,
+                        ),
+                    })),
+                ),
+            };
         });
-        const totalAvgFleetFind = addCost(
-            multiplyCost(averageFleetFindsBySize.small, eventSizeProbabilities.fleet.small),
-            multiplyCost(averageFleetFindsBySize.medium, eventSizeProbabilities.fleet.medium),
-            multiplyCost(averageFleetFindsBySize.large, eventSizeProbabilities.fleet.large),
-        );
+        const resources = addCost(...findsBySize.map(find => find.resources));
+        const fleet = addCost(...findsBySize.map(find => find.fleet));
 
-        return {
-            fleet: totalAvgFleetFind,
-            resources: totalAvgResourceFind,
-            total: addCost(totalAvgResourceFind, totalAvgFleetFind),
-        };
+        return { resources, fleet, total: addCost(resources, fleet) };
     }
 
     clone(): AmortizationExpeditionResultsBreakdown {

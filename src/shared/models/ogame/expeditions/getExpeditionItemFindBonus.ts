@@ -1,6 +1,10 @@
 import { ExpeditionEventType } from '../../expeditions/ExpeditionEventType';
 import { Items, type ItemId } from '../items/Items.generated';
 
+export function hasImprovedExpeditionChances(activeItems: readonly ItemId[]): boolean {
+    return activeItems.some(id => Items[id]?.effect?.type === 'expeditionImprovedChances');
+}
+
 export function getExpeditionItemFindBonus(type: ExpeditionEventType, activeItems: readonly ItemId[]): number {
     if (type !== ExpeditionEventType.resources) {
         return 0;

@@ -1,11 +1,15 @@
-export function getExpeditionFindFactor(topScore: number): number {
-    if (topScore < 100_000) return 0.1;
-    if (topScore < 1_000_000) return 0.24;
-    if (topScore < 5_000_000) return 0.36;
-    if (topScore < 25_000_000) return 0.48;
-    if (topScore < 50_000_000) return 0.6;
-    if (topScore < 75_000_000) return 0.72;
-    if (topScore < 100_000_000) return 0.84;
+export const expeditionFindScoreTiers = [
+    { minScore: 0, factor: 0.1 },
+    { minScore: 100_000, factor: 0.24 },
+    { minScore: 1_000_000, factor: 0.36 },
+    { minScore: 5_000_000, factor: 0.48 },
+    { minScore: 25_000_000, factor: 0.6 },
+    { minScore: 50_000_000, factor: 0.72 },
+    { minScore: 75_000_000, factor: 0.84 },
+    { minScore: 100_000_000, factor: 1 },
+] as const;
 
-    return 1.0;
+export function getExpeditionFindFactor(topScore: number): number {
+    const nextTier = expeditionFindScoreTiers.findIndex(tier => topScore < tier.minScore);
+    return expeditionFindScoreTiers.at(nextTier === -1 ? -1 : Math.max(0, nextTier - 1))!.factor;
 }

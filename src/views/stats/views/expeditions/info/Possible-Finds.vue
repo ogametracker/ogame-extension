@@ -86,7 +86,7 @@ import {
 } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventSize';
 import { PlayerClass } from '@ogame-tracker/shared/models/ogame/classes/PlayerClass';
 import { ShipType } from '@ogame-tracker/shared/models/ogame/ships/ShipType';
-import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
+import { createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import type { GridTableColumn } from '../../../components/common/GridTable.vue';
 import { useEmpireStore } from '../../../data/EmpireDataModule';
 import { useSettingsStore } from '../../../data/SettingsDataModule';
@@ -94,23 +94,29 @@ import { getRGBString } from '../../../utils/getRGBString';
 import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
 import type { PlanetData } from '@ogame-tracker/shared/models/empire/PlanetData';
 import {
-    ClassBonusLifeformTechnologies,
-    ExpeditionBonusLifeformTechnologies,
-} from '@ogame-tracker/shared/models/ogame/lifeforms/technologies/LifeformTechnologies';
+    getActiveLifeformTechnologyLevels,
+    getDiscovererLifeformBonus,
+    getExpeditionLifeformBonuses,
+} from '@ogame-tracker/shared/models/expeditions/getExpeditionLifeformBonuses';
 import { getPlanetLifeformTechnologyBoost } from '../../../models/lifeforms';
 import { LifeformType } from '@ogame-tracker/shared/models/ogame/lifeforms/LifeformType';
 import { getLifeformLevelTechnologyBonus } from '@ogame-tracker/shared/models/ogame/lifeforms/experience';
 import { useServerSettingsStore } from '@stats/data/ServerSettingsDataModule';
-import { getExpeditionFindFactor } from '@ogame-tracker/shared/models/expeditions/getExpeditionFindFactor';
+import {
+    getExpeditionFindAmounts,
+    getExpeditionFindFactors,
+    getExpeditionShipUnits,
+} from '@ogame-tracker/shared/models/expeditions/getExpeditionFindAmounts';
 import { findBaseAmounts } from '@ogame-tracker/shared/models/expeditions/findBaseAmounts';
 import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
 import { ShipByTypes } from '@ogame-tracker/shared/models/ogame/ships/ShipTypes';
 import { getMsuOrDsu } from '@stats/models/settings/getMsuOrDsu';
-import { getExpeditionItemFindBonus } from '@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus';
+import {
+    getExpeditionItemFindBonus,
+    hasImprovedExpeditionChances,
+} from '@ogame-tracker/shared/models/ogame/expeditions/getExpeditionItemFindBonus';
 import { ExpeditionEventType } from '@ogame-tracker/shared/models/expeditions/ExpeditionEventType';
-import { Items, type ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
-import { isItemActive } from '@ogame-tracker/shared/models/ogame/resource-production/getItemBonus';
-import { Item } from '@ogame-tracker/shared/models/ogame/items/Item.js';
+import type { ItemId } from '@ogame-tracker/shared/models/ogame/items/Items.generated';
 import DecimalNumber from '@stats/components/common/DecimalNumber.vue';
 
 type FindableUnits = {
@@ -278,145 +284,52 @@ const darkMatterItems = computed<{ size: ExpeditionEventSize; amount: [min: numb
 const info = computed(() => {
     const empire = empireStore.empire;
 
-    const planets = Object.values(empire.planets).filter(p => !p.isMoon) as PlanetData[];
-    const planetBuildingBoosts = createMappedRecord(
-        planets,
-        planet => planet.id,
-        planet => getPlanetLifeformTechnologyBoost(planet),
-    );
-
-    const resourceFindBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
-        let techBonus = 0;
-        planets.forEach(planet => {
-            const level = planet.activeLifeformTechnologies.includes(tech.type)
-                ? planet.lifeformTechnologies[tech.type]
-                : 0;
-
-            const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.resources, level);
-            const levelBonus =
-                planet.activeLifeform == LifeformType.none
-                    ? 0
-                    : baseBonus
-                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
-            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-            const total = baseBonus + levelBonus + buildingBonus;
-            techBonus += total;
-        });
-
-        return total + techBonus;
-    }, 0);
-
-    const shipFindBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
-        let techBonus = 0;
-        planets.forEach(planet => {
-            const level = planet.activeLifeformTechnologies.includes(tech.type)
-                ? planet.lifeformTechnologies[tech.type]
-                : 0;
-
-            const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.fleet, level);
-            const levelBonus =
-                planet.activeLifeform == LifeformType.none
-                    ? 0
-                    : baseBonus
-                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
-            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-            const total = baseBonus + levelBonus + buildingBonus;
-            techBonus += total;
-        });
-
-        return total + techBonus;
-    }, 0);
-
-    const darkMatterBonus = ExpeditionBonusLifeformTechnologies.reduce((total, tech) => {
-        let techBonus = 0;
-        planets.forEach(planet => {
-            const level = planet.activeLifeformTechnologies.includes(tech.type)
-                ? planet.lifeformTechnologies[tech.type]
-                : 0;
-
-            const baseBonus = tech.getExpeditionBonus(ExpeditionEventType.darkMatter, level);
-            const levelBonus =
-                planet.activeLifeform == LifeformType.none
-                    ? 0
-                    : baseBonus
-                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
-            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-            const total = baseBonus + levelBonus + buildingBonus;
-            techBonus += total;
-        });
-
-        return total + techBonus;
-    }, 0);
-
-    const discovererBonus = ClassBonusLifeformTechnologies.reduce((total, tech) => {
-        let techBonus = 0;
-        planets.forEach(planet => {
-            const level = planet.activeLifeformTechnologies.includes(tech.type)
-                ? planet.lifeformTechnologies[tech.type]
-                : 0;
-
-            const baseBonus = tech.getClassBonus(PlayerClass.discoverer, level);
-            const levelBonus =
-                planet.activeLifeform == LifeformType.none
-                    ? 0
-                    : baseBonus
-                      * getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]);
-            const buildingBonus = baseBonus * planetBuildingBoosts[planet.id][tech.type];
-
-            const total = baseBonus + levelBonus + buildingBonus;
-            techBonus += total;
-        });
-
-        return total + techBonus;
-    }, 0);
-
-    const resourceFindItemBonus = getExpeditionItemFindBonus(
-        ExpeditionEventType.resources,
-        Object.values(empireStore.empire.planets).flatMap(planet => Object.keys(planet.activeItems) as ItemId[]),
-    );
-
-    const improvedChancesItemBonus = Object.values(empireStore.empire.planets)
-        .flatMap(planet => Object.keys(planet.activeItems) as ItemId[])
-        .map(itemId => Items[itemId])
-        .find(
-            (item): item is Item & { effect: { type: 'expeditionImprovedChances' } } =>
-                item.effect?.type == 'expeditionImprovedChances',
-        )
-        ? true
-        : false;
+    const planets = Object.values(empire.planets).filter((planet): planet is PlanetData => !planet.isMoon);
+    const lifeformStates = planets.map(planet => ({
+        activeTechnologyLevels: getActiveLifeformTechnologyLevels(planet),
+        lifeformTechnologyBoost: getPlanetLifeformTechnologyBoost(planet),
+        lifeformExperienceBoost:
+            planet.activeLifeform == LifeformType.none
+                ? 0
+                : getLifeformLevelTechnologyBonus(empireStore.lifeformExperience[planet.activeLifeform]),
+    }));
+    const bonuses = getExpeditionLifeformBonuses(lifeformStates);
+    const itemIds = Object.values(empire.planets).flatMap(planet => Object.keys(planet.activeItems) as ItemId[]);
 
     return {
         playerClass: empire.playerClass,
         ecoSpeed: serverSettingsStore.serverSettings.speed.economy,
-        resourceFindBonus,
-        shipFindBonus,
-        discovererBonus,
-        darkMatterBonus,
-        resourceFindItemBonus,
-        improvedChancesItemBonus,
+        resourceFindBonus: bonuses.resources,
+        shipFindBonus: bonuses.fleet,
+        discovererBonus: getDiscovererLifeformBonus(lifeformStates),
+        darkMatterBonus: bonuses.darkMatter,
+        resourceFindItemBonus: getExpeditionItemFindBonus(ExpeditionEventType.resources, itemIds),
+        improvedChancesItemBonus: hasImprovedExpeditionChances(itemIds),
     };
 });
 
 const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
-    const pathfinderFactor = 2;
     const localInfo = info.value;
-
-    const classFactor =
-        localInfo.playerClass == PlayerClass.discoverer
-            ? localInfo.ecoSpeed * (1.5 * (1 + localInfo.discovererBonus))
-            : 1;
-
-    const topPointsFactors = getExpeditionFindFactor(serverSettingsStore.serverSettings.topScore ?? 0);
+    const serverSettings = serverSettingsStore.serverSettings;
+    const factors = getExpeditionFindFactors({
+        topScore: serverSettings.topScore ?? 0,
+        playerClass: localInfo.playerClass,
+        economySpeed: localInfo.ecoSpeed,
+        discovererExpeditionBonus: serverSettings.playerClasses.discoverer.expeditions.outcomeFactorBonus,
+        lifeformDiscovererBonus: localInfo.discovererBonus,
+    });
+    const bonuses = {
+        resources: localInfo.resourceFindBonus,
+        fleet: localInfo.shipFindBonus,
+        item: localInfo.resourceFindItemBonus,
+    };
 
     const maxConvertedShipCost = ExpeditionFindableShipTypes.map(shipType => {
         const ship = ShipByTypes[shipType];
         const cost = ship.cost;
 
         const converted = getMsuOrDsu(cost);
-        const units = cost.metal + cost.crystal;
+        const units = getExpeditionShipUnits(cost);
 
         return {
             converted,
@@ -427,24 +340,14 @@ const finds = computed<Record<ExpeditionEventSize, FindableUnits[]>>(() => {
 
     return createRecord(ExpeditionEventSizes, size =>
         findBaseAmounts[size].map<FindableUnits>(base => {
-            const metal =
-                topPointsFactors
-                * base
-                * pathfinderFactor
-                * classFactor
-                * (1 + localInfo.resourceFindBonus)
-                * (1 + localInfo.resourceFindItemBonus);
-
-            const shipUnits =
-                (topPointsFactors * base * pathfinderFactor * classFactor * (1 + localInfo.shipFindBonus)) / 2;
-
+            const { metal, crystal, deuterium, shipUnits } = getExpeditionFindAmounts(base, factors, bonuses);
             const maxShipUnitsConverted =
                 Math.trunc(shipUnits / maxConvertedShipCost.units) * maxConvertedShipCost.converted;
 
             return {
                 metal: Math.trunc(metal),
-                crystal: Math.trunc(metal / 2),
-                deuterium: Math.trunc(metal / 3),
+                crystal: Math.trunc(crystal),
+                deuterium: Math.trunc(deuterium),
                 shipUnits: Math.trunc(shipUnits),
                 maxShipUnitsConverted,
             };

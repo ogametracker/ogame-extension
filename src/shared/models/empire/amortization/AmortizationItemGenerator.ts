@@ -59,7 +59,6 @@ import { ServerSettings } from '@ogame-tracker/shared/models/server-settings/Ser
 import { createMappedRecord, createRecord } from '@ogame-tracker/shared/utils/createRecord';
 import { __measure } from '@ogame-tracker/shared/utils/performance/__measure';
 import { _throw } from '@ogame-tracker/shared/utils/_throw';
-import { ExpeditionEventType, ExpeditionEventTypes } from '../../expeditions/ExpeditionEventType';
 import { PlayerClass } from '../../ogame/classes/PlayerClass';
 import { getItemSlotBonus } from '../../ogame/expeditions/getItemSlotBonus';
 import { Items } from '../../ogame/items/Items.generated';
@@ -72,9 +71,7 @@ import {
 } from './AmortizationExpeditionResultsBreakdown';
 import {
     $mineBuildingTypes,
-    getLifeformTechnologyExpeditionBonusFactor,
     getPlanetCollectorClassBonusFactor,
-    getPlanetDiscovererClassBonusFactor,
     getPlanetExpeditionState,
     getPlanetLifeformBuildingBonusProductionFactor,
     getPlanetLifeformTechnologyBonusProductionFactor,
@@ -449,9 +446,7 @@ export class AmortizationItemGenerator {
     ) {
         planetState ??= this.#state.planets[planet.id];
 
-        planet.discovererClassBonusFactor = getPlanetDiscovererClassBonusFactor(planetState);
-        planet.lifeformTechnologyExpeditionBonusFactor = getLifeformTechnologyExpeditionBonusFactor(planetState);
-        planet.lifeformTechnologyBoost = getPlanetLifeformTechnologyBoost(planetState);
+        Object.assign(planet, getPlanetExpeditionState(planetState));
     }
     #update_planetState(
         planetState: AmortizationPlanetState,
@@ -791,10 +786,9 @@ export class AmortizationItemGenerator {
         const newExpeditionBreakdown = expeditionBreakdown.clone();
         newExpeditionBreakdown.options.planets[planetId] = {
             id: planetId,
-            discovererClassBonusFactor: 0,
             lifeformExperienceBoost: lifeformExperienceBonus[planetSettings.lifeform],
             lifeformTechnologyBoost: createRecord(LifeformTechnologyTypes, 0),
-            lifeformTechnologyExpeditionBonusFactor: createRecord(ExpeditionEventTypes, 0),
+            activeTechnologyLevels: {},
         };
 
         let timeInHours = Infinity;
@@ -1109,38 +1103,6 @@ export class AmortizationItemGenerator {
         productionDelta = subCost(newProduction, curProduction);
 
         if (includeExpeditions) {
-            let additionalDiscovererClassBonus = 0;
-            let additionalExpeditionBonuses: Record<ExpeditionEventType, number> = createRecord(
-                ExpeditionEventTypes,
-                0,
-            );
-            let additionalExpeditionEventProbabilityBonuses: Record<ExpeditionEventType, number> = createRecord(
-                ExpeditionEventTypes,
-                0,
-            );
-
-            if ('getExpeditionBonus' in technology) {
-                ExpeditionEventTypes.forEach(eventType => {
-                    const bonus =
-                        technology.getExpeditionBonus(eventType, newLevel)
-                        - technology.getExpeditionBonus(eventType, newLevel - 1);
-                    additionalExpeditionBonuses[eventType] += bonus;
-                });
-            } else if ('getExpeditionEventProbabilityBonus' in technology) {
-                ExpeditionEventTypes.forEach(eventType => {
-                    const bonus =
-                        technology.getExpeditionEventProbabilityBonus(eventType, newLevel)
-                        - technology.getExpeditionEventProbabilityBonus(eventType, newLevel - 1);
-                    additionalExpeditionEventProbabilityBonuses[eventType] += bonus;
-                });
-            } else if ('getClassBonus' in technology && technology.appliesTo(PlayerClass.discoverer)) {
-                const bonus =
-                    technology.getClassBonus(PlayerClass.discoverer, newLevel)
-                    - technology.getClassBonus(PlayerClass.discoverer, newLevel - 1);
-
-                additionalDiscovererClassBonus = bonus;
-            }
-
             const expeditionsPerHour = (expeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
             const curExpeditionFindsPerHour = multiplyCost(
                 expeditionBreakdown.averageExpeditionFinds.total,
@@ -1148,12 +1110,7 @@ export class AmortizationItemGenerator {
             );
             const newExpeditionBreakdown = expeditionBreakdown.clone();
 
-            const newPlanetBreakdown = newExpeditionBreakdown.options.planets[planetId];
-            newPlanetBreakdown.discovererClassBonusFactor += additionalDiscovererClassBonus;
-            ExpeditionEventTypes.forEach(eventType => {
-                newPlanetBreakdown.lifeformTechnologyExpeditionBonusFactor[eventType] +=
-                    additionalExpeditionBonuses[eventType];
-            });
+            newExpeditionBreakdown.options.planets[planetId].activeTechnologyLevels[technology.type] = newLevel;
             const newExpeditionsPerHour = (newExpeditionBreakdown.slots * this.#settings.expeditions.wavesPerDay) / 24;
             const newExpeditionFindsPerHour = multiplyCost(
                 newExpeditionBreakdown.averageExpeditionFinds.total,

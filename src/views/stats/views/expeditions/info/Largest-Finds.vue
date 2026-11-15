@@ -52,6 +52,7 @@ import { ResourceType } from '@ogame-tracker/shared/models/ogame/resources/Resou
 import { useExpeditionStore } from '../../../data/ExpeditionDataModule';
 import ExpeditionSizeIcon from '@stats/components/expeditions/ExpeditionSizeIcon.vue';
 import { ExpeditionFindableShipTypes } from '@ogame-tracker/shared/models/expeditions/ExpeditionEvents';
+import { getExpeditionShipUnits } from '@ogame-tracker/shared/models/expeditions/getExpeditionFindAmounts';
 import type {
     ExpeditionEventDarkMatter,
     ExpeditionEventFleet,
@@ -206,14 +207,14 @@ function addDarkMatterExpo(expo: ExpeditionEventDarkMatter) {
 }
 
 function addFleetExpo(expo: ExpeditionEventFleet) {
-    // ship units (metal + crystal)
+    // ship units
     {
         const units = ExpeditionFindableShipTypes.map(shipType => {
             const count = expo.fleet[shipType] ?? 0;
             const ship = ShipByTypes[shipType];
 
             const cost = ship.cost;
-            return (cost.metal + cost.crystal) * count;
+            return getExpeditionShipUnits(cost) * count;
         }).reduce((total, cur) => total + cur, 0);
 
         largestFinds.shipUnits.add({
